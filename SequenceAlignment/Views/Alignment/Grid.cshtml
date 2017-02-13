@@ -1,0 +1,44 @@
+﻿@model SequenceAlignment.ViewModels.GridViewModel
+
+
+<form asp-controller="Alignment" asp-action="Grid" enctype="multipart/form-data">
+    <label>
+        upload first text file <input type="file" name="FirstSequenceFile" accept="text/plain" />
+    </label>
+    <hr />
+    <label>
+        upload Second text file <input type="file" name="SecondSequenceFile" accept="text/plain" />
+    </label>
+    <hr />
+    <label>
+        Algorithm:
+        <select asp-for="Algorithm">
+            <option value="NeedlemanWunsch" selected> Needleman Wunsch </option>
+            <option value="ParallelNeedlemanWunsch"> Paralle Needleman Wunsch</option>
+        </select>
+    </label>
+    <hr />
+    <label>
+        Score Matrix:
+        <select asp-for="ScoringMatrix">
+            <option value="Identity" selected> Identity </option>
+            <option value="BLOSUM50"> BLOSUM50 </option>
+        </select>
+    </label>
+    <hr />
+    <label>
+        Gap <input type="number" asp-for="Gap" value="-8" />
+    </label>
+    <hr />
+    <label>
+        Gap Open Penalty <input type="number" asp-for="GapOpenPenalty" value="-2" />
+    </label>
+    <hr />
+    <label>
+        Gap Extension Penalty <input type="number" asp-for="GapExtensionPenalty" value="-2" />
+    </label>
+    <hr />
+
+    <input type="submit" value="Align" />
+</form>
+

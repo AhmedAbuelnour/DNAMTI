@@ -1,0 +1,35 @@
+﻿@model SequenceAlignment.ViewModels.RegistrationViewModel
+
+<hr />
+<div class="container">
+    <div class="register-photo">
+        <div class="form-container">
+            <form method="post" asp-controller="Account" asp-action="Signup">
+                <h2 class="text-center"><strong>Create</strong> a new account.</h2>
+                <div class="form-group">
+                    <input class="form-control" type="text"  placeholder="Username" asp-for="UserName" required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="email"  placeholder="Email" asp-for="Email" required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password"  placeholder="Password" asp-for="Password" required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password"  placeholder="Password (repeat)" asp-for="ComparePassword" required>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label class="control-label">
+                            <input type="checkbox" required>I agree to the license terms.
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-block btn-lg" type="submit">Sign Up</button>
+                </div>You already have an account? <a href="#" class="already"> Login here.</a>
+            </form>
+        </div>
+    </div>
+</div>
+<hr />

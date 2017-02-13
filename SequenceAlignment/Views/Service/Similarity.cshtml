@@ -1,0 +1,14 @@
+﻿@model SequenceAlignment.ViewModels.SimilarityViewModel
+
+<form asp-controller="Service" asp-action="Similarity">
+    <label>
+        Enter your first sequence:
+        <input type="text" required maxlength="20000" asp-for="FirstSequence" />
+    </label>
+    <label>
+        Enter your second sequence:
+        <input type="text" required maxlength="20000" asp-for="SecondSequence" />
+    </label>
+
+    <input type="submit" value="Get Similarity" />
+</form>

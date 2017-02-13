@@ -1,0 +1,16 @@
+﻿@model SequenceAlignment.ViewModels.GenerateSequenceViewModel
+
+<form asp-controller="Service" asp-action="Generate">
+    <label>
+        Enter your sequence length: <input type="number" asp-for="SequenceLength" required min="1">
+    </label>
+    <select asp-for="Alphabet">
+        <option value="AmbiguousDNA">Ambiguous DNA</option>
+        <option value="UnambiguousDNA" selected>Unambiguous DNA</option>
+        <option value="AmbiguousRNA">Ambiguous RNA</option>
+        <option value="UnambiguousRNA">Unambiguous RNA</option>
+        <option value="Protein">Protein</option>
+    </select>
+
+    <input type="submit" value="Generate Sequence" />
+</form>

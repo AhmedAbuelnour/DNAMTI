@@ -1,0 +1,13 @@
+﻿@model SequenceAlignment.ViewModels.SplitterViewModel
+
+<form asp-controller="Service" asp-action="Splitter">
+
+    <label>
+        Enter Your Sequence <input type="text" asp-for="Sequence" required />
+    </label>
+    <label>
+        Enter The Size of each Sequence <input type="number" required asp-for="Divider" min="10" />
+    </label>
+
+    <input type="submit" value="Split" />
+</form>

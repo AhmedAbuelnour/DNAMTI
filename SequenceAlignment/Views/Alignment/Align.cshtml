@@ -1,0 +1,48 @@
+﻿@model AlignmentService.ViewModels.SequenceViewModel
+
+
+<form asp-controller="Alignment" asp-action="Index" name="AlignmentForm" enctype="multipart/form-data">
+
+    <label>
+        First Sequence:
+        <textarea asp-for="FirstSequence" name="FirstSequence"></textarea>
+    </label>
+    <hr />
+    <label>
+        Second Sequence:
+        <textarea asp-for="SecondSequence" name="SecondSequence"></textarea>
+    </label>
+    <hr />
+    <label>
+        Algorithm:
+        <select asp-for="Algorithm">
+            <option value="NeedlemanWunsch" selected> Needleman Wunsch </option>
+            <option value="ParallelNeedlemanWunsch"> Paralle Needleman Wunsch</option>
+        </select>
+    </label>
+    <hr />
+    <label>
+        Score Matrix:
+        <select asp-for="ScoringMatrix">
+            <option value="Identity" selected> Identity </option>
+            <option value="BLOSUM50"> BLOSUM50 </option>
+        </select>
+    </label>
+    <hr />
+    <label>
+        Gap <input type="number" asp-for="Gap" value="-8" />
+    </label>
+    <hr />
+    <label>
+        Gap Open Penalty <input type="number" asp-for="GapOpenPenalty" value="-2" />
+    </label>
+    <hr />
+    <label>
+        Gap Extension Penalty <input type="number" asp-for="GapExtensionPenalty" value="-2" />
+    </label>
+    <hr />
+
+    <input type="submit" value="Align" />
+
+</form>
+

@@ -1,0 +1,16 @@
+﻿@model SequenceAlignment.ViewModels.CleanSequenceViewModel
+
+<form asp-controller="Service" asp-action="Clean">
+    <label>
+        Enter your sequence: <textarea asp-for="Sequence" required></textarea>
+    </label>
+    <select asp-for="Alphabet">
+        <option value="AmbiguousDNA">Ambiguous DNA</option>
+        <option value="UnambiguousDNA" selected>Unambiguous DNA</option>
+        <option value="AmbiguousRNA">Ambiguous RNA</option>
+        <option value="UnambiguousRNA">Unambiguous RNA</option>
+        <option value="Protein">Protein</option>
+    </select>
+
+    <input type="submit" value="Clean Sequence" />
+</form>
