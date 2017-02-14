@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Hubs;
 
 namespace SequenceAlignment.Hubs
@@ -10,9 +6,11 @@ namespace SequenceAlignment.Hubs
     [HubName("GridHub")]
     public class GridHub : Hub
     {
-        public void Alignment(string Model)
+        // Alignment Method for sender (Invoke)
+        public void Alignment(string JobID)
         {
-            Clients.All.Result(Model);
+            // Result Method for listner (ON)
+            Clients.All.Result(JobID);
         }
     }
 }

@@ -56,18 +56,17 @@ namespace SequenceAlignment.Controllers
                     AlignmentResult = Result.StandardFormat(210);
                     AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
                 });
-                SeqFound.PDFData = Helper.GetDocument(AlignmentResult, AlignmentScore, SeqFound.AlignmentID, Model.Algorithm, Model.ScoringMatrix, Model.Gap, Model.GapOpenPenalty, Model.GapExtensionPenalty);
+                SeqFound.ByteText = Helper.GetDocument(AlignmentResult, AlignmentScore, SeqFound.AlignmentID, Model.Algorithm, Model.ScoringMatrix, Model.Gap, Model.GapOpenPenalty, Model.GapExtensionPenalty);
                 SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await db.AddAsync(SeqFound);
                 await db.SaveChangesAsync();
-                return File(SeqFound.PDFData, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
             }
             else
             {
-                return File(SeqFound.PDFData, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
             }
         }
-
 
         [HttpGet]
         public IActionResult Grid()
@@ -78,22 +77,43 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstSequenceFile, IFormFile SecondSequenceFile)
         {
-            AlignmentViewModel Object = new AlignmentViewModel
+          
+           
+            // Check for earlier exist
+            Sequence Exist = Helper.GetMatchedAlignment(db.Sequences, await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile), User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (Exist==null) // Means the user didn't not submit these sequences before.
             {
-                FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),
-                SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile),
-                Algorithm = Model.Algorithm,
-                ScoreMatrix = Model.ScoringMatrix,
-                Gap = Model.Gap,
-                GapOpenPenalty = Model.GapOpenPenalty,
-                GapExtensionPenalty = Model.GapExtensionPenalty
-            };
-            string Json = JsonConvert.SerializeObject(Object);
-            var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
-            var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication 
-            await connection.Start(); // Start the connection 
-            await _hub.Invoke("Alignment", Json); // Invoke Alignment SignalR Method, and pass the Alignment Parameters to the Grid.
-            return View("GridRedirect");
+
+                // Storing in the database
+                await db.AddAsync(new Sequence { FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),
+                                                 SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile),
+                                                 UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+                await db.SaveChangesAsync();
+
+                // Sending to the Grid, that there is a job is required from you
+                var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
+                var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
+                await connection.Start(); // Start the connection 
+                await _hub.Invoke("Alignment", Exist.AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
+                return View("Notify", Exist.AlignmentID);
+            }
+            else
+            {
+                if(Exist.ByteText == null) // a failure happened before sending all the data to the Grid
+                {
+                    var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
+                    var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
+                    // Re-Sending them
+                    await connection.Start(); // Start the connection 
+                    await _hub.Invoke("Alignment", Exist.AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
+                    return View("Notify", Exist.AlignmentID); // it must be handled in the grid that the user whatever how many times he requested the same two sequences in the time that the grid is working , it must search fist if the same alignment ID is passed before it do nothing
+                }
+                else // the grid already alignment them , so no action is required from the grid, the user can download a text file directly.
+                {
+                    return File(Exist.ByteText, "plain/text", $"{Exist.AlignmentID}_Clould_Result.txt");
+                }
+            }
         }
 
     }

@@ -17,9 +17,9 @@ namespace SequenceAlignment.Models
         public string SecondSequence { get; set; }
 
         [Required(ErrorMessage = "PDF download link must be provided"), Column(TypeName = "VARBINARY(MAX)")]
-        public byte[] PDFData { get; set; }
+        public byte[] ByteText { get; set; }
 
-        public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(1); // Indicate how many days it will be stored in the database
+        public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(7); // Indicate how many days it will be stored in the database
         public string UserFK { get; set; }
         [ForeignKey(nameof(UserFK))]
         public IdentityUser UserNavigation { get; set; }
