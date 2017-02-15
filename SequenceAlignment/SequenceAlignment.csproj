@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\AlignmentStyles.min.css" />
-    <Content Include="wwwroot\css\HomeStyles.min.css" />
     <Content Include="wwwroot\css\LoginStyles.min.css" />
     <Content Include="wwwroot\images\AlignDNA.jpg" />
     <Content Include="wwwroot\images\Grid.jpg" />

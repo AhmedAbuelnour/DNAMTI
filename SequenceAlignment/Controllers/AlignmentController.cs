@@ -29,7 +29,6 @@ namespace SequenceAlignment.Controllers
             return View();
         }
 
-
         [HttpGet]
         public IActionResult Align()
         {
@@ -37,8 +36,13 @@ namespace SequenceAlignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Align(SequenceViewModel Model)
+        public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile , IFormFile SecondFile)
         {
+            if (string.IsNullOrWhiteSpace(Model.FirstSequence))
+                Model.FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+            if (string.IsNullOrWhiteSpace(Model.SecondSequence))
+                Model.SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondFile);
+
             Sequence SeqFound = Helper.GetMatchedAlignment(db.Sequences, Model.FirstSequence, Model.SecondSequence, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (SeqFound == null)
             {
@@ -77,20 +81,19 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstSequenceFile, IFormFile SecondSequenceFile)
         {
-          
-           
+            string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile);
+            string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile);
+            if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
+               return RedirectToAction("Align", "Alignment");
             // Check for earlier exist
             Sequence Exist = Helper.GetMatchedAlignment(db.Sequences, await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile), User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             if (Exist==null) // Means the user didn't not submit these sequences before.
             {
-
                 // Storing in the database
                 await db.AddAsync(new Sequence { FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),
                                                  SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile),
                                                  UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 await db.SaveChangesAsync();
-
                 // Sending to the Grid, that there is a job is required from you
                 var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
                 var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication

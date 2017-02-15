@@ -1,16 +1,23 @@
-﻿@model AlignmentService.ViewModels.SequenceViewModel
+﻿@model SequenceAlignment.ViewModels.SequenceViewModel
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
-<form asp-controller="Alignment" asp-action="Index" name="AlignmentForm" enctype="multipart/form-data">
+<form asp-controller="Alignment" asp-action="Index" name="AlignmentForm" enctype="multipart/form-data" ng-app="">
 
     <label>
         First Sequence:
-        <textarea asp-for="FirstSequence" name="FirstSequence"></textarea>
+        <textarea asp-for="FirstSequence" name="FirstSequence" ng-model="FirstSequence"></textarea>
+    </label>
+    <label ng-show="FirstSequence.length == undefined || FirstSequence.length == 0 ">
+        OR upload file: <input type="file" name="FirstFile" />
     </label>
     <hr />
     <label>
         Second Sequence:
-        <textarea asp-for="SecondSequence" name="SecondSequence"></textarea>
+        <textarea asp-for="SecondSequence" name="SecondSequence" ng-model="SecondSequence"></textarea>
+    </label>
+    <label ng-show="SecondSequence.length == undefined || SecondSequence.length == 0 ">
+        OR upload file: <input type="file" name="SecondFile"  />
     </label>
     <hr />
     <label>
