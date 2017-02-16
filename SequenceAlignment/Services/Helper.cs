@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace SequenceAlignment.Services
 {
     public static class Helper
     {
-        public static byte[] GetDocument(string AlignmentResult, float ScoreResult, string UniqeIdentifier, string Algorithm, string ScoringMatrix, int Gap, int GapOpenPenalty, int GapExtensionPenalty)
+        public static byte[] GetText(string AlignmentResult, float ScoreResult, string UniqeIdentifier, string Algorithm, string ScoringMatrix, int Gap, int GapOpenPenalty, int GapExtensionPenalty)
         {
             StringBuilder HtmlBuilder = new StringBuilder();
             HtmlBuilder.Append($"Date: {DateTime.Now}");
@@ -40,16 +41,16 @@ namespace SequenceAlignment.Services
             HtmlBuilder.Append("MTI - DNA Alignment");
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
         }
-        public static Sequence GetMatchedAlignment(IEnumerable<Sequence> Source, string FirstSequence, string SecondSequence, string UserId)
+        public static Sequence AreFound(IEnumerable<Sequence> Source, string FirstSequenceHash, string SecondSequenceHash)
         {
-            return Source.Where(MyUser => MyUser.UserFK == UserId)
+            return Source
                  .AsEnumerable()
                  .AsParallel()
                  .Where(Seq =>
                  {
-                     if (Seq.FirstSequence == FirstSequence && Seq.SecondSequence == SecondSequence)
+                     if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash)
                          return true;
-                     else if (Seq.SecondSequence == FirstSequence && Seq.FirstSequence == SecondSequence)
+                     else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash)
                          return true;
                      else
                          return false;
@@ -99,6 +100,19 @@ namespace SequenceAlignment.Services
         {
             for (int i = 0; i < str.Length; i += BlockSize)
                 yield return str.Substring(i, Math.Min(BlockSize, str.Length - i));
+        }
+
+        public static string SHA1HashStringForUTF8String(string Input)
+        {
+            byte[] InputBytes = Encoding.UTF8.GetBytes(Input);
+            SHA1 SHA = SHA1.Create();
+            byte[] hashBytes = SHA.ComputeHash(InputBytes);
+            StringBuilder Sb = new StringBuilder();
+            hashBytes.ToList().ForEach((b) =>
+            {
+                Sb.Append(b.ToString("X2"));
+            });
+            return Sb.ToString();
         }
 
     }

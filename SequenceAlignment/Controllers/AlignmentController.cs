@@ -39,36 +39,56 @@ namespace SequenceAlignment.Controllers
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile , IFormFile SecondFile)
         {
             if (string.IsNullOrWhiteSpace(Model.FirstSequence))
-                Model.FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+            {
+                string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                if (FirstSequence.Length > 20000)
+                    return RedirectToAction("Grid", "Alingmnet");
+                else
+                    Model.FirstSequence = FirstSequence;
+            }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence))
-                Model.SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondFile);
-
-            Sequence SeqFound = Helper.GetMatchedAlignment(db.Sequences, Model.FirstSequence, Model.SecondSequence, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            {
+                string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                if (SecondSequence.Length > 20000)
+                    return RedirectToAction("Grid", "Alingmnet");
+                else
+                    Model.SecondSequence = SecondSequence;
+            }
+            Sequence SeqFound = Helper.AreFound(db.Sequences,Helper.SHA1HashStringForUTF8String(Model.FirstSequence),Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
             if (SeqFound == null)
             {
                 SeqFound = new Sequence();
                 SeqFound.AlignmentID = Guid.NewGuid().ToString();
                 SeqFound.FirstSequence = Model.FirstSequence;
-                SeqFound.SecondSequence = Model.SecondSequence;
+                SeqFound.FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence);
+                SeqFound.SecondSequence= Model.SecondSequence;
+                SeqFound.SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence);
+                SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
+                ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
                 string AlignmentResult = string.Empty;
                 float AlignmentScore = 0.0f;
                 await Task.Run(() =>
                 {
-                    SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
-                    ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
                     AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, Model.Gap);
                     AlignmentResult = Result.StandardFormat(210);
                     AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
                 });
-                SeqFound.ByteText = Helper.GetDocument(AlignmentResult, AlignmentScore, SeqFound.AlignmentID, Model.Algorithm, Model.ScoringMatrix, Model.Gap, Model.GapOpenPenalty, Model.GapExtensionPenalty);
+                SeqFound.ByteText = Helper.GetText(AlignmentResult, 
+                                                    AlignmentScore,
+                                                    SeqFound.AlignmentID, 
+                                                    Model.Algorithm,
+                                                    Model.ScoringMatrix,
+                                                    Model.Gap, 
+                                                    Model.GapOpenPenalty,
+                                                    Model.GapExtensionPenalty);
                 SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await db.AddAsync(SeqFound);
                 await db.SaveChangesAsync();
-                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
             else
             {
-                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}Result.txt");
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
         }
 
@@ -86,35 +106,35 @@ namespace SequenceAlignment.Controllers
             if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
                return RedirectToAction("Align", "Alignment");
             // Check for earlier exist
-            Sequence Exist = Helper.GetMatchedAlignment(db.Sequences, await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile), User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (Exist==null) // Means the user didn't not submit these sequences before.
+            Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(FirstSequence), Helper.SHA1HashStringForUTF8String(SecondSequence));
+            if (SeqFound == null) // Means the user didn't not submit these sequences before.
             {
+                string AlignmentID = Guid.NewGuid().ToString();
                 // Storing in the database
-                await db.AddAsync(new Sequence { FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile),
-                                                 SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile),
+                await db.AddAsync(new Sequence {
+                                                 AlignmentID = AlignmentID,
+                                                 FirstSequence = FirstSequence,
+                                                 FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence),
+                                                 SecondSequence = SecondSequence,
+                                                 SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence),
                                                  UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 await db.SaveChangesAsync();
                 // Sending to the Grid, that there is a job is required from you
                 var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
                 var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
                 await connection.Start(); // Start the connection 
-                await _hub.Invoke("Alignment", Exist.AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
-                return View("Notify", Exist.AlignmentID);
+                await _hub.Invoke("Alignment", AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
+                return View("Notify", AlignmentID);
             }
             else
             {
-                if(Exist.ByteText == null) // a failure happened before sending all the data to the Grid
+                if(SeqFound.ByteText == null) // a failure happened before sending all the data to the Grid or the user re-submitted the same two sequences before finishing 
                 {
-                    var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
-                    var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
-                    // Re-Sending them
-                    await connection.Start(); // Start the connection 
-                    await _hub.Invoke("Alignment", Exist.AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
-                    return View("Notify", Exist.AlignmentID); // it must be handled in the grid that the user whatever how many times he requested the same two sequences in the time that the grid is working , it must search fist if the same alignment ID is passed before it do nothing
+                    return View("Notify", SeqFound.AlignmentID); // Returning the same Alignment ID
                 }
                 else // the grid already alignment them , so no action is required from the grid, the user can download a text file directly.
                 {
-                    return File(Exist.ByteText, "plain/text", $"{Exist.AlignmentID}_Clould_Result.txt");
+                    return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Clould_Result.txt");
                 }
             }
         }

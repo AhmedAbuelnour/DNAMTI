@@ -26,6 +26,7 @@ namespace SequenceAlignment
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
             services.AddDbContext<SequenceAlignmentDbContext>(options =>
                      options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -55,7 +56,7 @@ namespace SequenceAlignment
             }
 
             app.UseStaticFiles();
-
+            //app.UseResponseCompression();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
