@@ -39,7 +39,7 @@ namespace SequenceAlignment.Controllers
             {
                 string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
                 if (FirstSequence.Length > 20000)
-                    return RedirectToAction("Grid", "Alingmnet");
+                    return RedirectToAction("Grid", "Alignment");
                 else
                     Model.FirstSequence = FirstSequence;
             }
@@ -47,11 +47,11 @@ namespace SequenceAlignment.Controllers
             {
                 string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
                 if (SecondSequence.Length > 20000)
-                    return RedirectToAction("Grid", "Alingmnet");
+                    return RedirectToAction("Grid", "Alignment");
                 else
                     Model.SecondSequence = SecondSequence;
             }
-            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null))
+            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
             {
                 ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
                 return View(Model);
@@ -86,11 +86,11 @@ namespace SequenceAlignment.Controllers
                 SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await db.AddAsync(SeqFound);
                 await db.SaveChangesAsync();
-                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
+                return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
             else
             {
-                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
+                return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
         }
         [HttpGet]
@@ -101,7 +101,7 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
-            if (FirstFile == null || SecondFile == null)
+            if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
                 return View(Model);
             string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
             string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondFile);
@@ -136,7 +136,7 @@ namespace SequenceAlignment.Controllers
                 }
                 else // the grid already alignment them , so no action is required from the grid, the user can download a text file directly.
                 {
-                    return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Clould_Result.txt");
+                    return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Clould_Result.txt");
                 }
             }
         }
