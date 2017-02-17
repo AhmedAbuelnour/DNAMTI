@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
+<link href="~/css/Services.css" rel="stylesheet" />
+
+<div class="features-boxed">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Services </h2>
+            <p class="lead text-center"><strong>We Provide some useful tools for dealing with Biology Sequences.</strong></p>
+        </div>
+        <div class="row features">
+            <div class="col-md-6 col-sm-6 item">
+                <div class="box">
+                    <i class="glyphicon glyphicon-scissors icon"></i>
+                    <h3 class="name">Spliter </h3>
+                    <p class="description">Split your large sequence into small chunks with specified length.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Splitter"><strong>Split</strong> </a>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 item">
+                <div class="box">
+                    <i class="glyphicon glyphicon-random icon"></i>
+                    <h3 class="name">Sequence Generator </h3>
+                    <p class="description">Generate two sequences with specified similarity between them.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Generate"><strong>Generate</strong> </a>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 item">
+                <div class="box">
+                    <i class="glyphicon glyphicon-filter icon"></i>
+                    <h3 class="name">Cleaner </h3>
+                    <p class="description">Clean your Sequence from any noise based upon the type of the sequence.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Clean"><strong>Clean</strong> </a>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 item">
+                <div class="box">
+                    <i class="glyphicon glyphicon-duplicate icon"></i>
+                    <h3 class="name">Similarity </h3>
+                    <p class="description">Gets the similarity between two Sequences, with specific percentage</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Similarity"><strong>Get Similarity</strong> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

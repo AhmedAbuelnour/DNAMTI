@@ -22,100 +22,94 @@ namespace SequenceAlignment.Controllers
         {
             db = _db;
         }
-
         [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
-
         [HttpGet]
         public IActionResult Align()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile , IFormFile SecondFile)
+        public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
-                if (string.IsNullOrWhiteSpace(Model.FirstSequence))
-                {
-                    string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
-                    if (FirstSequence.Length > 20000)
-                        return RedirectToAction("Grid", "Alingmnet");
-                    else
-                        Model.FirstSequence = FirstSequence;
-                }
-                if (string.IsNullOrWhiteSpace(Model.SecondSequence))
-                {
-                    string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
-                    if (SecondSequence.Length > 20000)
-                        return RedirectToAction("Grid", "Alingmnet");
-                    else
-                        Model.SecondSequence = SecondSequence;
-                }
-                Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(Model.FirstSequence), Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
-                if (SeqFound == null)
-                {
-                    SeqFound = new Sequence();
-                    SeqFound.AlignmentID = Guid.NewGuid().ToString();
-                    SeqFound.FirstSequence = Model.FirstSequence;
-                    SeqFound.FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence);
-                    SeqFound.SecondSequence = Model.SecondSequence;
-                    SeqFound.SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence);
-                    SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
-                    ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
-                    string AlignmentResult = string.Empty;
-                    float AlignmentScore = 0.0f;
-                    await Task.Run(() =>
-                    {
-                        AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, Model.Gap);
-                        AlignmentResult = Result.StandardFormat(210);
-                        AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
-                    });
-                    SeqFound.ByteText = Helper.GetText(AlignmentResult,
-                                                        AlignmentScore,
-                                                        SeqFound.AlignmentID,
-                                                        Model.Algorithm,
-                                                        Model.ScoringMatrix,
-                                                        Model.Gap,
-                                                        Model.GapOpenPenalty,
-                                                        Model.GapExtensionPenalty);
-                    SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    await db.AddAsync(SeqFound);
-                    await db.SaveChangesAsync();
-                    return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
-                }
+                string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                if (FirstSequence.Length > 20000)
+                    return RedirectToAction("Grid", "Alingmnet");
                 else
+                    Model.FirstSequence = FirstSequence;
+            }
+            if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
+            {
+                string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                if (SecondSequence.Length > 20000)
+                    return RedirectToAction("Grid", "Alingmnet");
+                else
+                    Model.SecondSequence = SecondSequence;
+            }
+            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null))
+            {
+                ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
+                return View(Model);
+            }
+            Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(Model.FirstSequence), Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
+            if (SeqFound == null)
+            {
+                SeqFound = new Sequence();
+                SeqFound.AlignmentID = Guid.NewGuid().ToString();
+                SeqFound.FirstSequence = Model.FirstSequence;
+                SeqFound.FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence);
+                SeqFound.SecondSequence = Model.SecondSequence;
+                SeqFound.SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence);
+                SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
+                ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
+                string AlignmentResult = string.Empty;
+                float AlignmentScore = 0.0f;
+                await Task.Run(() =>
                 {
-                    return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
-                }
+                    AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, Model.Gap);
+                    AlignmentResult = Result.StandardFormat(210);
+                    AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
+                });
+                SeqFound.ByteText = Helper.GetText(AlignmentResult,
+                                                    AlignmentScore,
+                                                    SeqFound.AlignmentID,
+                                                    Model.Algorithm,
+                                                    Model.ScoringMatrix,
+                                                    Model.Gap,
+                                                    Model.GapOpenPenalty,
+                                                    Model.GapExtensionPenalty);
+                SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await db.AddAsync(SeqFound);
+                await db.SaveChangesAsync();
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
             else
             {
-                return View(Model);
+                return File(SeqFound.ByteText, "plain/text", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
-            
         }
-
         [HttpGet]
         public IActionResult Grid()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstSequenceFile, IFormFile SecondSequenceFile)
+        public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
-            string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstSequenceFile);
-            string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondSequenceFile);
+            if (FirstFile == null || SecondFile == null)
+                return View(Model);
+            string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+            string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondFile);
             if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
                return RedirectToAction("Align", "Alignment");
             // Check for earlier exist
             Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(FirstSequence), Helper.SHA1HashStringForUTF8String(SecondSequence));
-            if (SeqFound == null) // Means the user didn't not submit these sequences before.
+            if (SeqFound == null) // Means the user didn't  submit these sequences before.
             {
                 string AlignmentID = Guid.NewGuid().ToString();
                 // Storing in the database
@@ -146,7 +140,6 @@ namespace SequenceAlignment.Controllers
                 }
             }
         }
-
     }
 }
 

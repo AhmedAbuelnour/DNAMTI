@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using SequenceAlignment.ViewModels;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SequenceAlignment.Controllers
 {
-    [Authorize]
     public class ServiceController : Controller
     {
         // GET: /<controller>/
@@ -40,7 +38,7 @@ namespace SequenceAlignment.Controllers
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousRNA);
             else
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.Protein);
-            return File(Encoding.UTF8.GetBytes(CleanSequence), "plain/text", $"{Guid.NewGuid()}.txt");
+            return File(Encoding.UTF8.GetBytes(CleanSequence), "plain/text", $"{Guid.NewGuid()}_Clean.txt");
         }
 
         [HttpGet]

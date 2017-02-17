@@ -5,7 +5,6 @@
         public int Gap { get; set; }
         public int GapOpenPenalty { get; set; }
         public int GapExtensionPenalty { get; set; }
-        public string Algorithm { get; set; }
         public string ScoringMatrix { get; set; }
     }
 }

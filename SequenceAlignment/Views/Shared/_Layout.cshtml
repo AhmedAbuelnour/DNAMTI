@@ -3,14 +3,96 @@
 <head>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="~/css/Nav.css" rel="stylesheet" />
     <title>@ViewData["Title"] - Sequence Alignment</title>
 </head>
 <body>
 
+    <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+                <button asp-controller="Home" asp-action="Index" type="button" class="btn btn-nav" id="Home">
+                    <span class="glyphicon glyphicon-home"></span>
+                    <p>Home</p>
+                </button>
+        </div>
+        <div class="btn-group">
+            <button  type="button" class="btn btn-nav">
+                <span class="glyphicon glyphicon-align-center"></span>
+                <p>Alignment</p>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-nav">
+                <span class="glyphicon glyphicon-wrench"></span>
+                <p>Serives</p>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-nav">
+                <span class="glyphicon glyphicon-globe"></span>
+                <p>Web API</p>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-nav">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <p>About</p>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-nav">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <p>Signup</p>
+            </button>
+        </div>
+    </div>
+  
+    <div id="HomeIndex">
 
+    </div>
     @RenderBody()
-
+   
+    <div class="footer-clean">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-4 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">DNA Alignment</a></li>
+                            <li><a href="#">Generate Sequences</a></li>
+                            <li><a href="#">Clean Sequences</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-4 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Collage </a></li>
+                            <li><a href="#">Team</a></li>
+                            <li><a href="#">Legacy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 item">
+                        <h3>Developed &amp; Designed</h3>
+                        <ul>
+                            <li><a href="#">Ahmed Ramadan</a></li>
+                            <li><a href="#">Amr Tawfik</a></li>
+                            <li><a href="#">Mahmoud Zakaria</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2 item social">
+                        <a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a>
+                        <p class="copyright">MTI . CS © 2017</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
    
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="~/js/File.js"></script>
+
 </body>
 </html>

@@ -1,17 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Contact";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<link href="~/css/Contact.css" rel="stylesheet" />
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<div class="contact-clean">
+    <form method="post">
+        <h2 class="text-center">Contact us</h2>
+        <div class="form-group has-success has-feedback">
+            <input class="form-control" type="text" name="name" placeholder="Name" required/>
+        </div>
+        <div class="form-group has-error has-feedback">
+            <input class="form-control" type="email" name="email" placeholder="Email" required/>
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="14" name="message" placeholder="Message" required maxlength="2000"></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit"> Send </button>
+        </div>
+    </form>
+</div>

@@ -6,11 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\css\AlignmentStyles.min.css" />
-    <Content Include="wwwroot\css\LoginStyles.min.css" />
+    <Content Include="wwwroot\css\AlignSimple.css" />
+    <Content Include="wwwroot\css\Contact.css" />
+    <Content Include="wwwroot\css\File-Input---Beautiful-Input--Button-Approach-Jasny-Bootstrap1.css" />
+    <Content Include="wwwroot\css\Nav.css" />
+    <Content Include="wwwroot\css\Services.css" />
     <Content Include="wwwroot\images\AlignDNA.jpg" />
+    <Content Include="wwwroot\images\DNAGenerate.jpg" />
+    <Content Include="wwwroot\images\DNASplit.png" />
     <Content Include="wwwroot\images\Grid.jpg" />
-    <Content Include="wwwroot\js\NavScript.min.js" />
+    <Content Include="wwwroot\js\Animate.js" />
+    <Content Include="wwwroot\js\File.js" />
+    <Content Include="wwwroot\js\Nav.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Gray.Microsoft.AspNetCore.SignalR.Server" Version="0.2.0-alpha1" />
