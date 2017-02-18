@@ -1,16 +1,45 @@
 ﻿@model SequenceAlignment.ViewModels.CleanSequenceViewModel
+<style>
+    body {
+        text-align: unset;
+    }
+</style>
+<link href="~/css/AlignSimple.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
-<form asp-controller="Service" asp-action="Clean">
-    <label>
-        Enter your sequence: <textarea asp-for="Sequence" required></textarea>
-    </label>
-    <select asp-for="Alphabet">
-        <option value="AmbiguousDNA">Ambiguous DNA</option>
-        <option value="UnambiguousDNA" selected>Unambiguous DNA</option>
-        <option value="AmbiguousRNA">Ambiguous RNA</option>
-        <option value="UnambiguousRNA">Unambiguous RNA</option>
-        <option value="Protein">Protein</option>
-    </select>
-
-    <input type="submit" value="Clean Sequence" />
-</form>
+<div class="contact-clean" ng-app="">
+    <form method="post" asp-controller="Service" asp-action="Clean">
+        <h1 class="text-center">Clean </h1>
+        <div class="form-group">
+            <textarea placeholder="Sequence" asp-for="Sequence" class="form-control" ng-model="Sequence" pattern="^[a-zA-Z]+$"></textarea>
+        </div>
+        <div class="form-group" ng-show="Sequence.length == undefined || Sequence.length == 0">
+            <span class="label label-default">OR Upload File Contains the Sequence</span>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
+                    <input type="file" name="SequenceFile" accept="text/plain"/>
+                </span><a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="label label-default">Select Sequence Type</span>
+            <select class="form-control" asp-for="Alphabet">
+                <optgroup label="Ambiguous">
+                    <option value="AmbiguousDNA" selected>DNA</option>
+                    <option value="AmbiguousRNA">RNA</option>
+                </optgroup>
+                <optgroup label="Unambiguous">
+                    <option value="UnambiguousDNA">DNA</option>
+                    <option value="UnambiguousRNA">RNA</option>
+                </optgroup>
+                <optgroup label="Letters">
+                    <option value="Protein">Protein</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit"> Clean </button>
+        </div>
+    </form>
+</div>

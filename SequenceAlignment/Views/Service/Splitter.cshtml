@@ -1,13 +1,33 @@
 ﻿@model SequenceAlignment.ViewModels.SplitterViewModel
+<style>
+    body {
+        text-align: unset;
+    }
+</style>
+<link href="~/css/AlignSimple.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
-<form asp-controller="Service" asp-action="Splitter">
+<div class="contact-clean" ng-app="">
+    <form method="post" asp-controller="Service" asp-action="Splitter">
+        <h1 class="text-center">Splitter </h1>
+        <div class="form-group">
+            <textarea placeholder="Sequence" asp-for="Sequence" class="form-control" ng-model="Sequence" pattern="^[a-zA-Z]+$"></textarea>
+        </div>
+        <div class="form-group" ng-show="Sequence.length == undefined || Sequence.length == 0">
+            <span class="label label-default">OR Upload File Contains the Sequence</span>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
+                    <input type="file" name="SequenceFile" accept="text/plain" />
+                </span><a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="number" asp-for="Divider" placeholder="Chuck Length" inputmode="numeric" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Split </button>
+        </div>
+    </form>
+</div>
 
-    <label>
-        Enter Your Sequence <input type="text" asp-for="Sequence" required />
-    </label>
-    <label>
-        Enter The Size of each Sequence <input type="number" required asp-for="Divider" min="10" />
-    </label>
-
-    <input type="submit" value="Split" />
-</form>

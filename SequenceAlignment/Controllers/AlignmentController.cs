@@ -12,6 +12,8 @@ using BioEdge.Matrices;
 using BioEdge.Alignment;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SequenceAlignment.Controllers
 {
@@ -35,9 +37,14 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
+            if(!string.IsNullOrEmpty(Model.FirstSequence))
+                Model.FirstSequence = Model.FirstSequence.Trim();
+            if (!string.IsNullOrEmpty(Model.SecondSequence))
+                Model.SecondSequence = Model.SecondSequence.Trim();
+
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
-                string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
                 if (FirstSequence.Length > 20000)
                     return RedirectToAction("Grid", "Alignment");
                 else
@@ -45,7 +52,7 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
+                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
                 if (SecondSequence.Length > 20000)
                     return RedirectToAction("Grid", "Alignment");
                 else
@@ -56,6 +63,9 @@ namespace SequenceAlignment.Controllers
                 ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
                 return View(Model);
             }
+        
+            if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
+                return View(Model);
             Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(Model.FirstSequence), Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
             if (SeqFound == null)
             {
@@ -103,8 +113,12 @@ namespace SequenceAlignment.Controllers
         {
             if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
                 return View(Model);
-            string FirstSequence = await Helper.ConvertFileByteToByteStringAsync(FirstFile);
-            string SecondSequence = await Helper.ConvertFileByteToByteStringAsync(SecondFile);
+            string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+            string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim();
+
+            if (!Regex.IsMatch(FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(SecondSequence, @"^[a-zA-Z]+$"))
+                return View(Model);
+
             if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
                return RedirectToAction("Align", "Alignment");
             // Check for earlier exist

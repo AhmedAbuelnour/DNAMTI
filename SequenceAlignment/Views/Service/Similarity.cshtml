@@ -1,14 +1,41 @@
 ﻿@model SequenceAlignment.ViewModels.SimilarityViewModel
+<style>
+    body {
+        text-align: unset;
+    }
+</style>
+<link href="~/css/AlignSimple.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
-<form asp-controller="Service" asp-action="Similarity">
-    <label>
-        Enter your first sequence:
-        <input type="text" required maxlength="20000" asp-for="FirstSequence" />
-    </label>
-    <label>
-        Enter your second sequence:
-        <input type="text" required maxlength="20000" asp-for="SecondSequence" />
-    </label>
-
-    <input type="submit" value="Get Similarity" />
-</form>
+<div class="contact-clean">
+    <form method="post" asp-controller="Service" asp-action="Similarity">
+        <h1 class="text-center"> Similarity </h1>
+        <div class="form-group">
+            <textarea placeholder="First Sequence" asp-for="FirstSequence" ng-model="FirstSequence" class="form-control input-sm" maxlength="20000"></textarea>
+        </div>
+        <div class="form-group" ng-show="FirstSequence.length == undefined || FirstSequence.length == 0">
+            <span class="label label-default">OR Upload a File Contains The First Sequence</span>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
+                    <input type="file" name="FirstFile" accept="text/plain"/>
+                </span><a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea placeholder="Second Sequence" asp-for="SecondSequence" ng-model="SecondSequence" class="form-control input-sm" maxlength="20000"></textarea>
+        </div>
+        <div class="form-group" ng-show="SecondSequence.length == undefined || SecondSequence.length == 0">
+            <span class="label label-default">OR Upload a File Contains The First Sequence</span>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
+                    <input type="file" name="SecondFile" accept="text/plain" />
+                </span><a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Get Similarity</button>
+        </div>
+    </form>
+</div>
