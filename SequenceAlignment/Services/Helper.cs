@@ -8,7 +8,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 namespace SequenceAlignment.Services
 {
     public static class Helper
@@ -28,7 +27,7 @@ namespace SequenceAlignment.Services
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append($"   Gap: {Gap}");
             HtmlBuilder.Append(Environment.NewLine);
-            HtmlBuilder.Append($"   Gap Open Penalty:: {GapOpenPenalty}");
+            HtmlBuilder.Append($"   Gap Open Penalty: {GapOpenPenalty}");
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append($"   Gap Extension Penalty: {GapExtensionPenalty}");
             HtmlBuilder.Append(Environment.NewLine);
@@ -67,13 +66,11 @@ namespace SequenceAlignment.Services
                 return Encoding.UTF8.GetString(Stream.ToArray());
             }
         }
-
         public static char[] UnambiguousRNA = { 'G', 'A', 'U', 'C' };
         public static char[] UnambiguousDNA = { 'G', 'A', 'T', 'C' };
         public static char[] AmbiguousDNA = { 'G', 'A', 'T', 'C', 'R', 'Y', 'W', 'S', 'M', 'K', 'H', 'B', 'V', 'D', 'N' };
         public static char[] AmbiguousRNA = { 'G', 'A', 'U', 'C', 'R', 'Y', 'W', 'S', 'M', 'K', 'H', 'B', 'V', 'D', 'N' };
         public static char[] Protein = { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y' };
-
         public static string CleanUp(string Sequence, char[] AllowedCharacters)
         {
             string CleanedSequence = string.Empty;
@@ -84,7 +81,6 @@ namespace SequenceAlignment.Services
             }
             return CleanedSequence;
         }
-
         public static string GenerateSequence(int Length, char[] AllowedCharacters)
         {
             ThreadLocal<Random> appRandom = new ThreadLocal<Random>(() => new Random());
@@ -95,13 +91,11 @@ namespace SequenceAlignment.Services
             }
             return GeneratedSequence;
         }
-
         public static IEnumerable<string> SequenceSpliter(string str, int BlockSize)
         {
             for (int i = 0; i < str.Length; i += BlockSize)
                 yield return str.Substring(i, Math.Min(BlockSize, str.Length - i));
         }
-
         public static string SHA1HashStringForUTF8String(string Input)
         {
             byte[] InputBytes = Encoding.UTF8.GetBytes(Input);
@@ -114,6 +108,5 @@ namespace SequenceAlignment.Services
             });
             return Sb.ToString();
         }
-
     }
 }

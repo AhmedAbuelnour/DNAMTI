@@ -11,8 +11,13 @@
     <form asp-controller="Alignment" asp-action="Align" name="AlignmentForm" enctype="multipart/form-data" >
         <h1 class="text-center"> Simple Alignment </h1>
         <div class="form-group">
+            <span class="label label-info">Give your first sequence a name</span>
+            <input   asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control" />
+        </div>
+        <div class="form-group">
             <textarea asp-for="FirstSequence" name="FirstSequence" ng-model="FirstSequence" pattern="^[a-zA-Z]+$" placeholder="Enter First Sequence" maxlength="20000" class="form-control"></textarea>
         </div>
+
         <div class="form-group has-success" ng-show="FirstSequence.length == undefined || FirstSequence.length == 0 ">
             <span class="label label-default">OR Upload File Contains The First Sequence</span>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -26,6 +31,10 @@
                 </span>
                 <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
             </div>
+        </div>
+        <div class="form-group">
+            <span class="label label-info">Give your second sequence a name</span>
+            <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
         </div>
         <div class="form-group">
             <textarea asp-for="SecondSequence" pattern="^[a-zA-Z]+$"  name="SecondSequence" ng-model="SecondSequence" placeholder="Enter Second Sequence" maxlength="20000" class="form-control"></textarea>

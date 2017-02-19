@@ -14,6 +14,7 @@ using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SequenceAlignment.Controllers
 {
@@ -36,7 +37,7 @@ namespace SequenceAlignment.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
-        {
+        {              
             if(!string.IsNullOrEmpty(Model.FirstSequence))
                 Model.FirstSequence = Model.FirstSequence.Trim();
             if (!string.IsNullOrEmpty(Model.SecondSequence))
@@ -66,6 +67,7 @@ namespace SequenceAlignment.Controllers
         
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return View(Model);
+
             Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(Model.FirstSequence), Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
             if (SeqFound == null)
             {
@@ -75,6 +77,8 @@ namespace SequenceAlignment.Controllers
                 SeqFound.FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence);
                 SeqFound.SecondSequence = Model.SecondSequence;
                 SeqFound.SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence);
+                SeqFound.FirstSequenceName = Model.FirstSequenceName;
+                SeqFound.SecondSequenceName = Model.SecomdSequenceName;
                 SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
                 ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
                 string AlignmentResult = string.Empty;
@@ -130,16 +134,18 @@ namespace SequenceAlignment.Controllers
                 await db.AddAsync(new Sequence {
                                                  AlignmentID = AlignmentID,
                                                  FirstSequence = FirstSequence,
-                                                 FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence),
+                                                 FirstSequenceHash = Helper.SHA1HashStringForUTF8String(FirstSequence),
                                                  SecondSequence = SecondSequence,
-                                                 SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence),
+                                                 SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
+                                                 FirstSequenceName = Model.FirstSequenceName,
+                                                 SecondSequenceName = Model.SecomdSequenceName,
                                                  UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 await db.SaveChangesAsync();
                 // Sending to the Grid, that there is a job is required from you
                 var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
                 var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
                 await connection.Start(); // Start the connection 
-                await _hub.Invoke("Alignment", AlignmentID); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
+                await _hub.Invoke("SendToGrid", $"'AlignmentID:{AlignmentID}', 'Email':{User.FindFirstValue(ClaimTypes.Email)}"); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
                 return View("Notify", AlignmentID);
             }
             else

@@ -1,13 +1,17 @@
 ﻿@model SequenceAlignment.ViewModels.GridViewModel
+<link href="~/css/AlignSimple.css" rel="stylesheet" />
 <style>
     body {
         text-align: unset;
     }
 </style>
-<link href="~/css/AlignSimple.css" rel="stylesheet" />
 <div class="contact-clean">
     <form asp-controller="Alignment" asp-action="Grid" enctype="multipart/form-data">
         <h1 class="text-center"> Cloud Alignment </h1>
+        <div class="form-group">
+            <span class="label label-info pull-left">Give your First sequence a name</span>
+            <input type="text" asp-for="FirstSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
+        </div>
         <div class="form-group has-success">
             <span class="label label-info">Upload File Contains The First Sequence</span>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -23,6 +27,10 @@
                 <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
             </div>
         </div>
+        <div class="form-group">
+            <span class="label label-info pull-left">Give your second sequence a name</span>
+            <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
+        </div>
         <div class="form-group has-success">
             <span class="label label-info">Upload File Contains The Second Sequence</span>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -33,7 +41,7 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="label label-info">Select Score Matrix</span>
+            <span class="label label-info  pull-left">Select Score Matrix</span>
             <select class="form-control" asp-for="ScoringMatrix">
                 <option value="Identity" selected>Identity</option>
                 <option value="BLOSUM50">BLOSUM50</option>
@@ -42,15 +50,15 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-4">
-                    <span class="label label-info">Gap Value</span>
+                    <span class="label label-info  pull-left">Gap Value</span>
                     <input type="number" required step="1" asp-for="Gap" placeholder="Gap Value" value="-8" class="form-control" />
                 </div>
                 <div class="col-md-4">
-                    <span class="label label-info">Gap Open Penalty </span>
+                    <span class="label label-info  pull-left">Gap Open Penalty </span>
                     <input type="number" required value="-2" asp-for="GapOpenPenalty" placeholder="Gap Open Penality" step="1" class="form-control" />
                 </div>
                 <div class="col-md-4">
-                    <span class="label label-info">Gap Extension Penalty</span>
+                    <span class="label label-info  pull-left">Gap Extension Penalty</span>
                     <input type="number" required  value="-2" asp-for="GapExtensionPenalty" placeholder="Gap Extension Penality" step="1" class="form-control" />
                 </div>
             </div>

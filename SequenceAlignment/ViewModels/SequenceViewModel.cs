@@ -13,5 +13,7 @@ namespace SequenceAlignment.ViewModels
         public int GapExtensionPenalty { get; set; }
         public string Algorithm { get; set; }
         public string ScoringMatrix { get; set; }
+        public string FirstSequenceName { get; set; }
+        public string SecomdSequenceName { get; set; }
     }
 }

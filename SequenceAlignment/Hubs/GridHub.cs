@@ -7,10 +7,10 @@ namespace SequenceAlignment.Hubs
     public class GridHub : Hub
     {
         // Alignment Method for sender (Invoke)
-        public void Alignment(string JobID)
+        public void SendToGrid(string JobJson)
         {
             // Result Method for listner (ON)
-            Clients.All.Result(JobID);
+            Clients.All.ListenToGrid(JobJson);
         }
     }
 }
