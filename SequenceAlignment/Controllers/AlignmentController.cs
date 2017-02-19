@@ -59,7 +59,7 @@ namespace SequenceAlignment.Controllers
                 else
                     Model.SecondSequence = SecondSequence;
             }
-            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
+            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null))
             {
                 ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
                 return View(Model);
@@ -104,6 +104,7 @@ namespace SequenceAlignment.Controllers
             }
             else
             {
+                
                 return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
             }
         }
@@ -115,6 +116,7 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
+            
             if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
                 return View(Model);
             string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
