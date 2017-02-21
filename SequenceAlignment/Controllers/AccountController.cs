@@ -96,7 +96,7 @@ namespace SequenceAlignment.Controllers
                 EMailMessage.IsBodyHtml = false;
                 EMailMessage.Body = $"Please Confirm your password reset by click this link {confirmationLink}";
                 SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "A7med1994");
+                SC.Credentials = new NetworkCredential("Email", "Password");
                 SC.EnableSsl = true;
                 SC.Send(EMailMessage);
                 return View("CheckEmail");
