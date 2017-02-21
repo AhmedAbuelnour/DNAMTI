@@ -2,28 +2,26 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SequenceAlignment.ViewModels;
-using Newtonsoft.Json;
 using SequenceAlignment.Services;
 using Microsoft.AspNetCore.Http;
-using SequenceAlignment.Models;
 using System.Security.Claims;
 using BioEdge.MatricesHelper;
 using BioEdge.Matrices;
 using BioEdge.Alignment;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DataAccessLayer.Model;
+using DataAccessLayer.Service;
 
 namespace SequenceAlignment.Controllers
 {
     public class AlignmentController : Controller
     {
-        private readonly SequenceAlignmentDbContext db;
-        public AlignmentController(SequenceAlignmentDbContext _db)
+        private readonly IRepository Repo;
+        public AlignmentController(IRepository _Repo)
         {
-            db = _db;
+            Repo = _Repo;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -42,43 +40,64 @@ namespace SequenceAlignment.Controllers
                 Model.FirstSequence = Model.FirstSequence.Trim();
             if (!string.IsNullOrEmpty(Model.SecondSequence))
                 Model.SecondSequence = Model.SecondSequence.Trim();
-
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
-                string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
-                if (FirstSequence.Length > 20000)
-                    return RedirectToAction("Grid", "Alignment");
+                if(FirstFile.ContentType == "text/plain")
+                {
+                    string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                    if (FirstSequence.Length > 20000)
+                        return RedirectToAction("Grid", "Alignment");
+                    else if (FirstSequence.Length == 0)
+                        return View(Model); // Error
+                    else
+                        Model.FirstSequence = FirstSequence;
+                }
                 else
-                    Model.FirstSequence = FirstSequence;
+                {
+                    return View(Model); // Error
+                }
+               
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
-                if (SecondSequence.Length > 20000)
-                    return RedirectToAction("Grid", "Alignment");
+                if (FirstFile.ContentType == "text/plain")
+                {
+                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                    if (SecondSequence.Length > 20000)
+                        return RedirectToAction("Grid", "Alignment");
+                    else if (SecondSequence.Length == 0)
+                        return View(Model); // Error
+                    else
+                        Model.SecondSequence = SecondSequence;
+                }
                 else
-                    Model.SecondSequence = SecondSequence;
+                {
+                    return View(Model);
+                }
             }
             if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null))
             {
                 ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
                 return View(Model);
             }
-        
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return View(Model);
-
-            Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(Model.FirstSequence), Helper.SHA1HashStringForUTF8String(Model.SecondSequence));
-            if (SeqFound == null)
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence);
+            if (JobFound == null)
             {
-                SeqFound = new Sequence();
-                SeqFound.AlignmentID = Guid.NewGuid().ToString();
-                SeqFound.FirstSequence = Model.FirstSequence;
-                SeqFound.FirstSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.FirstSequence);
-                SeqFound.SecondSequence = Model.SecondSequence;
-                SeqFound.SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SeqFound.SecondSequence);
-                SeqFound.FirstSequenceName = Model.FirstSequenceName;
-                SeqFound.SecondSequenceName = Model.SecomdSequenceName;
+                JobFound = new AlignmentJob()
+                {
+                    AlignmentID = Guid.NewGuid().ToString(),
+                    Algorithm = Model.Algorithm,
+                    ScoringMatrix = Model.ScoringMatrix,
+                    FirstSequenceHash = Helper.SHA1HashStringForUTF8String(Model.FirstSequence),
+                    SecondSequenceHash = Helper.SHA1HashStringForUTF8String(Model.SecondSequence),
+                    FirstSequenceName = Model.FirstSequenceName,
+                    SecondSequenceName = Model.SecomdSequenceName,
+                    GapOpenPenalty = Model.GapOpenPenalty,
+                    Gap = Model.Gap,
+                    GapExtensionPenalty = Model.GapExtensionPenalty
+                };
                 SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
                 ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
                 string AlignmentResult = string.Empty;
@@ -89,23 +108,22 @@ namespace SequenceAlignment.Controllers
                     AlignmentResult = Result.StandardFormat(210);
                     AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
                 });
-                SeqFound.ByteText = Helper.GetText(AlignmentResult,
-                                                    AlignmentScore,
-                                                    SeqFound.AlignmentID,
-                                                    Model.Algorithm,
-                                                    Model.ScoringMatrix,
-                                                    Model.Gap,
-                                                    Model.GapOpenPenalty,
-                                                    Model.GapExtensionPenalty);
-                SeqFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await db.AddAsync(SeqFound);
-                await db.SaveChangesAsync();
-                return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
+                JobFound.ByteText = Helper.GetText(AlignmentResult,
+                                                   AlignmentScore,
+                                                   JobFound.AlignmentID,
+                                                   Model.Algorithm,
+                                                   Model.ScoringMatrix,
+                                                   Model.Gap,
+                                                   Model.GapOpenPenalty,
+                                                   Model.GapExtensionPenalty);
+                JobFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await Repo.AddAlignmentJobAsync(JobFound);
+                return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
             }
             else
             {
                 
-                return File(SeqFound.ByteText, "text/plain", $"{SeqFound.AlignmentID}_Alignment_Result.txt");
+                return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
             }
         }
         [HttpGet]
@@ -128,21 +146,20 @@ namespace SequenceAlignment.Controllers
             if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
                return RedirectToAction("Align", "Alignment");
             // Check for earlier exist
-            Sequence SeqFound = Helper.AreFound(db.Sequences, Helper.SHA1HashStringForUTF8String(FirstSequence), Helper.SHA1HashStringForUTF8String(SecondSequence));
+            AlignmentJob SeqFound = Repo.AreExist(FirstSequence,SecondSequence);
             if (SeqFound == null) // Means the user didn't  submit these sequences before.
             {
                 string AlignmentID = Guid.NewGuid().ToString();
                 // Storing in the database
-                await db.AddAsync(new Sequence {
+                await Repo.AddAlignmentJobAsync(new AlignmentJob {
                                                  AlignmentID = AlignmentID,
-                                                 FirstSequence = FirstSequence,
+                                                 ScoringMatrix = Model.ScoringMatrix,
+                                                 Algorithm = "Edge",
                                                  FirstSequenceHash = Helper.SHA1HashStringForUTF8String(FirstSequence),
-                                                 SecondSequence = SecondSequence,
                                                  SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
                                                  FirstSequenceName = Model.FirstSequenceName,
                                                  SecondSequenceName = Model.SecomdSequenceName,
                                                  UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
-                await db.SaveChangesAsync();
                 // Sending to the Grid, that there is a job is required from you
                 var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
                 var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication

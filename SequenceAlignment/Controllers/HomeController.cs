@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SequenceAlignment.ViewModels;
-
+using System.Net.Mail;
+using System.Net;
 namespace SequenceAlignment.Controllers
 {
     public class HomeController : Controller
@@ -22,8 +23,19 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public IActionResult Contact(ContactViewModel Model)
         {
-            // TODO - Sending an email to MTI IT 
-            return View();
+            MailMessage EMailMessage = new MailMessage();
+            EMailMessage.From = new MailAddress(Model.Email);
+            EMailMessage.To.Add("amrtawfik_2011@hotmail.com");
+            EMailMessage.Subject = "Hello I'm Ahmed From MVC";
+            EMailMessage.Body = Model.Message;
+
+            SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
+            SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "A7med1994");
+            SC.EnableSsl = true;
+
+            SC.Send(EMailMessage);
+
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Error()
         {

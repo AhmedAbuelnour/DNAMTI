@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using SequenceAlignment.Models;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer.Model;
 
 namespace SequenceAlignment
 {
@@ -27,10 +27,12 @@ namespace SequenceAlignment
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCompression();
-            services.AddDbContext<SequenceAlignmentDbContext>(options =>
+            services.AddDbContext<AlignmentDbContext>(options =>
                      options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SequenceAlignmentDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AlignmentDbContext>().AddDefaultTokenProviders();
+
+            services.AddScoped<DataAccessLayer.Service.IRepository, DataAccessLayer.Service.Repository>();
             // Add framework services.
             services.AddMvc();
             services.AddSignalR();

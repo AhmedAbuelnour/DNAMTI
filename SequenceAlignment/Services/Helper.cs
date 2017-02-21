@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SequenceAlignment.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,22 +38,6 @@ namespace SequenceAlignment.Services
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append("MTI - DNA Alignment");
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
-        }
-        public static Sequence AreFound(IEnumerable<Sequence> Source, string FirstSequenceHash, string SecondSequenceHash)
-        {
-            return Source
-                 .AsEnumerable()
-                 .AsParallel()
-                 .Where(Seq =>
-                 {
-                     if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash)
-                         return true;
-                     else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash)
-                         return true;
-                     else
-                         return false;
-                 })
-                 .SingleOrDefault();
         }
         public static async Task<string> ConvertFileByteToByteStringAsync(IFormFile UploadFile)
         {
