@@ -56,9 +56,8 @@ namespace SequenceAlignment
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseResponseCompression();
             app.UseStaticFiles();
-            //app.UseResponseCompression();
             app.UseIdentity();
             app.UseMvc(routes =>
             {

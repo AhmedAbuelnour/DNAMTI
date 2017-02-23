@@ -13,15 +13,21 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using DataAccessLayer.Model;
 using DataAccessLayer.Service;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
 
 namespace SequenceAlignment.Controllers
 {
+    [Authorize]
     public class AlignmentController : Controller
     {
         private readonly IRepository Repo;
-        public AlignmentController(IRepository _Repo)
+        private readonly UserManager<IdentityUser> UserManager;
+        public AlignmentController(IRepository _Repo, UserManager<IdentityUser> _UserManager)
         {
             Repo = _Repo;
+            UserManager = _UserManager;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -56,7 +62,6 @@ namespace SequenceAlignment.Controllers
                 {
                     return View(Model); // Error
                 }
-               
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
@@ -122,14 +127,24 @@ namespace SequenceAlignment.Controllers
             }
             else
             {
-                
                 return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
             }
         }
         [HttpGet]
-        public IActionResult Grid()
+        public async Task<IActionResult> Grid()
         {
-            return View();
+            IdentityUser CurrentUser = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
+            if (CurrentUser is null)
+                return View("Error");
+            bool IsEmailConfirmed = await UserManager.IsEmailConfirmedAsync(CurrentUser);
+            if (IsEmailConfirmed)
+                return View();
+            else
+            {
+                //TODO: Impelement a way.
+                return View("Need Email Confirmation"); // Require a View;
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
