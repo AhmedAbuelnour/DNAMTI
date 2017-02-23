@@ -44,7 +44,7 @@ namespace SequenceAlignment.Controllers
                     EMailMessage.IsBodyHtml = true;
                     EMailMessage.Body = $"Please Confirm your email by click this link {confirmationLink}";
                     SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                    SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "A7med1994");
+                    SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "Password");
                     SC.EnableSsl = true;
 
                     SC.Send(EMailMessage);
