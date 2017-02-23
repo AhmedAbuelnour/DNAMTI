@@ -117,6 +117,8 @@ namespace DataAccessLayer.Service
         }
         public void FinalizeJob(string AlignmentJobID, AlignedSequences AlignmentResult)
         {
+            if(string.IsNullOrWhiteSpace(AlignmentJobID))
+                throw new Exception("ID Can't be Empty string");
             if (AlignmentResult == null)
                 throw new Exception("Alignment Result Can't be null");
             AlignmentJob Seq = db.AlignmentJobs.SingleOrDefault(Find => Find.AlignmentID == AlignmentJobID);
@@ -128,6 +130,8 @@ namespace DataAccessLayer.Service
         }
         public async Task FinalizeJobAsync(string AlignmentJobID, AlignedSequences AlignmentResult)
         {
+            if (string.IsNullOrWhiteSpace(AlignmentJobID))
+                throw new Exception("ID Can't be Empty string");
             if (AlignmentResult == null)
                 throw new Exception("Alignment Result Can't be null");
             AlignmentJob Seq = await db.AlignmentJobs.SingleOrDefaultAsync(Find => Find.AlignmentID == AlignmentJobID);
@@ -143,7 +147,7 @@ namespace DataAccessLayer.Service
                 throw new Exception("Can't Send Empty string as ID");
             AlignmentJob LocalSequence = db.AlignmentJobs.SingleOrDefault(Seq => Seq.AlignmentID == AlignmentJobID);
             if (LocalSequence == null)
-                return false;
+                throw new Exception("Can't Find A Record In The Database With The Specified ID");
             else if (LocalSequence.ByteText == null)
                 return false;
             return true;
@@ -154,7 +158,7 @@ namespace DataAccessLayer.Service
                 throw new Exception("Can't Send Empty string as ID");
             AlignmentJob LocalSequence = await db.AlignmentJobs.SingleOrDefaultAsync(Seq => Seq.AlignmentID == AlignmentJobID);
             if (LocalSequence == null)
-                return false;
+                throw new Exception("Can't Find A Record In The Database With The Specified ID");
             else if (LocalSequence.ByteText == null)
                 return false;
             return true;
@@ -187,21 +191,13 @@ namespace DataAccessLayer.Service
         }
         public Tuple<string, string> GetSubmittedSequences(string AlignmentJobID)
         {
-            try
-            {
-                AlignmentJob Seq = db.AlignmentJobs.SingleOrDefault(Find => Find.AlignmentID == AlignmentJobID);
-                if (Seq == null)
-                    throw new Exception("Can't Find Alignment Job matches the Given ID");
-                string File = Encoding.ASCII.GetString(Seq.ByteText);
-                string FirstSequence = File.Substring(File.IndexOf("First Sequence:") + "First Sequence:".Length, File.IndexOf("Second Sequence:")).Trim();
-                string SecondSequence = File.Substring(File.IndexOf("Second Sequence:") + "Second Sequence:".Length).Trim();
-                return new Tuple<string, string>(FirstSequence, SecondSequence);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
+            AlignmentJob Seq = db.AlignmentJobs.SingleOrDefault(Find => Find.AlignmentID == AlignmentJobID);
+            if (Seq == null)
+                throw new Exception("Can't Find Alignment Job matches the Given ID");
+            string File = Encoding.ASCII.GetString(Seq.ByteText);
+            string FirstSequence = File.Substring(File.IndexOf("First Sequence:") + "First Sequence:".Length, File.IndexOf("Second Sequence:")).Trim();
+            string SecondSequence = File.Substring(File.IndexOf("Second Sequence:") + "Second Sequence:".Length).Trim();
+            return new Tuple<string, string>(FirstSequence, SecondSequence);
         }
 
 
