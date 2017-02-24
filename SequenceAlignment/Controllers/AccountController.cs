@@ -24,7 +24,6 @@ namespace SequenceAlignment.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Signup(RegistrationViewModel Model)
         {
@@ -75,7 +74,6 @@ namespace SequenceAlignment.Controllers
                 return View("Error");
             }
         }
-
         [HttpGet]
         public IActionResult ForgetPassword()
         {
@@ -103,7 +101,6 @@ namespace SequenceAlignment.Controllers
             }
             return View();
         }
-
         [HttpGet]
         public IActionResult ResetPassword(string UserId , string Token)
         {
@@ -141,8 +138,8 @@ namespace SequenceAlignment.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var xx = await SignInManager.PasswordSignInAsync(await UserManager.FindByEmailAsync(Model.Email), Model.Password, Model.RememberMe, false);
-                if (xx.Succeeded)
+                var SignInResult = await SignInManager.PasswordSignInAsync(await UserManager.FindByEmailAsync(Model.Email), Model.Password, Model.RememberMe, false);
+                if (SignInResult.Succeeded)
                 {
                     if (string.IsNullOrEmpty(returnUrl))
                         return RedirectToAction("Index", "Home");
@@ -159,7 +156,6 @@ namespace SequenceAlignment.Controllers
                 return View(Model);
             }
         }
-
         [Authorize, HttpGet]
         public async Task<IActionResult> Logout()
         {
