@@ -1,10 +1,8 @@
-﻿@model IEnumerable<SequenceAlignment.Models.Sequence>
+﻿@model IEnumerable<DataAccessLayer.Model.AlignmentJob>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 @{ 
-    var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate , Selector.ByteText }).OrderBy(O=> O.SubmittedDate);
-    string Json = Newtonsoft.Json.JsonConvert.SerializeObject(FilteredData);
+    var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);
 }
 <div class="container" ng-app="">
     <div class="form-group pull-left">
@@ -21,16 +19,19 @@
             </tr>
         </thead>
         <tbody >
-                <tr ng-repeat="Seq in @Json | filter : SearchBox track by $index | limitTo: 25">
-                    <td class="col-md-2 col-xs-1">{{Seq.AlignmentID}}</td>
-                    <td class="col-md-2 col-xs-1">{{Seq.FirstSequenceName}}</td>
-                    <td class="col-md-2 col-xs-1">{{Seq.SecondSequenceName}}</td>
-                    <td class="col-md-2 col-xs-1">{{Seq.SubmittedDate}}</td>
+            @foreach (var Job in FilteredData)
+            {
+                <tr>
+                    <td class="col-md-2 col-xs-1">@Job.AlignmentID</td>
+                    <td class="col-md-2 col-xs-1">@Job.FirstSequenceName</td>
+                    <td class="col-md-2 col-xs-1">@Job.SecondSequenceName</td>
+                    <td class="col-md-2 col-xs-1">@Job.SubmittedDate</td>
                     <td class="col-md-2 col-xs-1">
-                        <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="{{Seq.AlignmentID}}">Download</a>
-                        <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="{{Seq.AlignmentID}}">Remove</a>
-                    </td>                         
+                        <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="@Job.AlignmentID">Download</a>
+                        <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="@Job.AlignmentID">Remove</a>
+                    </td>
                 </tr>
+            }
         </tbody>
     </table>
 </div>

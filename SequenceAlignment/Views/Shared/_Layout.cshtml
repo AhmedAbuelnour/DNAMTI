@@ -29,23 +29,43 @@
             </a>
         </div>
         <div class="btn-group">
-            <button type="button" class="btn btn-nav">
+            <a asp-controller="WebService" asp-action="Index" class="btn btn-nav">
                 <span class="glyphicon glyphicon-globe"></span>
                 <p>Web API</p>
-            </button>
+            </a>
         </div>
         <div class="btn-group">
-            <button type="button" class="btn btn-nav">
+            <a asp-controller="Home" asp-action="About" class="btn btn-nav">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <p>About</p>
-            </button>
+            </a>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-nav">
-                <span class="glyphicon glyphicon-pencil"></span>
-                <p>Signup</p>
-            </button>
-        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="btn-group">
+                <a asp-controller="Profile" asp-action="Index" class="btn btn-nav">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <p>Profile</p>
+                </a>
+            </div>
+            <div class="btn-group">
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-nav">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                    <p>Logout</p>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="btn-group">
+                <a asp-controller="Account" asp-action="Login" class="btn btn-nav">
+                    <span class="glyphicon glyphicon-log-in"></span>
+                    <p>Login</p>
+                </a>
+            </div>
+
+        }
+      
     </div>
   
     <div id="HomeIndex">

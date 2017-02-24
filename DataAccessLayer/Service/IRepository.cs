@@ -14,7 +14,7 @@ namespace DataAccessLayer.Service
         void AddAlignmentJob(AlignmentJob Job);
         Task AddAlignmentJobAsync(string SequenceA, string SequenceNameA, string SequenceB, string SequenceNameB, string UserId);
         void AddAlignmentJob(string SequenceA, string SequenceNameA, string SequenceB, string SequenceNameB, string UserId);
-        Task<AlignmentJob> GetAlignmentJobByIdAsync(string AlignmentJobID);
+        IEnumerable<AlignmentJob> GetHistory(string UserID);
         AlignmentJob GetAlignmentJobById(string AlignmentJobID);
         Task<IEnumerable<AlignmentJob>> GetAlignmentJobsAsync();
         IEnumerable<AlignmentJob> GetAlignmentJobs();
@@ -26,5 +26,6 @@ namespace DataAccessLayer.Service
         Task<bool> IsFinishedAsync(string AlignmentJobID);
         AlignmentJob AreExist(string FirstSequence, string SecondSequence);
         Tuple<string, string> GetSubmittedSequences(string AlignmentJobID);
+
     }
 }

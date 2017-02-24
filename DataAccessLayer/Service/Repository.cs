@@ -85,9 +85,9 @@ namespace DataAccessLayer.Service
             });
             db.SaveChanges();
         }
-        public async Task<AlignmentJob> GetAlignmentJobByIdAsync(string AlignmentJobID)
+        public IEnumerable<AlignmentJob> GetHistory(string UserID)
         {
-            return await db.AlignmentJobs.SingleOrDefaultAsync(Seq => Seq.AlignmentID == AlignmentJobID);
+            return db.AlignmentJobs.Where(Seq => Seq.UserFK == UserID).ToList();
         }
         /// <summary>
         /// Get a certian Alignment Job with specified ID
