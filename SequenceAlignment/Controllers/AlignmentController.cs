@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using DataAccessLayer.Model;
 using DataAccessLayer.Service;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Security.Principal;
 using Microsoft.AspNetCore.Identity;
 
 namespace SequenceAlignment.Controllers
@@ -121,7 +120,7 @@ namespace SequenceAlignment.Controllers
                                                    Model.Gap,
                                                    Model.GapOpenPenalty,
                                                    Model.GapExtensionPenalty);
-                JobFound.UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                JobFound.UserFK = UserManager.GetUserId(User);
                 await Repo.AddAlignmentJobAsync(JobFound);
                 return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
             }
@@ -133,6 +132,7 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public async Task<IActionResult> Grid()
         {
+            ViewData["Message"] = string.Empty;
             IdentityUser CurrentUser = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
             if (CurrentUser is null)
                 return View("Error");
@@ -141,10 +141,9 @@ namespace SequenceAlignment.Controllers
                 return View();
             else
             {
-                //TODO: Impelement a way.
-                return View("Need Email Confirmation"); // Require a View;
+                ViewData["Message"] = "Check Your E-Mail";
+                return View(); 
             }
-
         }
         [HttpPost]
         public async Task<IActionResult> Grid(GridViewModel Model, IFormFile FirstFile, IFormFile SecondFile)

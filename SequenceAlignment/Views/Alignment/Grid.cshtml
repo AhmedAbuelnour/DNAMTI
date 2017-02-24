@@ -64,8 +64,17 @@
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary btn-block" type="submit"> Align </button>
+            @if(ViewData["Message"] == null)
+            {
+                <button class="btn btn-primary btn-block" type="submit"> Align </button>
+            }
+            else
+            {
+                <h3 class="text-center text-danger">Email Confirmation Is Required for Cloud Alignment</h3>
+            }
         </div>
+
+        <h1>@ViewData["Message"]</h1>
     </form>
 </div>
 
