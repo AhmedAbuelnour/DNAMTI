@@ -14,5 +14,11 @@ namespace DataAccessLayer.Model
 
 
         public DbSet<AlignmentJob> AlignmentJobs { get; set; }
+
+        // For Windows Application, Override OnConfiguring Method
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+        //}
     }
 }

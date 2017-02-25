@@ -41,15 +41,15 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {              
-            if(!string.IsNullOrEmpty(Model.FirstSequence))
-                Model.FirstSequence = Model.FirstSequence.Trim();
-            if (!string.IsNullOrEmpty(Model.SecondSequence))
-                Model.SecondSequence = Model.SecondSequence.Trim();
+            if(!string.IsNullOrWhiteSpace(Model.FirstSequence))
+                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty);
+            if (!string.IsNullOrWhiteSpace(Model.SecondSequence))
+                Model.SecondSequence = Model.SecondSequence.Trim().Replace(" ", string.Empty);
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
                 if(FirstFile.ContentType == "text/plain")
                 {
-                    string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                    string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty);
                     if (FirstSequence.Length > 20000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (FirstSequence.Length == 0)

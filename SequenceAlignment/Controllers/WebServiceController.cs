@@ -39,7 +39,7 @@ namespace SequenceAlignment.Controllers
 
             IdentityUser MyUser = await UserManager.FindByEmailAsync(Email);
             if(MyUser == null)
-                return "You have to sign-up first to be able to use or alignmnet serive";
+                return "You have to sign-up first to be able to use our alignmnet serive";
 
             AlignmentJob JobFound = Repo.AreExist(FirstSequence, SecondSequence);
             if (JobFound == null)
@@ -58,7 +58,15 @@ namespace SequenceAlignment.Controllers
                     GapExtensionPenalty = -2
                 };
                 SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(JobFound.Algorithm);
-                ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(JobFound.ScoringMatrix);
+                ScoringMatrix ScoringMatrixInstance;
+                try
+                {
+                    ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(JobFound.ScoringMatrix);
+                }
+                catch
+                {
+                    return "The Score Matrix Name is invalid.";
+                }
                 string AlignmentResult = string.Empty;
                 float AlignmentScore = 0.0f;
                 await Task.Run(() =>
@@ -110,7 +118,6 @@ namespace SequenceAlignment.Controllers
                 return "Sequence Can't be empty";
             if (FirstSequence.Length > 20000 || SecondSequence.Length > 20000)
                 return "Sequence length Can't be greater than 20K";
-
             if (!Regex.IsMatch(FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(SecondSequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
             return $"{BioEdge.MatricesHelper.Similarity.CalculateSimilarity(FirstSequence,SecondSequence) * 100} %";
