@@ -1,0 +1,64 @@
+﻿<link href="~/css/System-Status.css" rel="stylesheet" />
+<style>
+    body {
+        text-align: unset;
+    }
+</style>
+<div class="bg-gray padding-50">
+    <div class="container" id="system-status">
+        <h1 class="text-center"><strong>Generate </strong></h1>
+        <div class="system-status">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <h2 class="text-uppercase">How to use</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>URL </td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net//api/webservice/generate/Alphabet/SequencesLength/ConsecutiveMatch/Position</td>
+                                </tr>
+                                <tr>
+                                    <td>Method Type</td>
+                                    <td><i class="glyphicon glyphicon-send"></i>POST</td>
+                                </tr>
+                                <tr>
+                                    <td>Alphabet </td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>The allowed alphabet of the sequence.</td>
+                                </tr>
+                                <tr>
+                                    <td>SequencesLength </td>
+                                    <td><i class="glyphicon glyphicon-font"></i>The length of the two generated sequences. </td>
+                                </tr>
+                                <tr>
+                                    <td>ConsecutiveMatch </td>
+                                    <td><i class="glyphicon glyphicon-text-width"></i> Length of the consecutive match letters between the two generated sequences.</td>
+                                </tr>
+                                <tr>
+                                    <td>Position </td>
+                                    <td><i class="glyphicon glyphicon-screenshot"></i> Define where you want your consecutive match to be located in the generated sequences.</td>
+                                </tr>
+                                <tr>
+                                    <td>Return </td>
+                                    <td><i class="glyphicon glyphicon-arrow-down"></i> Two generated Sequences.</td>
+                                </tr>
+                                <tr>
+                                    <td>Allowed Alphabet</td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i> AmbiguousDNA , UnambiguousDNA , AmbiguousRNA , UnambiguousRNA , Protein</td>
+                                </tr>
+                                <tr>
+                                    <td>Allowed Positions</td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i> L for Left-to-right , R for Right-to-left , M for middle</td>
+                                </tr>
+                                <tr>
+                                    <td>Example </td>
+                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net//api/webservice/generate/AmbiguousDNA/100/10/L</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

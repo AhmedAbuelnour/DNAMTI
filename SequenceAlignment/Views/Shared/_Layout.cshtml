@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="~/css/Nav.css" rel="stylesheet" />
+    <link href="~/css/footer.css" rel="stylesheet" />
     <title>@ViewData["Title"] - Sequence Alignment</title>
 </head>
 <body>
@@ -45,7 +46,7 @@
             <div class="btn-group">
                 <a asp-controller="Profile" asp-action="Index" class="btn btn-nav">
                     <span class="glyphicon glyphicon-user"></span>
-                    <p>Profile</p>
+                    <p>History</p>
                 </a>
             </div>
             <div class="btn-group">
@@ -73,40 +74,18 @@
     </div>
     @RenderBody()
    
-    <div class="footer-clean">
+    <div class="footer-basic">
         <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3 col-sm-4 item">
-                        <h3>Services</h3>
-                        <ul>
-                            <li><a href="#">DNA Alignment</a></li>
-                            <li><a href="#">Generate Sequences</a></li>
-                            <li><a href="#">Clean Sequences</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3 col-sm-4 item">
-                        <h3>About</h3>
-                        <ul>
-                            <li><a href="#">Collage </a></li>
-                            <li><a href="#">Team</a></li>
-                            <li><a href="#">Legacy</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4 col-sm-4 item">
-                        <h3>Developed &amp; Designed</h3>
-                        <ul>
-                            <li><a href="#">Ahmed Ramadan</a></li>
-                            <li><a href="#">Amr Tawfik</a></li>
-                            <li><a href="#">Mahmoud Zakaria</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 item social">
-                        <a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a>
-                        <p class="copyright">MTI . CS © 2017</p>
-                    </div>
-                </div>
-            </div>
+            <ul class="list-inline">
+                <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                <li><a asp-action="Index" asp-controller="Alignment">Alignment </a></li>
+                <li><a asp-action="Index" asp-controller="Service">Services </a></li>
+                <li><a asp-action="Index" asp-controller="WebService">WebAPI </a></li>
+                <li><a asp-action="About" asp-controller="Home">About </a></li>
+                <li><a asp-action="Contact" asp-controller="Home">Contact </a></li>
+
+            </ul>
+            <p class="copyright">MTI © 2017</p>
         </footer>
     </div>
    

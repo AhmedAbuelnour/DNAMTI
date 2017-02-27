@@ -58,18 +58,24 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public IActionResult Generate(GenerateSequenceViewModel Model)
         {
-            string CleanSequence = string.Empty;
+            Tuple<string, string> CleanSequence;
             if (Model.Alphabet == "AmbiguousDNA")
-                CleanSequence = Helper.GenerateSequence(Model.SequenceLength, Helper.AmbiguousDNA);
+                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.AmbiguousDNA,Model.ConsecutiveMatch,Model.Position);
             else if (Model.Alphabet == "UnambiguousDNA")
-                CleanSequence = Helper.GenerateSequence(Model.SequenceLength, Helper.UnambiguousDNA);
+                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.UnambiguousDNA, Model.ConsecutiveMatch, Model.Position);
             else if (Model.Alphabet == "AmbiguousRNA")
-                CleanSequence = Helper.GenerateSequence(Model.SequenceLength, Helper.AmbiguousRNA);
+                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.AmbiguousRNA, Model.ConsecutiveMatch, Model.Position);
             else if (Model.Alphabet == "UnambiguousRNA")
-                CleanSequence = Helper.GenerateSequence(Model.SequenceLength, Helper.UnambiguousRNA);
+                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.UnambiguousRNA, Model.ConsecutiveMatch, Model.Position);
             else
-                CleanSequence = Helper.GenerateSequence(Model.SequenceLength, Helper.Protein);
-            return File(Encoding.UTF8.GetBytes(CleanSequence), "text/plain", $"{Guid.NewGuid()}_GeneratedSequence{Model.SequenceLength}.txt");
+                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.Protein, Model.ConsecutiveMatch, Model.Position);
+
+            return File(Encoding.UTF8.GetBytes(new StringBuilder().Append(CleanSequence.Item1).
+                                                                   Append(Environment.NewLine).
+                                                                   Append(Environment.NewLine).
+                                                                   Append(CleanSequence.Item2).ToString()),
+                                                                   "text/plain",
+                                                                   $"{Guid.NewGuid()}_GeneratedSequence{Model.SequenceLength}.txt");
         }
 
         [HttpGet]

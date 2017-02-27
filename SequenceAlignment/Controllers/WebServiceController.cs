@@ -26,7 +26,39 @@ namespace SequenceAlignment.Controllers
             Repo = _Repo;
             UserManager = _UserManager;
         }
-        [HttpGet("[action]/{FirstSequence}/{SecondSequence}/{ScoringMatrixName}/{Email}")]
+
+        [HttpGet("[action]")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult Align()
+        {
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult Clean()
+        {
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult Similarity()
+        {
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult Splitter()
+        {
+            return View();
+        }
+        [HttpGet("[action]")]
+        public IActionResult Generate()
+        {
+            return View();
+        }
+
+        [HttpPost("[action]/{FirstSequence}/{SecondSequence}/{ScoringMatrixName}/{Email}")]
         public async Task<string> Align(string FirstSequence, string SecondSequence,string ScoringMatrixName, string Email)
         {
             if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
@@ -89,8 +121,8 @@ namespace SequenceAlignment.Controllers
             }
             else
                 return Encoding.UTF8.GetString(JobFound.ByteText);
-        }
-        [HttpGet("[action]/{Sequence}/{Alphabet}")]
+        } 
+        [HttpPost("[action]/{Sequence}/{Alphabet}")]
         public string Clean(string Sequence, string Alphabet)
         {
             if (string.IsNullOrWhiteSpace(Sequence))
@@ -111,7 +143,7 @@ namespace SequenceAlignment.Controllers
                 CleanSequence = Helper.CleanUp(Sequence, Helper.Protein);
             return CleanSequence;
         }
-        [HttpGet("[action]/{FirstSequence}/{SecondSequence}")]
+        [HttpPost("[action]/{FirstSequence}/{SecondSequence}")]
         public string Similarity(string FirstSequence, string SecondSequence)
         {
             if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
@@ -122,7 +154,7 @@ namespace SequenceAlignment.Controllers
                 return "Sequence must contains only characters";
             return $"{BioEdge.MatricesHelper.Similarity.CalculateSimilarity(FirstSequence,SecondSequence) * 100} %";
         }
-        [HttpGet("[action]/{Sequence}/{ChunkLength}")]
+        [HttpPost("[action]/{Sequence}/{ChunkLength}")]
         public string Splitter(string Sequence ,int ChunkLength)
         {
             if (string.IsNullOrWhiteSpace(Sequence))
@@ -130,6 +162,30 @@ namespace SequenceAlignment.Controllers
             if (!Regex.IsMatch(Sequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
             return JsonConvert.SerializeObject(Helper.SequenceSpliter(Sequence, ChunkLength).ToList());
+        }
+        [HttpPost("[action]/{Alphabet}/{ChunkLength}/{ConsecutiveMatch:int}/{Position}")]
+        public string Generate(string Alphabet, int SequencesLength,int ConsecutiveMatch, char Position)
+        {
+            Tuple<string, string> GeneratedSequences;
+            if (SequencesLength < 1)
+                return "Generated Sequences must be greater than 0";
+            if (string.IsNullOrWhiteSpace(Alphabet))
+                return "Alphabet Can't be empty";
+            if (!Regex.IsMatch(Alphabet, @"^[a-zA-Z]+$"))
+                return "Sequence must contains only characters";
+
+            if (Alphabet == "AmbiguousDNA")
+                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.AmbiguousDNA,ConsecutiveMatch,Position);
+            else if (Alphabet == "UnambiguousDNA")
+                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousDNA, ConsecutiveMatch, Position);
+            else if (Alphabet == "AmbiguousRNA")
+                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.AmbiguousRNA, ConsecutiveMatch, Position);
+            else if (Alphabet == "UnambiguousRNA")
+                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousRNA, ConsecutiveMatch, Position);
+            else
+                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.Protein, ConsecutiveMatch, Position);
+
+            return $"'SequenceA:{GeneratedSequences.Item1}',SequenceB:{GeneratedSequences.Item2}";
         }
     }
 }

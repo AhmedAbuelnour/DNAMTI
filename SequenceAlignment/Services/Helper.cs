@@ -64,16 +64,39 @@ namespace SequenceAlignment.Services
             }
             return CleanedSequence;
         }
-        public static string GenerateSequence(int Length, char[] AllowedCharacters)
+        public static Tuple<string, string> GenerateSequences(int Length, char[] AllowedCharacters, int ConsecutiveMatch, char Position)
         {
-            ThreadLocal<Random> appRandom = new ThreadLocal<Random>(() => new Random());
-            string GeneratedSequence = string.Empty;
+            if (ConsecutiveMatch >= Length)
+                throw new Exception("Consecutive Match Length can't be greater than or equal the acutal sequence length");
+            Random appRandom = new Random();
+            string GeneratedSequenceA = string.Empty;
+            string CM;
             for (int i = 0; i < Length; i++)
+                GeneratedSequenceA = string.Concat(GeneratedSequenceA, AllowedCharacters[appRandom.Next(0, AllowedCharacters.Length)].ToString());
+            string GeneratedSequenceB = string.Empty;
+            for (int i = 0; i < Length; i++)
+                GeneratedSequenceB = string.Concat(GeneratedSequenceB, AllowedCharacters[appRandom.Next(0, AllowedCharacters.Length)].ToString());
+
+            if (Position == 'L')
             {
-                GeneratedSequence = string.Concat(GeneratedSequence, AllowedCharacters[appRandom.Value.Next(0, AllowedCharacters.Length)].ToString());
+                CM = GeneratedSequenceA.Substring(0, ConsecutiveMatch);
+                GeneratedSequenceB = string.Copy(GeneratedSequenceB.Replace(GeneratedSequenceB.Substring(0, ConsecutiveMatch), CM));
             }
-            return GeneratedSequence;
+            else if (Position == 'R')
+            {
+                CM = GeneratedSequenceA.Substring(GeneratedSequenceA.Length - ConsecutiveMatch);
+                GeneratedSequenceB = string.Copy(GeneratedSequenceB.Replace(GeneratedSequenceB.Substring(GeneratedSequenceB.Length - ConsecutiveMatch), CM));
+            }
+            else
+            {
+                if ((GeneratedSequenceA.Length / 2) / 2 > (GeneratedSequenceA.Length / 2))
+                    throw new Exception("Middle Index can't be greater than or equal the sequence length");
+                CM = GeneratedSequenceA.Substring((GeneratedSequenceA.Length / 2) - ConsecutiveMatch / 2, ConsecutiveMatch);
+                GeneratedSequenceB = string.Copy(GeneratedSequenceB.Replace(GeneratedSequenceB.Substring((GeneratedSequenceA.Length / 2) - ConsecutiveMatch / 2, ConsecutiveMatch), CM));
+            }
+            return new Tuple<string, string>(GeneratedSequenceA, GeneratedSequenceB);
         }
+
         public static IEnumerable<string> SequenceSpliter(string str, int BlockSize)
         {
             for (int i = 0; i < str.Length; i += BlockSize)

@@ -9,8 +9,12 @@
     <Content Include="wwwroot\css\AlignSimple.css" />
     <Content Include="wwwroot\css\Contact.css" />
     <Content Include="wwwroot\css\File-Input---Beautiful-Input--Button-Approach-Jasny-Bootstrap1.css" />
+    <Content Include="wwwroot\css\footer.css" />
+    <Content Include="wwwroot\css\Login.css" />
     <Content Include="wwwroot\css\Nav.css" />
     <Content Include="wwwroot\css\Services.css" />
+    <Content Include="wwwroot\css\Signup.css" />
+    <Content Include="wwwroot\css\System-Status.css" />
     <Content Include="wwwroot\images\AlignDNA.jpg" />
     <Content Include="wwwroot\images\DNAGenerate.jpg" />
     <Content Include="wwwroot\images\DNASplit.png" />

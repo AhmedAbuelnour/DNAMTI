@@ -3,34 +3,47 @@
 @{ 
     var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);
 }
-<div class="container" ng-app="">
-    <div class="form-group pull-left">
-        <input type="text" class="search form-control" placeholder="What you looking for?" ng-model="SearchBox"/>
-    </div><span class="counter pull-right"></span>
+
+<br />
+<div class="container" ng-app="" >
     <table class="table table-hover table-bordered results">
         <thead>
             <tr>
-                <th class="col-md-2 col-xs-2 text-center">ID</th>
+                <th class="col-md-3 col-xs-3 text-center">ID Job</th>
                 <th class="col-md-2 col-xs-2 text-center">First Sequence</th>
                 <th class="col-md-2 col-xs-2 text-center">Second Sequence</th>
-                <th class="col-md-2 col-xs-2 text-center">Submitted Date</th>
+                <th class="col-md-1 col-xs-1 text-center">Date</th>
                 <th class="col-md-2 col-xs-2 text-center">Actions</th>
             </tr>
         </thead>
         <tbody >
-            @foreach (var Job in FilteredData)
+            @if (FilteredData.Count() == 0)
             {
                 <tr>
-                    <td class="col-md-2 col-xs-1">@Job.AlignmentID</td>
-                    <td class="col-md-2 col-xs-1">@Job.FirstSequenceName</td>
-                    <td class="col-md-2 col-xs-1">@Job.SecondSequenceName</td>
-                    <td class="col-md-2 col-xs-1">@Job.SubmittedDate</td>
-                    <td class="col-md-2 col-xs-1">
-                        <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="@Job.AlignmentID">Download</a>
-                        <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="@Job.AlignmentID">Remove</a>
+                    <td colspan="5" class="col-md-12 col-xs-12">
+                        <div class="alert alert-warning">
+                            <strong>No Alignment Job has been added!</strong> 
+                        </div>
                     </td>
                 </tr>
+
             }
+            else
+            {
+                @foreach (var Job in FilteredData)
+                {
+                    <tr>
+                        <td class="col-md-3 col-xs-3">@Job.AlignmentID</td>
+                        <td class="col-md-2 col-xs-2">@Job.FirstSequenceName</td>
+                        <td class="col-md-2 col-xs-2">@Job.SecondSequenceName</td>
+                        <td class="col-md-1 col-xs-1">@Job.SubmittedDate.ToShortDateString()</td>
+                        <td class="col-md-2 col-xs-2">
+                            <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="@Job.AlignmentID">Download</a>
+                            <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="@Job.AlignmentID">Remove</a>
+                        </td>
+                    </tr>
+                }
+            }       
         </tbody>
     </table>
 </div>

@@ -37,13 +37,13 @@ namespace SequenceAlignment.Controllers
                     string ConfirmationToken = await UserManager.GenerateEmailConfirmationTokenAsync(MyUser);
                     string confirmationLink = Url.Action("ConfirmEmail", "Account", new { UserId = MyUser.Id, Token = ConfirmationToken },HttpContext.Request.Scheme);
                     MailMessage EMailMessage = new MailMessage();
-                    EMailMessage.From = new MailAddress("A7medRamadan@outlook.com");
+                    EMailMessage.From = new MailAddress("MtiDna@outlook.com");
                     EMailMessage.To.Add(MyUser.Email);
                     EMailMessage.Subject = "Email Confirmation";
                     EMailMessage.IsBodyHtml = true;
-                    EMailMessage.Body = $"Please Confirm your email by click this link {confirmationLink}";
+                    EMailMessage.Body = $"Please Confirm your email by click this link <a href='{confirmationLink}'> Confirm Me </a>";
                     SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                    SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "Password");
+                    SC.Credentials = new NetworkCredential("MtiDna@outlook.com", "Mti_dna2017");
                     SC.EnableSsl = true;
 
                     SC.Send(EMailMessage);
@@ -53,7 +53,7 @@ namespace SequenceAlignment.Controllers
                 else
                 {
                     result.Errors.ToList().ForEach(x => ModelState.AddModelError(string.Empty, x.Description));
-                    return View(User);
+                    return View(Model);
                 }
             }
             return View(User);
@@ -88,13 +88,13 @@ namespace SequenceAlignment.Controllers
                 string ConfirmationToken = await UserManager.GeneratePasswordResetTokenAsync(User);
                 string confirmationLink = Url.Action("ResetPassword", "Account", new { UserId = User.Id, Token = ConfirmationToken }, HttpContext.Request.Scheme);
                 MailMessage EMailMessage = new MailMessage();
-                EMailMessage.From = new MailAddress("WebSiteEmailAccount@outlook.com");
+                EMailMessage.From = new MailAddress("MtiDna@outlook.com");
                 EMailMessage.To.Add(User.Email);
                 EMailMessage.Subject = "Email Confirmation";
-                EMailMessage.IsBodyHtml = false;
-                EMailMessage.Body = $"Please Confirm your password reset by click this link {confirmationLink}";
+                EMailMessage.IsBodyHtml = true;
+                EMailMessage.Body = $"Please Confirm your password reset by click this link <a href='{confirmationLink}'> Reset Me </a>";
                 SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "Password");
+                SC.Credentials = new NetworkCredential("MtiDna@outlook.com", "Mti_dna2017");
                 SC.EnableSsl = true;
                 SC.Send(EMailMessage);
                 return View("CheckEmail");

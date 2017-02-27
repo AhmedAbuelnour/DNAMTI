@@ -25,12 +25,12 @@ namespace SequenceAlignment.Controllers
         {
             MailMessage EMailMessage = new MailMessage();
             EMailMessage.From = new MailAddress(Model.Email);
-            EMailMessage.To.Add("A7medRamadan@outlook.com");
-            EMailMessage.Subject = "Hello I'm Ahmed From MVC";
+            EMailMessage.To.Add("MtiDna@outlook.com");
+            EMailMessage.Subject = "MTI DNA - Contact";
             EMailMessage.Body = Model.Message;
-
+            EMailMessage.IsBodyHtml = false;
             SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-            SC.Credentials = new NetworkCredential("A7medRamadan@outlook.com", "Password");
+            SC.Credentials = new NetworkCredential("MtiDna@outlook.com", "Mti_dna2017");
             SC.EnableSsl = true;
 
             SC.Send(EMailMessage);
