@@ -23,7 +23,7 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public IActionResult Contact(ContactViewModel Model)
         {
-            MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com",Model.Email);
+            MailMessage EMailMessage = new MailMessage(Model.Email,"mtidna2017@gmail.com");
 
             EMailMessage.Subject = "MTI DNA - Contact";
             EMailMessage.Body = Model.Message;
