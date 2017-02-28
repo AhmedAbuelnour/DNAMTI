@@ -8,7 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
 <div class="contact-clean" ng-app="">
-    <form method="post" asp-controller="Service" asp-action="Splitter">
+    <form method="post" asp-controller="Service" asp-action="Splitter" enctype="multipart/form-data">
         <h1 class="text-center">Splitter </h1>
         <div class="form-group">
             <textarea placeholder="Sequence" asp-for="Sequence" class="form-control" ng-model="Sequence" pattern="^[a-zA-Z]+$"></textarea>

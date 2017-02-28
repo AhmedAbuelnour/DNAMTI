@@ -5,12 +5,13 @@
         text-align: unset;
     }
 </style>
+
 <div class="contact-clean">
     <form asp-controller="Alignment" asp-action="Grid" enctype="multipart/form-data">
         <h1 class="text-center"> Cloud Alignment </h1>
         <div class="form-group">
             <span class="label label-info pull-left">Give your First sequence a name</span>
-            <input type="text" asp-for="FirstSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
+            <input type="text" asp-for="FirstSequenceName" placeholder="What does your first sequence represent?" required class="form-control" />
         </div>
         <div class="form-group has-success">
             <span class="label label-info">Upload File Contains The First Sequence</span>
@@ -64,17 +65,18 @@
             </div>
         </div>
         <div class="form-group">
-            @if(ViewData["Message"] == null)
+            @if(ViewData["Message"].ToString() == string.Empty)
             {
                 <button class="btn btn-primary btn-block" type="submit"> Align </button>
             }
-            else
+            else if(ViewData["Message"].ToString() == "Check Your E-Mail")
             {
                 <h3 class="text-center text-danger">Email Confirmation Is Required for Cloud Alignment</h3>
+                <h1 class="text-center text-info">@ViewData["Message"]</h1>
             }
         </div>
 
-        <h1>@ViewData["Message"]</h1>
+        
     </form>
 </div>
 

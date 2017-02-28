@@ -1,18 +1,18 @@
-﻿@model IEnumerable<DataAccessLayer.Model.AlignmentJob>
+﻿@model IEnumerable<SequenceAlignment.Models.AlignmentJob>
 
 @{ 
     var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);
 }
 
 <br />
-<div class="container" ng-app="" >
+<div class="container-fluid" ng-app=""  style="background-color:#f1f7fc">
     <table class="table table-hover table-bordered results">
         <thead>
             <tr>
-                <th class="col-md-3 col-xs-3 text-center">ID Job</th>
+                <th class="col-md-2 col-xs-2 text-center">ID Job</th>
                 <th class="col-md-2 col-xs-2 text-center">First Sequence</th>
                 <th class="col-md-2 col-xs-2 text-center">Second Sequence</th>
-                <th class="col-md-1 col-xs-1 text-center">Date</th>
+                <th class="col-md-2 col-xs-2 text-center">Submitted Date</th>
                 <th class="col-md-2 col-xs-2 text-center">Actions</th>
             </tr>
         </thead>
@@ -47,3 +47,4 @@
         </tbody>
     </table>
 </div>
+<hr />

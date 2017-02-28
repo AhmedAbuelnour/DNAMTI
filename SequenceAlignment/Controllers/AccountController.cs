@@ -36,14 +36,14 @@ namespace SequenceAlignment.Controllers
                     IdentityUser MyUser = await UserManager.FindByEmailAsync(User.Email);
                     string ConfirmationToken = await UserManager.GenerateEmailConfirmationTokenAsync(MyUser);
                     string confirmationLink = Url.Action("ConfirmEmail", "Account", new { UserId = MyUser.Id, Token = ConfirmationToken },HttpContext.Request.Scheme);
-                    MailMessage EMailMessage = new MailMessage();
-                    EMailMessage.From = new MailAddress("MtiDna@outlook.com");
-                    EMailMessage.To.Add(MyUser.Email);
+                    MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com", MyUser.Email);
                     EMailMessage.Subject = "Email Confirmation";
                     EMailMessage.IsBodyHtml = true;
+
                     EMailMessage.Body = $"Please Confirm your email by click this link <a href='{confirmationLink}'> Confirm Me </a>";
-                    SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                    SC.Credentials = new NetworkCredential("MtiDna@outlook.com", "Mti_dna2017");
+                    SmtpClient SC = new SmtpClient("smtp.gmail.com", 587);
+                    SC.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
                     SC.EnableSsl = true;
 
                     SC.Send(EMailMessage);
@@ -56,7 +56,7 @@ namespace SequenceAlignment.Controllers
                     return View(Model);
                 }
             }
-            return View(User);
+            return View(Model);
         }
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string UserId , string Token)
@@ -65,13 +65,11 @@ namespace SequenceAlignment.Controllers
             IdentityResult result =  await UserManager.ConfirmEmailAsync(User, Token);
             if (result.Succeeded)
             {
-                ViewBag.Message = "Email confirmed successfully!";
-                return View("Success");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                ViewBag.Message = "Error while confirming your email!";
-                return View("Error");
+                return View("../Shared/Error","Confirmation Error!");
             }
         }
         [HttpGet]
@@ -87,14 +85,13 @@ namespace SequenceAlignment.Controllers
             {
                 string ConfirmationToken = await UserManager.GeneratePasswordResetTokenAsync(User);
                 string confirmationLink = Url.Action("ResetPassword", "Account", new { UserId = User.Id, Token = ConfirmationToken }, HttpContext.Request.Scheme);
-                MailMessage EMailMessage = new MailMessage();
-                EMailMessage.From = new MailAddress("MtiDna@outlook.com");
-                EMailMessage.To.Add(User.Email);
-                EMailMessage.Subject = "Email Confirmation";
+                MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com", User.Email);
+                EMailMessage.Subject = "Password Confirmation";
                 EMailMessage.IsBodyHtml = true;
                 EMailMessage.Body = $"Please Confirm your password reset by click this link <a href='{confirmationLink}'> Reset Me </a>";
-                SmtpClient SC = new SmtpClient("smtp-mail.outlook.com", 587);
-                SC.Credentials = new NetworkCredential("MtiDna@outlook.com", "Mti_dna2017");
+                SmtpClient SC = new SmtpClient("smtp.gmail.com", 587);
+                SC.DeliveryMethod = SmtpDeliveryMethod.Network;
+                SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
                 SC.EnableSsl = true;
                 SC.Send(EMailMessage);
                 return View("CheckEmail");

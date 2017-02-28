@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using DataAccessLayer.Model;
-using DataAccessLayer.Service;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BioEdge.MatricesHelper;
@@ -13,6 +11,7 @@ using SequenceAlignment.Services;
 using BioEdge.Matrices;
 using BioEdge.Alignment;
 using System.Text;
+using SequenceAlignment.Models;
 
 namespace SequenceAlignment.Controllers
 {

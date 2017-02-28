@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer.Model;
+using SequenceAlignment.Models;
 
 namespace SequenceAlignment
 {
@@ -32,7 +32,7 @@ namespace SequenceAlignment
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AlignmentDbContext>().AddDefaultTokenProviders();
 
-            services.AddScoped<DataAccessLayer.Service.IRepository, DataAccessLayer.Service.Repository>();
+            services.AddScoped<Services.IRepository, Services.Repository>();
             // Add framework services.
             services.AddMvc();
             services.AddSignalR();
@@ -54,7 +54,7 @@ namespace SequenceAlignment
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
             }
             app.UseResponseCompression();
             app.UseStaticFiles();

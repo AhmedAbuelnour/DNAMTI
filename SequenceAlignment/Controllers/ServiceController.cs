@@ -12,10 +12,10 @@ using System.Text.RegularExpressions;
 
 namespace SequenceAlignment.Controllers
 {
+    [AllowAnonymous]
     public class ServiceController : Controller
     {
-        // GET: /<controller>/
-        [HttpGet,AllowAnonymous]
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
@@ -85,13 +85,18 @@ namespace SequenceAlignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SimilarityAsync(SimilarityViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
+        public async Task<IActionResult> Similarity(SimilarityViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
             if (!string.IsNullOrEmpty(Model.FirstSequence))
                 Model.FirstSequence = Model.FirstSequence.Trim();
             if (!string.IsNullOrEmpty(Model.SecondSequence))
                 Model.SecondSequence = Model.SecondSequence.Trim();
-
+            if (FirstFile != null)
+                if (FirstFile.ContentType != "text/plain")
+                    return View(Model);
+            if (SecondFile != null)
+                if (SecondFile.ContentType != "text/plain")
+                    return View(Model);
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
                 string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
@@ -102,13 +107,13 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim();
                 if (SecondSequence.Length > 20000)
                     return View(Model); // Can't be greater than 20K
                 else
                     Model.SecondSequence = SecondSequence;
             }
-            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
+            if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) )
             {
                 ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
                 return View(Model);
@@ -119,10 +124,15 @@ namespace SequenceAlignment.Controllers
 
             StringBuilder Sb = new StringBuilder();
             Sb.Append($"Similarity between your two sequences are: {BioEdge.MatricesHelper.Similarity.CalculateSimilarity(Model.FirstSequence, Model.SecondSequence) * 100} %");
+            Sb.Append(Environment.NewLine);
             Sb.Append("Additional Information:");
+            Sb.Append(Environment.NewLine);
             Sb.Append("Your First Submitted Sequence:");
+            Sb.Append(Environment.NewLine);
             Sb.Append(Model.FirstSequence);
+            Sb.Append(Environment.NewLine);
             Sb.Append("Your Second Submitted Sequence:");
+            Sb.Append(Environment.NewLine);
             Sb.Append(Model.SecondSequence);
             return File(Encoding.UTF8.GetBytes(Sb.ToString()), "text/plain", $"{Guid.NewGuid()}_SimilaritySequence.txt");
         }
@@ -146,6 +156,7 @@ namespace SequenceAlignment.Controllers
 
             StringBuilder Sb = new StringBuilder();
             Sb.Append($"Your Sequences count:{Sequences.Count()}, Each sequence is {Model.Divider} length:");
+            Sb.Append(Environment.NewLine);
             for (int i = 0; i < Sequences.Count; i++)
             {
                 Sb.Append(Sequences[i]);

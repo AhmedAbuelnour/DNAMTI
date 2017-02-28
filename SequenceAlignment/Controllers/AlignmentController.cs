@@ -11,10 +11,9 @@ using BioEdge.Alignment;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
-using DataAccessLayer.Model;
-using DataAccessLayer.Service;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using SequenceAlignment.Models;
 
 namespace SequenceAlignment.Controllers
 {
