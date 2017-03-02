@@ -1,10 +1,10 @@
 ﻿using BioEdge.Alignment;
-using SequenceAlignment.Models;
+using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SequenceAlignment.Services
+namespace DataAccessLayer.Services
 {
     public interface IRepository
     {

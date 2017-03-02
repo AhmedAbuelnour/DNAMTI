@@ -50,8 +50,6 @@ namespace SequenceAlignment.Services
         }
         public static char[] UnambiguousRNA = { 'G', 'A', 'U', 'C' };
         public static char[] UnambiguousDNA = { 'G', 'A', 'T', 'C' };
-        public static char[] AmbiguousDNA = { 'G', 'A', 'T', 'C', 'R', 'Y', 'W', 'S', 'M', 'K', 'H', 'B', 'V', 'D', 'N' };
-        public static char[] AmbiguousRNA = { 'G', 'A', 'U', 'C', 'R', 'Y', 'W', 'S', 'M', 'K', 'H', 'B', 'V', 'D', 'N' };
         public static char[] Protein = { 'A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y' };
         public static string CleanUp(string Sequence, char[] AllowedCharacters)
         {
@@ -95,7 +93,6 @@ namespace SequenceAlignment.Services
             }
             return new Tuple<string, string>(GeneratedSequenceA, GeneratedSequenceB);
         }
-
         public static IEnumerable<string> SequenceSpliter(string str, int BlockSize)
         {
             for (int i = 0; i < str.Length; i += BlockSize)

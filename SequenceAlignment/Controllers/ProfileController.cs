@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using SequenceAlignment.Services;
+using DataAccessLayer.Services;
 
 namespace SequenceAlignment.Controllers
 {

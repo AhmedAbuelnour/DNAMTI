@@ -37,13 +37,9 @@ namespace SequenceAlignment.Controllers
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 
             string CleanSequence = string.Empty;
-            if (Model.Alphabet == "AmbiguousDNA")
-                CleanSequence = Helper.CleanUp(Model.Sequence, Helper.AmbiguousDNA);
-            else if (Model.Alphabet == "UnambiguousDNA")
+            if (Model.Alphabet == "DNA")
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousDNA);
-            else if (Model.Alphabet == "AmbiguousRNA")
-                CleanSequence = Helper.CleanUp(Model.Sequence, Helper.AmbiguousRNA);
-            else if (Model.Alphabet == "UnambiguousRNA")
+            else if (Model.Alphabet == "RNA")
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousRNA);
             else
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.Protein);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SequenceAlignment.Models.AlignmentJob>
+﻿@model IEnumerable<DataAccessLayer.Models.AlignmentJob>
 
 @{ 
     var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);

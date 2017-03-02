@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Model;
+﻿using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using BioEdge.MatricesHelper;
 using BioEdge.Alignment;
 
-namespace DataAccessLayer.Service
+namespace DataAccessLayer.Services
 {
     public class Repository : IRepository
     {
@@ -17,7 +17,6 @@ namespace DataAccessLayer.Service
         public Repository(AlignmentDbContext _db)
         {
             db = _db;
-            db.Database.EnsureCreated();
         }
         public void DeleteAlignmentJob(string AlignmentJobID)
         {
@@ -242,5 +241,25 @@ namespace DataAccessLayer.Service
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
         }
 
+        public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix)
+        {
+            if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
+                throw new Exception("Can't pass empty string as a sequence");
+            string FirstSequenceHash = SHA1HashStringForUTF8String(FirstSequence);
+            string SecondSequenceHash = SHA1HashStringForUTF8String(SecondSequence);
+            AlignmentJob LocalSequence = db.AlignmentJobs.AsEnumerable().SingleOrDefault(Seq =>
+            {
+                if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                    return true;
+                else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                    return true;
+                else
+                    return false;
+            });
+
+            if (LocalSequence == null)
+                return null;
+            return LocalSequence;
+        }
     }
 }

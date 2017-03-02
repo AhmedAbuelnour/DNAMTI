@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SequenceAlignment.Models;
-
+using DataAccessLayer.Models;
+using DataAccessLayer.Services;
 namespace SequenceAlignment
 {
     public class Startup
@@ -32,7 +32,7 @@ namespace SequenceAlignment
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AlignmentDbContext>().AddDefaultTokenProviders();
 
-            services.AddScoped<Services.IRepository, Services.Repository>();
+            services.AddScoped<IRepository, Repository>();
             // Add framework services.
             services.AddMvc();
             services.AddSignalR();
@@ -47,14 +47,10 @@ namespace SequenceAlignment
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                // Browser Link is not compatible with Kestrel 1.1.0
-                // For details on enabling Browser Link, see https://go.microsoft.com/fwlink/?linkid=840936
-                // app.UseBrowserLink();
             }
             else
             {
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler();
             }
             app.UseResponseCompression();
             app.UseStaticFiles();

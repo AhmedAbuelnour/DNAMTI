@@ -7,11 +7,12 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BioEdge.MatricesHelper;
-using SequenceAlignment.Services;
+using DataAccessLayer.Services;
 using BioEdge.Matrices;
 using BioEdge.Alignment;
 using System.Text;
-using SequenceAlignment.Models;
+using DataAccessLayer.Models;
+using SequenceAlignment.Services;
 
 namespace SequenceAlignment.Controllers
 {
@@ -130,12 +131,8 @@ namespace SequenceAlignment.Controllers
                 return "Sequence must contains only characters";
 
             string CleanSequence = string.Empty;
-            if (Alphabet == "AmbiguousDNA")
-                CleanSequence = Helper.CleanUp(Sequence, Helper.AmbiguousDNA);
-            else if (Alphabet == "UnambiguousDNA")
+            if (Alphabet == "UnambiguousDNA")
                 CleanSequence = Helper.CleanUp(Sequence, Helper.UnambiguousDNA);
-            else if (Alphabet == "AmbiguousRNA")
-                CleanSequence = Helper.CleanUp(Sequence, Helper.AmbiguousRNA);
             else if (Alphabet == "UnambiguousRNA")
                 CleanSequence = Helper.CleanUp(Sequence, Helper.UnambiguousRNA);
             else
@@ -173,12 +170,9 @@ namespace SequenceAlignment.Controllers
             if (!Regex.IsMatch(Alphabet, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
 
-            if (Alphabet == "AmbiguousDNA")
-                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.AmbiguousDNA,ConsecutiveMatch,Position);
-            else if (Alphabet == "UnambiguousDNA")
+          
+            if (Alphabet == "UnambiguousDNA")
                 GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousDNA, ConsecutiveMatch, Position);
-            else if (Alphabet == "AmbiguousRNA")
-                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.AmbiguousRNA, ConsecutiveMatch, Position);
             else if (Alphabet == "UnambiguousRNA")
                 GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousRNA, ConsecutiveMatch, Position);
             else

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SequenceAlignment.ViewModels;
-using SequenceAlignment.Services;
+using DataAccessLayer.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using BioEdge.MatricesHelper;
@@ -13,8 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using SequenceAlignment.Models;
+using DataAccessLayer.Models;
 using SequenceAlignment.Json;
+using SequenceAlignment.Services;
 
 namespace SequenceAlignment.Controllers
 {

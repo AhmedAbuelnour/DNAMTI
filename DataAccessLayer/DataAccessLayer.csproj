@@ -163,11 +163,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AlignmentDbContext.cs" />
-    <Compile Include="Model\AlignmentJob.cs" />
+    <Compile Include="Models\AlignmentDbContext.cs" />
+    <Compile Include="Models\AlignmentJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\IRepository.cs" />
-    <Compile Include="Service\Repository.cs" />
+    <Compile Include="Services\IRepository.cs" />
+    <Compile Include="Services\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

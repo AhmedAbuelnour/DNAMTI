@@ -3,23 +3,23 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLayer.Model
+namespace DataAccessLayer.Models
 {
     public class AlignmentJob
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string AlignmentID { get; set; } = Guid.NewGuid().ToString();
 
-        [Required(ErrorMessage = "You have to name your first sequence, if not real sequence you can just give it a fake name")]
+        [MaxLength(50),Required(ErrorMessage = "You have to name your first sequence")]
         public string FirstSequenceName { get; set; }
 
-        [Required(ErrorMessage = "Hashing the Sequence is required!")]
+        [Required]
         public string FirstSequenceHash { get; set; }
 
-        [Required(ErrorMessage = "You have to name your Second sequence, if not real sequence you can just give it a fake name")]
+        [MaxLength(50),Required(ErrorMessage = "You have to name your second sequence")]
         public string SecondSequenceName { get; set; }
 
-        [Required(ErrorMessage = "Hashing the Sequence is required!")]
+        [Required]
         public string SecondSequenceHash { get; set; }
 
         [Column(TypeName = "VARBINARY(MAX)")]
