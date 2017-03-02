@@ -37,7 +37,8 @@ namespace SequenceAlignment.Controllers
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
-
+            if (!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
+                return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
             string CleanSequence = string.Empty;
             if (Model.Alphabet == "DNA")
                 CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousDNA);
