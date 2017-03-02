@@ -32,7 +32,6 @@ namespace SequenceAlignment.Controllers
             if (string.IsNullOrEmpty(Model.Sequence))
                 if (SequenceFile is null)
                     return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
-
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 
@@ -134,11 +133,16 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Splitter(SplitterViewModel Model, IFormFile SequenceFile)
         {
+            if (Model.Sequence == null && SequenceFile == null)
+                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             if (string.IsNullOrEmpty(Model.Sequence))
                 if (SequenceFile is null)
                     return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
+
+            if (!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
+                return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
 
             IList<string> Sequences =  Helper.SequenceSpliter(Model.Sequence, Model.Divider).ToList();
 
