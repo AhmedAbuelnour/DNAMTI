@@ -31,7 +31,8 @@ namespace SequenceAlignment.Controllers
         {
             if (string.IsNullOrEmpty(Model.Sequence))
                 if (SequenceFile is null)
-                    return View(Model);
+                    return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
+
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 
@@ -59,13 +60,9 @@ namespace SequenceAlignment.Controllers
         public IActionResult Generate(GenerateSequenceViewModel Model)
         {
             Tuple<string, string> CleanSequence;
-            if (Model.Alphabet == "AmbiguousDNA")
-                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.AmbiguousDNA,Model.ConsecutiveMatch,Model.Position);
-            else if (Model.Alphabet == "UnambiguousDNA")
+            if (Model.Alphabet == "DNA")
                 CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.UnambiguousDNA, Model.ConsecutiveMatch, Model.Position);
-            else if (Model.Alphabet == "AmbiguousRNA")
-                CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.AmbiguousRNA, Model.ConsecutiveMatch, Model.Position);
-            else if (Model.Alphabet == "UnambiguousRNA")
+            else if (Model.Alphabet == "RNA")
                 CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.UnambiguousRNA, Model.ConsecutiveMatch, Model.Position);
             else
                 CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.Protein, Model.ConsecutiveMatch, Model.Position);
@@ -77,7 +74,6 @@ namespace SequenceAlignment.Controllers
                                                                    "text/plain",
                                                                    $"{Guid.NewGuid()}_GeneratedSequence{Model.SequenceLength}.txt");
         }
-
         [HttpGet]
         public IActionResult Similarity()
         {
@@ -88,20 +84,19 @@ namespace SequenceAlignment.Controllers
         public async Task<IActionResult> Similarity(SimilarityViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
             if (!string.IsNullOrEmpty(Model.FirstSequence))
-                Model.FirstSequence = Model.FirstSequence.Trim();
+                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ",string.Empty).ToUpper();
             if (!string.IsNullOrEmpty(Model.SecondSequence))
-                Model.SecondSequence = Model.SecondSequence.Trim();
+                Model.SecondSequence = Model.SecondSequence.Trim().Replace(" ", string.Empty).ToUpper();
             if (FirstFile != null)
                 if (FirstFile.ContentType != "text/plain")
-                    return View(Model);
+                    return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
             if (SecondFile != null)
-                if (SecondFile.ContentType != "text/plain")
-                    return View(Model);
+                return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
                 string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
                 if (FirstSequence.Length > 20000)
-                    return View(Model); // Can't be greater than 20K
+                    return View("Error", new ErrorViewModel { Message = "Can't be greater than 20K", Solution = "You must upload a sequence less than 20K" });
                 else
                     Model.FirstSequence = FirstSequence;
             }
@@ -109,18 +104,15 @@ namespace SequenceAlignment.Controllers
             {
                 string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim();
                 if (SecondSequence.Length > 20000)
-                    return View(Model); // Can't be greater than 20K
+                    return View("Error", new ErrorViewModel { Message = "Can't be greater than 20K", Solution = "You must upload a sequence less than 20K" });
                 else
                     Model.SecondSequence = SecondSequence;
             }
             if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) )
-            {
-                ModelState.AddModelError("", "You have to enter the sequence or either upload a file contains the sequence");
-                return View(Model);
-            }
+                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
 
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
-                return View(Model);
+                return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
 
             StringBuilder Sb = new StringBuilder();
             Sb.Append($"Similarity between your two sequences are: {BioEdge.MatricesHelper.Similarity.CalculateSimilarity(Model.FirstSequence, Model.SecondSequence) * 100} %");
@@ -148,7 +140,7 @@ namespace SequenceAlignment.Controllers
         {
             if (string.IsNullOrEmpty(Model.Sequence))
                 if (SequenceFile is null)
-                    return View(Model);
+                    return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 

@@ -15,17 +15,9 @@
         <div class="form-group">
             <span class="label label-default">Select Sequence Type</span>
             <select class="form-control" asp-for="Alphabet">
-                <optgroup label="Ambiguous">
-                    <option value="AmbiguousDNA" selected="">DNA</option>
-                    <option value="AmbiguousRNA">RNA</option>
-                </optgroup>
-                <optgroup label="Unambiguous">
-                    <option value="UnambiguousDNA">DNA</option>
-                    <option value="UnambiguousRNA">RNA</option>
-                </optgroup>
-                <optgroup label="Letters">
+                    <option value="DNA" selected>DNA</option>
+                    <option value="RNA">RNA</option>
                     <option value="Protein">Protein</option>
-                </optgroup>
             </select>
         </div>
         <div class="form-group">

@@ -12,7 +12,7 @@
         <h1 class="text-center"> Simple Alignment </h1>
         <div class="form-group">
             <span class="label label-info">Give your first sequence a name</span>
-            <input   asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control" />
+            <input   asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control" maxlength="50"/>
         </div>
         <div class="form-group">
             <textarea asp-for="FirstSequence" name="FirstSequence" ng-model="FirstSequence" pattern="^[a-zA-Z]+$" placeholder="Enter First Sequence" maxlength="20000" class="form-control"></textarea>
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group">
             <span class="label label-info">Give your second sequence a name</span>
-            <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
+            <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" maxlength="50" />
         </div>
         <div class="form-group">
             <textarea asp-for="SecondSequence" pattern="^[a-zA-Z]+$"  name="SecondSequence" ng-model="SecondSequence" placeholder="Enter Second Sequence" maxlength="20000" class="form-control"></textarea>
@@ -51,8 +51,35 @@
         <div class="form-group">
             <span class="label label-info">Select Score Matrix</span>
             <select class="form-control" asp-for="ScoringMatrix">
+                <optgroup label="Identity">
                     <option value="Identity" selected>Identity</option>
+                </optgroup>
+                <optgroup label="BLOSUM">
+                    <option value="BLOSUM35">BLOSUM35</option>
+                    <option value="BLOSUM40">BLOSUM40</option>
                     <option value="BLOSUM50">BLOSUM50</option>
+                    <option value="BLOSUM60">BLOSUM60</option>
+                    <option value="BLOSUM62">BLOSUM62</option>
+                    <option value="BLOSUM65">BLOSUM65</option>
+                    <option value="BLOSUM70">BLOSUM70</option>
+                    <option value="BLOSUM75">BLOSUM75</option>
+                    <option value="BLOSUM80">BLOSUM80</option>
+                    <option value="BLOSUM85">BLOSUM85</option>
+                    <option value="BLOSUM90">BLOSUM90</option>
+                    <option value="BLOSUM95">BLOSUM95</option>
+                </optgroup>
+                <optgroup label="PAM">
+                    <option value="PAM50">PAM50</option>
+                    <option value="PAM100">PAM100</option>
+                    <option value="PAM120">PAM120</option>
+                    <option value="PAM150">PAM150</option>
+                    <option value="PAM160">PAM160</option>
+                    <option value="PAM200">PAM200</option>
+                    <option value="PAM220">PAM220</option>
+                    <option value="PAM250">PAM250</option>
+                    <option value="PAM280">PAM280</option>
+                    <option value="PAM300">PAM300</option>
+                </optgroup>
             </select>
         </div>
         <div class="form-group">

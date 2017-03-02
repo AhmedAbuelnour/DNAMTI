@@ -1,8 +1,22 @@
-﻿@{
+﻿@model SequenceAlignment.ViewModels.ErrorViewModel
+
+@{
     ViewData["Title"] = "Error";
 }
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
-
-<h3>@Model</h3>
+<link href="~/css/Notify.css" rel="stylesheet"  />
+<div class="highlight-clean" style="background-color:#f1f7fc">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center"> Error Notification </h2>
+            <p class="lead text-center">Error Message: @Model.Message </p>
+            <hr />
+            <p class="lead text-center">Solution: @Model.Solution </p>
+            
+            @if (!string.IsNullOrWhiteSpace(Model.Link))
+            {
+                <hr />
+                <p class="lead text-center">Link : <text> @Html.Raw(Model.Link) </text> </p>
+            }
+        </div>
+    </div>
+</div>

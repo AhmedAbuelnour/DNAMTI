@@ -25,6 +25,8 @@ namespace SequenceAlignment.Services
         bool IsFinished(string AlignmentJobID);
         Task<bool> IsFinishedAsync(string AlignmentJobID);
         AlignmentJob AreExist(string FirstSequence, string SecondSequence);
+        AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix);
+
         Tuple<string, string> GetSubmittedSequences(string AlignmentJobID);
 
     }

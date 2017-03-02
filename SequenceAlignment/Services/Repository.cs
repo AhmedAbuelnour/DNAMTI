@@ -241,5 +241,25 @@ namespace SequenceAlignment.Services
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
         }
 
+        public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix)
+        {
+            if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
+                throw new Exception("Can't pass empty string as a sequence");
+            string FirstSequenceHash = SHA1HashStringForUTF8String(FirstSequence);
+            string SecondSequenceHash = SHA1HashStringForUTF8String(SecondSequence);
+            AlignmentJob LocalSequence = db.AlignmentJobs.AsEnumerable().SingleOrDefault(Seq =>
+            {
+                if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                    return true;
+                else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                    return true;
+                else
+                    return false;
+            });
+
+            if (LocalSequence == null)
+                return null;
+            return LocalSequence;
+        }
     }
 }

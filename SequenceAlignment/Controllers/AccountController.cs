@@ -58,18 +58,36 @@ namespace SequenceAlignment.Controllers
             }
             return View(Model);
         }
+        public async Task<IActionResult> SendConfirmationEmail(string UserID)
+        {
+            IdentityUser MyUser = await UserManager.FindByIdAsync(UserID);
+            string ConfirmationToken = await UserManager.GenerateEmailConfirmationTokenAsync(MyUser);
+            string confirmationLink = Url.Action("ConfirmEmail", "Account", new { UserId = MyUser.Id, Token = ConfirmationToken }, HttpContext.Request.Scheme);
+            MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com", MyUser.Email);
+            EMailMessage.Subject = "Email Confirmation";
+            EMailMessage.IsBodyHtml = true;
+
+            EMailMessage.Body = $"Please Confirm your email by click this link <a href='{confirmationLink}'> Confirm Me </a>";
+            SmtpClient SC = new SmtpClient("smtp.gmail.com", 587);
+            SC.DeliveryMethod = SmtpDeliveryMethod.Network;
+            SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
+            SC.EnableSsl = true;
+
+            SC.Send(EMailMessage);
+            return RedirectToAction("Index", "Home");
+        }
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string UserId , string Token)
         {
-            IdentityUser User = await UserManager.FindByIdAsync(UserId);
-            IdentityResult result =  await UserManager.ConfirmEmailAsync(User, Token);
+            IdentityUser MyUser = await UserManager.FindByIdAsync(UserId);
+            IdentityResult result =  await UserManager.ConfirmEmailAsync(MyUser, Token);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                return View("../Shared/Error","Confirmation Error!");
+                return View("Error",new ErrorViewModel { Message = "We Can't Confirm your email",Solution = "You may need to resend the confirmation email again" ,Link = $"<a class='btn btn-info' href='{Url.Action("SendConfirmationEmail", "Account", new { UserId = UserManager.GetUserId(User) }, HttpContext.Request.Scheme)}'> Resend Email Confirmation </a>" } );
             }
         }
         [HttpGet]
@@ -115,8 +133,7 @@ namespace SequenceAlignment.Controllers
                     return RedirectToAction("Index","Home");
                 else
                 {
-                    ViewBag.Message = "Error while confirming your email!";
-                    return View("Error");
+                    return View("Error", new ErrorViewModel { Message = "We Can't reset your password ", Solution = "You may need to try again later"});
                 }
             }
             else

@@ -11,7 +11,7 @@
         <h1 class="text-center"> Cloud Alignment </h1>
         <div class="form-group">
             <span class="label label-info pull-left">Give your First sequence a name</span>
-            <input type="text" asp-for="FirstSequenceName" placeholder="What does your first sequence represent?" required class="form-control" />
+            <input type="text" asp-for="FirstSequenceName" maxlength="50" placeholder="What does your first sequence represent?" required class="form-control" />
         </div>
         <div class="form-group has-success">
             <span class="label label-info">Upload File Contains The First Sequence</span>
@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
             <span class="label label-info pull-left">Give your second sequence a name</span>
-            <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" />
+            <input type="text" asp-for="SecomdSequenceName" maxlength="50" placeholder="What does your second sequence represent?" required class="form-control" />
         </div>
         <div class="form-group has-success">
             <span class="label label-info">Upload File Contains The Second Sequence</span>
@@ -44,8 +44,35 @@
         <div class="form-group">
             <span class="label label-info  pull-left">Select Score Matrix</span>
             <select class="form-control" asp-for="ScoringMatrix">
-                <option value="Identity" selected>Identity</option>
-                <option value="BLOSUM50">BLOSUM50</option>
+                <optgroup label="Identity">
+                    <option value="Identity" selected>Identity</option>
+                </optgroup>
+                <optgroup label="BLOSUM">
+                    <option value="BLOSUM35">BLOSUM35</option>
+                    <option value="BLOSUM40">BLOSUM40</option>
+                    <option value="BLOSUM50">BLOSUM50</option>
+                    <option value="BLOSUM60">BLOSUM60</option>
+                    <option value="BLOSUM62">BLOSUM62</option>
+                    <option value="BLOSUM65">BLOSUM65</option>
+                    <option value="BLOSUM70">BLOSUM70</option>
+                    <option value="BLOSUM75">BLOSUM75</option>
+                    <option value="BLOSUM80">BLOSUM80</option>
+                    <option value="BLOSUM85">BLOSUM85</option>
+                    <option value="BLOSUM90">BLOSUM90</option>
+                    <option value="BLOSUM95">BLOSUM95</option>
+                </optgroup>
+                <optgroup label="PAM">
+                    <option value="PAM50">PAM50</option>
+                    <option value="PAM100">PAM100</option>
+                    <option value="PAM120">PAM120</option>
+                    <option value="PAM150">PAM150</option>
+                    <option value="PAM160">PAM160</option>
+                    <option value="PAM200">PAM200</option>
+                    <option value="PAM220">PAM220</option>
+                    <option value="PAM250">PAM250</option>
+                    <option value="PAM280">PAM280</option>
+                    <option value="PAM300">PAM300</option>
+                </optgroup>
             </select>
         </div>
         <div class="form-group">
@@ -65,18 +92,8 @@
             </div>
         </div>
         <div class="form-group">
-            @if(ViewData["Message"].ToString() == string.Empty)
-            {
-                <button class="btn btn-primary btn-block" type="submit"> Align </button>
-            }
-            else if(ViewData["Message"].ToString() == "Check Your E-Mail")
-            {
-                <h3 class="text-center text-danger">Email Confirmation Is Required for Cloud Alignment</h3>
-                <h1 class="text-center text-info">@ViewData["Message"]</h1>
-            }
-        </div>
-
-        
+            <button class="btn btn-primary btn-block" type="submit"> Align </button>
+        </div>       
     </form>
 </div>
 
