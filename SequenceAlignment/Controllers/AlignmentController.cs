@@ -67,9 +67,9 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                if (FirstFile.ContentType == "text/plain")
+                if (SecondFile.ContentType == "text/plain")
                 {
-                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper();
+                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper();
                     if (SecondSequence.Length > 20000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (SecondSequence.Length == 0)

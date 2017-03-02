@@ -9,10 +9,10 @@
 
 <div class="contact-clean" ng-app="">
     <form asp-controller="Alignment" asp-action="Align" name="AlignmentForm" enctype="multipart/form-data" >
-        <h1 class="text-center"> Simple Alignment </h1>
+        <h1 class="text-center"> Alignment </h1>
         <div class="form-group">
             <span class="label label-info">Give your first sequence a name</span>
-            <input   asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control" maxlength="50"/>
+            <input  asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control"  maxlength="50"/>
         </div>
         <div class="form-group">
             <textarea asp-for="FirstSequence" name="FirstSequence" ng-model="FirstSequence" pattern="^[a-zA-Z]+$" placeholder="Enter First Sequence" maxlength="20000" class="form-control"></textarea>
@@ -93,15 +93,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <span class="label label-info">Gap Value</span>
-                    <input type="number" required step="1" asp-for="Gap"  placeholder="Gap Value" value="-8" class="form-control" />
+                    <input type="number" required step="1" asp-for="Gap"  placeholder="Gap Value" inputmode="numeric"  value="-8" class="form-control" />
                 </div>
                 <div class="col-md-4">
                     <span class="label label-info">Gap Open Penalty </span>
-                    <input type="number" required value="-2" asp-for="GapOpenPenalty" placeholder="Gap Open Penality" step="1" class="form-control" />
+                    <input type="number" required value="-2" asp-for="GapOpenPenalty" inputmode="numeric"  placeholder="Gap Open Penality" step="1" class="form-control" />
                 </div>
                 <div class="col-md-4">
                     <span class="label label-info">Gap Extension Penalty</span>
-                    <input type="number" required value="-2" asp-for="GapExtensionPenalty" placeholder="Gap Extension Penality" step="1" class="form-control" />
+                    <input type="number" required value="-2" asp-for="GapExtensionPenalty" placeholder="Gap Extension Penality" step="1" class="form-control" inputmode="numeric" />
                 </div>
             </div>
         </div>
