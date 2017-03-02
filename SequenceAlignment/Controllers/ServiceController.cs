@@ -136,13 +136,16 @@ namespace SequenceAlignment.Controllers
             if (Model.Sequence == null && SequenceFile == null)
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             if (string.IsNullOrEmpty(Model.Sequence))
-                if (SequenceFile is null)
-                    return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
+                if (SequenceFile.ContentType != "text/plain")
+                    return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 
             if (!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
+
+            if(Model.Divider >= Model.Sequence.Length || Model.Divider <= 0)
+                return View("Error", new ErrorViewModel { Message = "You Can't split with length greater than the sequence length or less than 0", Solution = "Your splitter must be greater than or equal to 1" });
 
             IList<string> Sequences =  Helper.SequenceSpliter(Model.Sequence, Model.Divider).ToList();
 
