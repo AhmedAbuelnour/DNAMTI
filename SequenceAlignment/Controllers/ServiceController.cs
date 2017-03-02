@@ -60,7 +60,7 @@ namespace SequenceAlignment.Controllers
         {
             if(Model.SequenceLength <= 0)
                 return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with length of 0 or less", Solution = "You should should use length greater than or equal to 1" });
-            if(Model.ConsecutiveMatch >= Model.SequenceLength)
+            if(Model.ConsecutiveMatch >= Model.SequenceLength || Model.ConsecutiveMatch < 0)
                 return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with Consecutive Match length equal to or greater than sequence length", Solution = "You should should use length greater than or equal to 1" });
 
             Tuple<string, string> CleanSequence;
