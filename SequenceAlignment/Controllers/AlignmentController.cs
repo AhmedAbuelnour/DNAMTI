@@ -146,8 +146,11 @@ namespace SequenceAlignment.Controllers
         {
             if (Model.FirstSequenceName.Length > 50 || Model.SecomdSequenceName.Length > 50)
                 return View("Error", new ErrorViewModel { Message = "You Can't enter a sequence name greater than 50 character", Solution = "You should name your sequence with a name less than or equal to 50 character" });
-            if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
+            if (FirstFile == null || SecondFile == null)
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+            if(FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
+                return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
+
             string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
             string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
 

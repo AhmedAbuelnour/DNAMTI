@@ -25,9 +25,9 @@ namespace DataAccessLayer.Models
         [Column(TypeName = "VARBINARY(MAX)")]
         public byte[] ByteText { get; set; }
 
-        public DateTime SubmittedDate { get; set; } = DateTime.Now;
+        public DateTime SubmittedDate { get; set; } = DateTime.Now.ToLocalTime();
 
-        public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(7); // Indicate how many days it will be stored in the database
+        public DateTime ExpirationDate { get; set; } = DateTime.Now.ToLocalTime().AddDays(7); // Indicate how many days it will be stored in the database
 
         public string UserFK { get; set; }
 

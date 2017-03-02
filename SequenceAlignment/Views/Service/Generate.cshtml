@@ -10,7 +10,7 @@
     <form method="post" asp-controller="Service" asp-action="Generate">
         <h1 class="text-center">Generate </h1>
         <div class="form-group">
-            <input class="form-control" type="number" inputmode="numeric" placeholder="Sequence Length" asp-for="SequenceLength" required min="10">
+            <input class="form-control" type="number" inputmode="numeric" placeholder="Sequence Length" asp-for="SequenceLength" required min="10" max="40000">
         </div>
         <div class="form-group">
             <span class="label label-default">Select Sequence Type</span>
@@ -21,7 +21,7 @@
             </select>
         </div>
         <div class="form-group">
-            <input class="form-control"  asp-for="ConsecutiveMatch" type="text" placeholder="Consecutive Match Length">
+            <input class="form-control"  asp-for="ConsecutiveMatch" type="number" inputmode="numeric"  placeholder="Consecutive Match Length">
         </div>
         <div class="form-group">
             <span class="label label-default">Select Consecutive Match Position</span>

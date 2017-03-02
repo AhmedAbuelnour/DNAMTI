@@ -29,9 +29,12 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Clean(CleanSequenceViewModel Model , IFormFile SequenceFile)
         {
+            if(string.IsNullOrWhiteSpace(Model.Sequence) && SequenceFile == null)
+                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+
             if (string.IsNullOrEmpty(Model.Sequence))
-                if (SequenceFile is null)
-                    return View("Error", new ErrorViewModel { Message = "You can't upload an empty file", Solution = "You should upload a file contains a sequence" });
+                if (SequenceFile.ContentType != "text/plain")
+                    return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
 
@@ -54,6 +57,11 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public IActionResult Generate(GenerateSequenceViewModel Model)
         {
+            if(Model.SequenceLength <= 0)
+                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with length of 0 or less", Solution = "You should should use length greater than or equal to 1" });
+            if(Model.ConsecutiveMatch >= Model.SequenceLength)
+                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with Consecutive Match length equal to or greater than sequence length", Solution = "You should should use length greater than or equal to 1" });
+
             Tuple<string, string> CleanSequence;
             if (Model.Alphabet == "DNA")
                 CleanSequence = Helper.GenerateSequences(Model.SequenceLength, Helper.UnambiguousDNA, Model.ConsecutiveMatch, Model.Position);
@@ -87,9 +95,10 @@ namespace SequenceAlignment.Controllers
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
             if (SecondFile != null)
                 return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
+
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
-                string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
                 if (FirstSequence.Length > 20000)
                     return View("Error", new ErrorViewModel { Message = "Can't be greater than 20K", Solution = "You must upload a sequence less than 20K" });
                 else
@@ -97,7 +106,7 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim();
+                string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper();
                 if (SecondSequence.Length > 20000)
                     return View("Error", new ErrorViewModel { Message = "Can't be greater than 20K", Solution = "You must upload a sequence less than 20K" });
                 else
@@ -140,15 +149,11 @@ namespace SequenceAlignment.Controllers
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
                 else
                     Model.Sequence = await Helper.ConvertFileByteToByteStringAsync(SequenceFile);
-
             if (!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
-
             if(Model.Divider >= Model.Sequence.Length || Model.Divider <= 0)
-                return View("Error", new ErrorViewModel { Message = "You Can't split with length greater than the sequence length or less than 0", Solution = "Your splitter must be greater than or equal to 1" });
-
+                return View("Error", new ErrorViewModel { Message = "You Can't split with length greater than the sequence length or less than 0", Solution = "Your splitter must be less than the sequence length and greater than 1" });
             IList<string> Sequences =  Helper.SequenceSpliter(Model.Sequence, Model.Divider).ToList();
-
             StringBuilder Sb = new StringBuilder();
             Sb.Append($"Your Sequences count:{Sequences.Count()}, Each sequence is {Model.Divider} length:");
             Sb.Append(Environment.NewLine);
