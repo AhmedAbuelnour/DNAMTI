@@ -32,11 +32,15 @@ namespace SequenceAlignment.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            ViewData["Title"] = "Index";
+
             return View();
         }
         [HttpGet]
         public IActionResult Align()
         {
+            ViewData["Title"] = "Align";
+
             return View();
         }
         [HttpPost]
@@ -134,6 +138,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public async Task<IActionResult> Grid()
         {
+            ViewData["Title"] = "Grid";
+
             IdentityUser CurrentUser = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
             bool IsEmailConfirmed = await UserManager.IsEmailConfirmedAsync(CurrentUser);
             if (IsEmailConfirmed)

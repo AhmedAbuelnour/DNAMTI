@@ -18,11 +18,15 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewData["Title"] = "Index";
+
             return View();
         }
         [HttpGet]
         public IActionResult Clean()
         {
+            ViewData["Title"] = "Clean";
+
             return View();
         }
 
@@ -52,6 +56,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Generate()
         {
+            ViewData["Title"] = "Generate";
+
             return View();
         }
 
@@ -81,6 +87,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Similarity()
         {
+            ViewData["Title"] = "Similarity";
+
             return View();
         }
 
@@ -137,6 +145,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Splitter()
         {
+            ViewData["Title"] = "Splitter";
+
             return View();
         }
 

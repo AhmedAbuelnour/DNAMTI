@@ -22,6 +22,7 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Signup()
         {
+            ViewData["Title"] = "Signup";
             return View();
         }
         [HttpPost]
@@ -79,6 +80,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string UserId , string Token)
         {
+            ViewData["Title"] = "Confirm Email";
+
             IdentityUser MyUser = await UserManager.FindByIdAsync(UserId);
             IdentityResult result =  await UserManager.ConfirmEmailAsync(MyUser, Token);
             if (result.Succeeded)
@@ -93,6 +96,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult ForgetPassword()
         {
+            ViewData["Title"] = "Forget Password";
+
             return View();
         }
         [HttpPost]
@@ -119,6 +124,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult ResetPassword(string UserId , string Token)
         {
+            ViewData["Title"] = "Reset Password";
+
             ResetPasswordViewModel VM = new ResetPasswordViewModel { CodeToken = Token, UserId = UserId };
             return View(VM);
         }
@@ -143,6 +150,8 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
+            ViewData["Title"] = "Login";
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -173,6 +182,8 @@ namespace SequenceAlignment.Controllers
         [Authorize, HttpGet]
         public async Task<IActionResult> Logout()
         {
+            ViewData["Title"] = "Logout";
+
             await SignInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

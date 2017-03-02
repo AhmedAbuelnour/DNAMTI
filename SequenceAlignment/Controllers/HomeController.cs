@@ -8,14 +8,20 @@ namespace SequenceAlignment.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Title"] = "Index";
+
             return View();
         }
         public IActionResult About()
         {
+            ViewData["Title"] = "About";
+
             return View();
         }
         public IActionResult Contact()
         {
+            ViewData["Title"] = "Contact";
+
             return View();
         }
         [HttpPost]

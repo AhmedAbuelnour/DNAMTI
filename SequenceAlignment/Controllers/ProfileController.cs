@@ -19,6 +19,8 @@ namespace SequenceAlignment.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            ViewData["Title"] = "History";
+
             return View(Repo.GetHistory(UserManager.GetUserId(User)));
         }
 
