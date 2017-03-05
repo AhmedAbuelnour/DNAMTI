@@ -202,8 +202,6 @@ namespace DataAccessLayer.Services
             string SecondSequence = File.Substring(File.IndexOf("Second Sequence:") + "Second Sequence:".Length).Trim();
             return new Tuple<string, string>(FirstSequence, SecondSequence);
         }
-
-
         private string SHA1HashStringForUTF8String(string Input)
         {
             byte[] InputBytes = Encoding.UTF8.GetBytes(Input);
@@ -243,8 +241,7 @@ namespace DataAccessLayer.Services
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append("MTI - DNA Alignment");
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
-        }
-       
+        }      
         public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix)
         {
             if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))

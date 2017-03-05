@@ -47,7 +47,14 @@ namespace SequenceAlignment.Controllers
                     SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
                     SC.EnableSsl = true;
 
-                    SC.Send(EMailMessage);
+                    try
+                    {
+                        SC.Send(EMailMessage);
+                    }
+                    catch
+                    {
+                        return View("Error", new ErrorViewModel { Message = "Coludn't Send a confirmation email", Solution = "Try to send a cinfirmation email later" });
+                    }
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -116,7 +123,14 @@ namespace SequenceAlignment.Controllers
                 SC.DeliveryMethod = SmtpDeliveryMethod.Network;
                 SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
                 SC.EnableSsl = true;
-                SC.Send(EMailMessage);
+                try
+                {
+                    SC.Send(EMailMessage);
+                }
+                catch
+                {
+                    return View("Error", new ErrorViewModel { Message = "Coludn't reset the password", Solution = "Try again later" });
+                }
                 return View("CheckEmail");
             }
             return View();

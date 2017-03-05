@@ -37,7 +37,14 @@ namespace SequenceAlignment.Controllers
                 SC.DeliveryMethod = SmtpDeliveryMethod.Network;
                 SC.Credentials = new NetworkCredential("mtidna2017@gmail.com", "Mti_dna2017");
                 SC.EnableSsl = true;
-                SC.Send(EMailMessage);
+                try
+                {
+                    SC.Send(EMailMessage);
+                }
+                catch
+                {
+                    return View("Error", new ErrorViewModel { Message = "Coludn't Send the email", Solution = "Try again later" });
+                }
             }
             
             return RedirectToAction("Index", "Home");
