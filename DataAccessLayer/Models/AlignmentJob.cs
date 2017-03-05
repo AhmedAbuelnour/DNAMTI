@@ -29,6 +29,9 @@ namespace DataAccessLayer.Models
 
         public DateTime ExpirationDate { get; set; } = DateTime.Now.ToLocalTime().AddDays(7); // Indicate how many days it will be stored in the database
 
+
+        public bool IsAlignmentCompleted { get; set; }
+
         public string UserFK { get; set; }
 
         public int Gap { get; set; } = -8;

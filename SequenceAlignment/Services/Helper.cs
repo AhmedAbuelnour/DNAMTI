@@ -10,6 +10,16 @@ namespace SequenceAlignment.Services
 {
     public static class Helper
     {
+        public static byte[] SetTextGrid(string FirstSequence , string SecondSequence)
+        {
+            StringBuilder HtmlBuilder = new StringBuilder();
+            HtmlBuilder.Append("First Sequence:");
+            HtmlBuilder.Append(FirstSequence);
+            HtmlBuilder.Append(Environment.NewLine);
+            HtmlBuilder.Append("Second Sequence:");
+            HtmlBuilder.Append(SecondSequence);
+            return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
+        }
         public static byte[] GetText(string AlignmentResult, float ScoreResult, string UniqeIdentifier, string Algorithm, string ScoringMatrix, int Gap, int GapOpenPenalty, int GapExtensionPenalty)
         {
             StringBuilder HtmlBuilder = new StringBuilder();

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DataAccessLayer.Models.AlignmentJob>
 
 @{ 
-    var FilteredData = Model.Where(x=>x.ByteText != null).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);
+    var FilteredData = Model.Where(x=>x.IsAlignmentCompleted == true).Select(Selector => new { Selector.AlignmentID, Selector.FirstSequenceName, Selector.SecondSequenceName, Selector.SubmittedDate }).OrderBy(O=> O.SubmittedDate);
 }
 
 <br />
@@ -26,7 +26,6 @@
                         </div>
                     </td>
                 </tr>
-
             }
             else
             {

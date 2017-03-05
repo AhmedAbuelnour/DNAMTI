@@ -13,8 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using SequenceAlignment.Models;
 using SequenceAlignment.Json;
+using DataAccessLayer.Models;
+using DataAccessLayer.Services;
 
 namespace SequenceAlignment.Controllers
 {
@@ -64,9 +65,9 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                if (FirstFile.ContentType == "text/plain")
+                if (SecondFile.ContentType == "text/plain")
                 {
-                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
+                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ",string.Empty).ToUpper();
                     if (SecondSequence.Length > 20000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (SecondSequence.Length == 0)
@@ -84,7 +85,7 @@ namespace SequenceAlignment.Controllers
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             }
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
-                return View(Model);
+                return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
             AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence);
             if (JobFound == null)
             {
@@ -99,7 +100,8 @@ namespace SequenceAlignment.Controllers
                     SecondSequenceName = Model.SecomdSequenceName,
                     GapOpenPenalty = Model.GapOpenPenalty,
                     Gap = Model.Gap,
-                    GapExtensionPenalty = Model.GapExtensionPenalty
+                    GapExtensionPenalty = Model.GapExtensionPenalty,
+                    IsAlignmentCompleted = true,
                 };
                 SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
                 ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
@@ -158,14 +160,15 @@ namespace SequenceAlignment.Controllers
                 string AlignmentID = Guid.NewGuid().ToString();
                 // Storing in the database
                 await Repo.AddAlignmentJobAsync(new AlignmentJob {
-                                                 AlignmentID = AlignmentID,
-                                                 ScoringMatrix = Model.ScoringMatrix,
-                                                 Algorithm = "Edge",
-                                                 FirstSequenceHash = Helper.SHA1HashStringForUTF8String(FirstSequence),
-                                                 SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
-                                                 FirstSequenceName = Model.FirstSequenceName,
-                                                 SecondSequenceName = Model.SecomdSequenceName,
-                                                 UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+                    AlignmentID = AlignmentID,
+                    ScoringMatrix = Model.ScoringMatrix,
+                    Algorithm = "Edge",
+                    FirstSequenceHash = Helper.SHA1HashStringForUTF8String(FirstSequence),
+                    SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
+                    FirstSequenceName = Model.FirstSequenceName,
+                    SecondSequenceName = Model.SecomdSequenceName,
+                    ByteText = Helper.SetTextGrid(FirstSequence, SecondSequence),
+                    UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 // Sending to the Grid, that there is a job is required from you
                 var connection = new HubConnection(@"http://mtidna.azurewebsites.net"); // Setting the URL of the SignalR server
                 var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication

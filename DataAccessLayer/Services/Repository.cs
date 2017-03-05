@@ -108,11 +108,11 @@ namespace DataAccessLayer.Services
         }
         public async Task<IEnumerable<AlignmentJob>> GetPendingAlignmentJobsAsync()
         {
-            return await db.AlignmentJobs.Where(Seq => Seq.ByteText == null).ToListAsync();
+            return await db.AlignmentJobs.Where(Seq => Seq.Algorithm == "Edge").ToListAsync();
         }
         public IEnumerable<AlignmentJob> GetPendingAlignmentJobs()
         {
-            return db.AlignmentJobs.Where(Seq => Seq.ByteText == null).ToList();
+            return db.AlignmentJobs.Where(Seq => Seq.Algorithm == "Edge").ToList();
         }
         public void FinalizeJob(string AlignmentJobID, AlignedSequences AlignmentResult)
         {
@@ -124,6 +124,7 @@ namespace DataAccessLayer.Services
             if (Seq == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
             Seq.ByteText = GetText(AlignmentResult.StandardFormat(), AlignmentResult.AlignmentScore(DynamicInvoke.GetScoreMatrix(Seq.ScoringMatrix), Seq.GapOpenPenalty, Seq.GapExtensionPenalty), Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
+            Seq.IsAlignmentCompleted = true;
             db.AlignmentJobs.Update(Seq);
             db.SaveChanges();
         }
@@ -137,6 +138,8 @@ namespace DataAccessLayer.Services
             if (Seq == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
             Seq.ByteText = GetText(AlignmentResult.StandardFormat(), AlignmentResult.AlignmentScore(DynamicInvoke.GetScoreMatrix(Seq.ScoringMatrix), Seq.GapOpenPenalty, Seq.GapExtensionPenalty), Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
+            Seq.IsAlignmentCompleted = true;
+
             await Task.Run(() => db.AlignmentJobs.Update(Seq));
             await db.SaveChangesAsync();
         }
@@ -147,7 +150,7 @@ namespace DataAccessLayer.Services
             AlignmentJob LocalSequence = db.AlignmentJobs.SingleOrDefault(Seq => Seq.AlignmentID == AlignmentJobID);
             if (LocalSequence == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
-            else if (LocalSequence.ByteText == null)
+            else if (!LocalSequence.IsAlignmentCompleted)
                 return false;
             return true;
         }
@@ -158,7 +161,7 @@ namespace DataAccessLayer.Services
             AlignmentJob LocalSequence = await db.AlignmentJobs.SingleOrDefaultAsync(Seq => Seq.AlignmentID == AlignmentJobID);
             if (LocalSequence == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
-            else if (LocalSequence.ByteText == null)
+            else if (!LocalSequence.IsAlignmentCompleted)
                 return false;
             return true;
         }
@@ -240,7 +243,7 @@ namespace DataAccessLayer.Services
             HtmlBuilder.Append("MTI - DNA Alignment");
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
         }
-
+       
         public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix)
         {
             if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
