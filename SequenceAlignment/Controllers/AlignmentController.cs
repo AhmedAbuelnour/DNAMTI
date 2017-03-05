@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SequenceAlignment.ViewModels;
-using DataAccessLayer.Services;
+using SequenceAlignment.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using BioEdge.MatricesHelper;
@@ -13,9 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using DataAccessLayer.Models;
+using SequenceAlignment.Models;
 using SequenceAlignment.Json;
-using SequenceAlignment.Services;
 
 namespace SequenceAlignment.Controllers
 {
@@ -32,24 +31,18 @@ namespace SequenceAlignment.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Index";
-
             return View();
         }
         [HttpGet]
         public IActionResult Align()
         {
-            ViewData["Title"] = "Align";
-
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {              
-            if(Model.FirstSequenceName.Length > 50 || Model.SecomdSequenceName.Length > 50)
-                return View("Error", new ErrorViewModel { Message = "You Can't enter a sequence name greater than 50 character", Solution = "You should name your sequence with a name less than or equal to 50 character" });
-            if (!string.IsNullOrWhiteSpace(Model.FirstSequence))
-                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty).ToUpper();
+            if(!string.IsNullOrWhiteSpace(Model.FirstSequence))
+                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty);
             if (!string.IsNullOrWhiteSpace(Model.SecondSequence))
                 Model.SecondSequence = Model.SecondSequence.Trim().Replace(" ", string.Empty).ToUpper();
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
@@ -71,9 +64,9 @@ namespace SequenceAlignment.Controllers
             }
             if (string.IsNullOrWhiteSpace(Model.SecondSequence) && SecondFile != null)
             {
-                if (SecondFile.ContentType == "text/plain")
+                if (FirstFile.ContentType == "text/plain")
                 {
-                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper();
+                    string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim();
                     if (SecondSequence.Length > 20000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (SecondSequence.Length == 0)
@@ -91,8 +84,8 @@ namespace SequenceAlignment.Controllers
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             }
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
-                return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
-            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence, Model.ScoringMatrix);
+                return View(Model);
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence);
             if (JobFound == null)
             {
                 JobFound = new AlignmentJob()
@@ -112,20 +105,18 @@ namespace SequenceAlignment.Controllers
                 ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
                 string AlignmentResult = string.Empty;
                 float AlignmentScore = 0.0f;
-                await Task.Run(() =>
-                {
-                    AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, Model.Gap);
-                    AlignmentResult = Result.StandardFormat(210);
-                    AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
-                });
+
+                AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, Model.Gap);
+                AlignmentResult = Result.StandardFormat(210);
+                AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
                 JobFound.ByteText = Helper.GetText(AlignmentResult,
-                                                   AlignmentScore,
-                                                   JobFound.AlignmentID,
-                                                   Model.Algorithm,
-                                                   Model.ScoringMatrix,
-                                                   Model.Gap,
-                                                   Model.GapOpenPenalty,
-                                                   Model.GapExtensionPenalty);
+                                                  AlignmentScore,
+                                                  JobFound.AlignmentID,
+                                                  Model.Algorithm,
+                                                  Model.ScoringMatrix,
+                                                  Model.Gap,
+                                                  Model.GapOpenPenalty,
+                                                  Model.GapExtensionPenalty);
                 JobFound.UserFK = UserManager.GetUserId(User);
                 await Repo.AddAlignmentJobAsync(JobFound);
                 return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
@@ -138,8 +129,6 @@ namespace SequenceAlignment.Controllers
         [HttpGet]
         public async Task<IActionResult> Grid()
         {
-            ViewData["Title"] = "Grid";
-
             IdentityUser CurrentUser = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
             bool IsEmailConfirmed = await UserManager.IsEmailConfirmedAsync(CurrentUser);
             if (IsEmailConfirmed)
@@ -152,11 +141,8 @@ namespace SequenceAlignment.Controllers
         {
             if (Model.FirstSequenceName.Length > 50 || Model.SecomdSequenceName.Length > 50)
                 return View("Error", new ErrorViewModel { Message = "You Can't enter a sequence name greater than 50 character", Solution = "You should name your sequence with a name less than or equal to 50 character" });
-            if (FirstFile == null || SecondFile == null)
+            if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
-            if(FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
-                return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
-
             string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
             string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
 
