@@ -103,7 +103,8 @@ namespace SequenceAlignment.Controllers
                 if (FirstFile.ContentType != "text/plain")
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
             if (SecondFile != null)
-                return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
+                if (SecondFile.ContentType != "text/plain")
+                    return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
 
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
             {
@@ -155,7 +156,7 @@ namespace SequenceAlignment.Controllers
         {
             if (Model.Sequence == null && SequenceFile == null)
                 return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
-            if (string.IsNullOrEmpty(Model.Sequence))
+            if (SequenceFile != null)
                 if (SequenceFile.ContentType != "text/plain")
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });
                 else

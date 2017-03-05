@@ -167,6 +167,7 @@ namespace SequenceAlignment.Controllers
                     SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
                     FirstSequenceName = Model.FirstSequenceName,
                     SecondSequenceName = Model.SecomdSequenceName,
+                    IsAlignmentCompleted = false,
                     ByteText = Helper.SetTextGrid(FirstSequence, SecondSequence),
                     UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 // Sending to the Grid, that there is a job is required from you
@@ -178,7 +179,7 @@ namespace SequenceAlignment.Controllers
             }
             else
             {
-                if(SeqFound.ByteText == null) // a failure happened before sending all the data to the Grid or the user re-submitted the same two sequences before finishing 
+                if(SeqFound.IsAlignmentCompleted == false) 
                 {
                     return View("Notify", SeqFound.AlignmentID); // Returning the same Alignment ID
                 }
