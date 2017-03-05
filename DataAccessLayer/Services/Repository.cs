@@ -17,6 +17,7 @@ namespace DataAccessLayer.Services
         public Repository(AlignmentDbContext _db)
         {
             db = _db;
+            db.Database.EnsureCreated();
         }
         public void DeleteAlignmentJob(string AlignmentJobID)
         {

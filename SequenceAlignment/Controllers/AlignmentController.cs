@@ -86,7 +86,7 @@ namespace SequenceAlignment.Controllers
             }
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
-            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence);
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence,Model.ScoringMatrix);
             if (JobFound == null)
             {
                 JobFound = new AlignmentJob()
