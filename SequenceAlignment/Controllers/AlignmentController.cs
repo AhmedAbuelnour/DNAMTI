@@ -41,9 +41,9 @@ namespace SequenceAlignment.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
-        {              
-            if(!string.IsNullOrWhiteSpace(Model.FirstSequence))
-                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty);
+        {
+            if (!string.IsNullOrWhiteSpace(Model.FirstSequence))
+                Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty).ToUpper();
             if (!string.IsNullOrWhiteSpace(Model.SecondSequence))
                 Model.SecondSequence = Model.SecondSequence.Trim().Replace(" ", string.Empty).ToUpper();
             if (string.IsNullOrWhiteSpace(Model.FirstSequence) && FirstFile != null)
@@ -121,11 +121,17 @@ namespace SequenceAlignment.Controllers
                                                   Model.GapExtensionPenalty);
                 JobFound.UserFK = UserManager.GetUserId(User);
                 await Repo.AddAlignmentJobAsync(JobFound);
-                return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
+                if (Model.DownloadDirectly == 1)
+                    return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
+                else
+                    return RedirectToAction("Display", "Profile", new { AlignmentID = JobFound.AlignmentID } );
             }
             else
             {
-                return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
+                if (Model.DownloadDirectly == 1)
+                    return File(JobFound.ByteText, "text/plain", $"{JobFound.AlignmentID}_Alignment_Result.txt");
+                else
+                    return RedirectToAction("Display", "Profile", new { AlignmentID = JobFound.AlignmentID });
             }
         }
         [HttpGet]

@@ -15,5 +15,7 @@ namespace SequenceAlignment.ViewModels
         public string ScoringMatrix { get; set; }
         public string FirstSequenceName { get; set; }
         public string SecomdSequenceName { get; set; }
+        public int DownloadDirectly { get; set; }
+
     }
 }

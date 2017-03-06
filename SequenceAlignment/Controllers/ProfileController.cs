@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using DataAccessLayer.Services;
+using System.Text;
 
 namespace SequenceAlignment.Controllers
 {
@@ -16,7 +17,18 @@ namespace SequenceAlignment.Controllers
             Repo = _Repo;
             UserManager = _UserManager;
         }
-        // GET: /<controller>/
+
+        [HttpGet("[action]/{AlignmentID}")]
+        public IActionResult Display(string AlignmentID)
+        {
+            return View("Display",AlignmentID);         
+        }
+        [HttpGet("[action]/{AlignmentID}")]
+        public virtual IActionResult GetFile(string AlignmentID)
+        {
+            return Content(Encoding.UTF8.GetString(Repo.GetAlignmentJobById(AlignmentID).ByteText));
+        }
+
         public IActionResult Index()
         {
             ViewData["Title"] = "History";

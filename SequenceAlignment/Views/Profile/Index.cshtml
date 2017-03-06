@@ -13,7 +13,7 @@
                 <th class="col-md-2 col-xs-2 text-center">First Sequence</th>
                 <th class="col-md-2 col-xs-2 text-center">Second Sequence</th>
                 <th class="col-md-2 col-xs-2 text-center">Submitted Date</th>
-                <th class="col-md-2 col-xs-2 text-center">Actions</th>
+                <th class="col-md-4 col-xs-4 text-center">Actions</th>
             </tr>
         </thead>
         <tbody >
@@ -32,13 +32,14 @@
                 @foreach (var Job in FilteredData)
                 {
                     <tr>
-                        <td class="col-md-3 col-xs-3">@Job.AlignmentID</td>
+                        <td class="col-md-2 col-xs-2">@Job.AlignmentID</td>
                         <td class="col-md-2 col-xs-2">@Job.FirstSequenceName</td>
                         <td class="col-md-2 col-xs-2">@Job.SecondSequenceName</td>
-                        <td class="col-md-1 col-xs-1">@Job.SubmittedDate.ToShortDateString()</td>
-                        <td class="col-md-2 col-xs-2">
+                        <td class="col-md-2 col-xs-2">@Job.SubmittedDate.ToShortDateString()</td>
+                        <td class="col-md-4 col-xs-4">
                             <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="@Job.AlignmentID">Download</a>
                             <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="@Job.AlignmentID">Remove</a>
+                            <a class="btn btn-info" asp-controller="Profile" asp-action="Display" asp-route-AlignmentID="@Job.AlignmentID">View</a>
                         </td>
                     </tr>
                 }
