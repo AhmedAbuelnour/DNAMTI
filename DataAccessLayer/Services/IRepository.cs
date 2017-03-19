@@ -18,10 +18,10 @@ namespace DataAccessLayer.Services
         AlignmentJob GetAlignmentJobById(string AlignmentJobID);
         Task<IEnumerable<AlignmentJob>> GetAlignmentJobsAsync();
         IEnumerable<AlignmentJob> GetAlignmentJobs();
-        Task<IEnumerable<AlignmentJob>> GetPendingAlignmentJobsAsync();
-        IEnumerable<AlignmentJob> GetPendingAlignmentJobs();
-        void FinalizeJob(string AlignmentJobID, AlignedSequences AlignmentResult);
-        Task FinalizeJobAsync(string AlignmentJobID, AlignedSequences AlignmentResult);
+        Task<IEnumerable<string>> GetPendingAlignmentJobsAsync();
+        IEnumerable<GridInfo> GetPendingAlignmentJobs();
+        void FinalizeJob(string AlignmentJobID, string AlignmentResult);
+        Task FinalizeJobAsync(string AlignmentJobID, string AlignmentResult);
         bool IsFinished(string AlignmentJobID);
         Task<bool> IsFinishedAsync(string AlignmentJobID);
         AlignmentJob AreExist(string FirstSequence, string SecondSequence);

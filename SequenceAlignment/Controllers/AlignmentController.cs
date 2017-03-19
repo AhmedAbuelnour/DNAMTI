@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using SequenceAlignment.Json;
 using DataAccessLayer.Models;
 using DataAccessLayer.Services;
 

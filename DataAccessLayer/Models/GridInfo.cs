@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace SequenceAlignment.Json
+namespace DataAccessLayer.Models
 {
     public class GridInfo
     {

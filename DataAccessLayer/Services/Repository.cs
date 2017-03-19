@@ -107,29 +107,30 @@ namespace DataAccessLayer.Services
         {
             return db.AlignmentJobs.ToList();
         }
-        public async Task<IEnumerable<AlignmentJob>> GetPendingAlignmentJobsAsync()
+        public async Task<IEnumerable<string>> GetPendingAlignmentJobsAsync()
         {
-            return await db.AlignmentJobs.Where(Seq => Seq.Algorithm == "Edge").ToListAsync();
+            return await db.AlignmentJobs.Where(Seq => Seq.IsAlignmentCompleted == false).Select(Seq => Seq.AlignmentID).ToListAsync();
         }
-        public IEnumerable<AlignmentJob> GetPendingAlignmentJobs()
+        public IEnumerable<GridInfo> GetPendingAlignmentJobs()
         {
-            return db.AlignmentJobs.Where(Seq => Seq.Algorithm == "Edge").ToList();
+            string Pendings =  Newtonsoft.Json.JsonConvert.SerializeObject(db.AlignmentJobs.Where(Seq => Seq.IsAlignmentCompleted == false).Select(Seq => new { AlignmentJobId =  Seq.AlignmentID, Email= Seq.UserNavigation.Email }).ToList());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<GridInfo>>(Pendings);
         }
-        public void FinalizeJob(string AlignmentJobID, AlignedSequences AlignmentResult)
+        public void FinalizeJob(string AlignmentJobID, string AlignmentResult)
         {
-            if(string.IsNullOrWhiteSpace(AlignmentJobID))
+            if (string.IsNullOrWhiteSpace(AlignmentJobID))
                 throw new Exception("ID Can't be Empty string");
             if (AlignmentResult == null)
                 throw new Exception("Alignment Result Can't be null");
             AlignmentJob Seq = db.AlignmentJobs.SingleOrDefault(Find => Find.AlignmentID == AlignmentJobID);
             if (Seq == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
-            Seq.ByteText = GetText(AlignmentResult.StandardFormat(), AlignmentResult.AlignmentScore(DynamicInvoke.GetScoreMatrix(Seq.ScoringMatrix), Seq.GapOpenPenalty, Seq.GapExtensionPenalty), Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
+            Seq.ByteText = GetText(AlignmentResult, Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
             Seq.IsAlignmentCompleted = true;
             db.AlignmentJobs.Update(Seq);
             db.SaveChanges();
         }
-        public async Task FinalizeJobAsync(string AlignmentJobID, AlignedSequences AlignmentResult)
+        public async Task FinalizeJobAsync(string AlignmentJobID, string AlignmentResult)
         {
             if (string.IsNullOrWhiteSpace(AlignmentJobID))
                 throw new Exception("ID Can't be Empty string");
@@ -138,7 +139,7 @@ namespace DataAccessLayer.Services
             AlignmentJob Seq = await db.AlignmentJobs.SingleOrDefaultAsync(Find => Find.AlignmentID == AlignmentJobID);
             if (Seq == null)
                 throw new Exception("Can't Find A Record In The Database With The Specified ID");
-            Seq.ByteText = GetText(AlignmentResult.StandardFormat(), AlignmentResult.AlignmentScore(DynamicInvoke.GetScoreMatrix(Seq.ScoringMatrix), Seq.GapOpenPenalty, Seq.GapExtensionPenalty), Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
+            Seq.ByteText = GetText(AlignmentResult, Seq.AlignmentID, Seq.Algorithm, Seq.ScoringMatrix, Seq.Gap, Seq.GapOpenPenalty, Seq.GapExtensionPenalty);
             Seq.IsAlignmentCompleted = true;
 
             await Task.Run(() => db.AlignmentJobs.Update(Seq));
@@ -198,7 +199,7 @@ namespace DataAccessLayer.Services
             if (Seq == null)
                 throw new Exception("Can't Find Alignment Job matches the Given ID");
             string File = Encoding.ASCII.GetString(Seq.ByteText);
-            string FirstSequence = File.Substring(File.IndexOf("First Sequence:") + "First Sequence:".Length, File.IndexOf("Second Sequence:")).Trim();
+            string FirstSequence = File.Substring(File.IndexOf("First Sequence:") + "First Sequence:".Length, File.IndexOf("Second Sequence:") -"Second Sequence:".Length).Trim();
             string SecondSequence = File.Substring(File.IndexOf("Second Sequence:") + "Second Sequence:".Length).Trim();
             return new Tuple<string, string>(FirstSequence, SecondSequence);
         }
@@ -214,7 +215,7 @@ namespace DataAccessLayer.Services
             });
             return Sb.ToString();
         }
-        private static byte[] GetText(string AlignmentResult, float ScoreResult, string UniqeIdentifier, string Algorithm, string ScoringMatrix, int Gap, int GapOpenPenalty, int GapExtensionPenalty)
+        private static byte[] GetText(string AlignmentResult,string UniqeIdentifier, string Algorithm, string ScoringMatrix, int Gap, int GapOpenPenalty, int GapExtensionPenalty)
         {
             StringBuilder HtmlBuilder = new StringBuilder();
             HtmlBuilder.Append($"Date: {DateTime.Now}");
@@ -232,8 +233,6 @@ namespace DataAccessLayer.Services
             HtmlBuilder.Append($"   Gap Open Penalty: {GapOpenPenalty}");
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append($"   Gap Extension Penalty: {GapExtensionPenalty}");
-            HtmlBuilder.Append(Environment.NewLine);
-            HtmlBuilder.Append($"Alignment Score: {ScoreResult}");
             HtmlBuilder.Append(Environment.NewLine);
             HtmlBuilder.Append("Alignment Result");
             HtmlBuilder.Append(Environment.NewLine);

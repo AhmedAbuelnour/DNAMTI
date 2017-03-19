@@ -1,15 +1,15 @@
 ﻿@model string
-
-<div class="embed-responsive embed-responsive-4by3">
-
-    <iframe style="margin-left:10px" class="embed-responsive-item"
-            src="@Html.Raw(Url.Action("GetFile", "Profile", new { AlignmentID = Model }))">
-    </iframe>
-</div>
 <div class="row">
-    <div class="class="col-md-2 col-xs-2">
+    <div class="class=" col-md-2 col-xs-2">
         <a class="btn btn-primary" asp-controller="Profile" asp-action="DownloadFile" asp-route-AlignmentID="@Model">Download</a>
         <a class="btn btn-danger" asp-controller="Profile" asp-action="DeleteFile" asp-route-AlignmentID="@Model">Remove</a>
     </div>
+</div>
+
+<div class="embed-responsive embed-responsive-4by3">
+      <iframe style="margin-left:10px" class="embed-responsive-item"
+            src="@Html.Raw(Url.Action("GetFile", "Profile", new { AlignmentID = Model }))">
+    </iframe>
+
 </div>
 

@@ -13,11 +13,15 @@ using BioEdge.Alignment;
 using System.Text;
 using DataAccessLayer.Models;
 using SequenceAlignment.Services;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net.Mail;
+using System.Net;
 
 namespace SequenceAlignment.Controllers
 {
     [Route("api/[controller]")]
-    public class WebServiceController : Controller
+    public class WebServiceController : Controller 
     {
         private readonly IRepository Repo;
         private readonly UserManager<IdentityUser> UserManager;
@@ -26,7 +30,6 @@ namespace SequenceAlignment.Controllers
             Repo = _Repo;
             UserManager = _UserManager;
         }
-
         [HttpGet("[action]")]
         public IActionResult Index()
         {
@@ -57,7 +60,6 @@ namespace SequenceAlignment.Controllers
         {
             return View();
         }
-
         [HttpPost("[action]/{FirstSequence}/{SecondSequence}/{ScoringMatrixName}/{Email}")]
         public async Task<string> Align(string FirstSequence, string SecondSequence,string ScoringMatrixName, string Email)
         {
@@ -180,5 +182,6 @@ namespace SequenceAlignment.Controllers
 
             return $"'SequenceA:{GeneratedSequences.Item1}',SequenceB:{GeneratedSequences.Item2}";
         }
+
     }
 }
