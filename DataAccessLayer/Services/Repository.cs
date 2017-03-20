@@ -19,6 +19,10 @@ namespace DataAccessLayer.Services
             db = _db;
             db.Database.EnsureCreated();
         }
+        public string GetEmailByAlingmnetJobId(string AlignmentJobId)
+        {
+            return db.AlignmentJobs.Include(e => e.UserNavigation).Where(x => x.AlignmentID == AlignmentJobId).Select(e => e.UserNavigation.Email).SingleOrDefault();
+        }
         public void DeleteAlignmentJob(string AlignmentJobID)
         {
             if (string.IsNullOrWhiteSpace(AlignmentJobID))
@@ -111,10 +115,9 @@ namespace DataAccessLayer.Services
         {
             return await db.AlignmentJobs.Where(Seq => Seq.IsAlignmentCompleted == false).Select(Seq => Seq.AlignmentID).ToListAsync();
         }
-        public IEnumerable<GridInfo> GetPendingAlignmentJobs()
+        public IEnumerable<string> GetPendingAlignmentJobs()
         {
-            string Pendings =  Newtonsoft.Json.JsonConvert.SerializeObject(db.AlignmentJobs.Where(Seq => Seq.IsAlignmentCompleted == false).Select(Seq => new { AlignmentJobId =  Seq.AlignmentID, Email= Seq.UserNavigation.Email }).ToList());
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<GridInfo>>(Pendings);
+            return db.AlignmentJobs.Where(Seq => Seq.IsAlignmentCompleted == false).Select(Seq => Seq.AlignmentID).ToList();
         }
         public void FinalizeJob(string AlignmentJobID, string AlignmentResult)
         {

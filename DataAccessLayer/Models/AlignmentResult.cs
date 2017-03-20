@@ -12,6 +12,5 @@ namespace DataAccessLayer.Models
 
         public string JobId { get; set; }
 
-        public string Email { get; set; }
     }
 }

@@ -31,9 +31,10 @@ namespace SequenceAlignment.Controllers
         public void Result([FromBody]string JobResult)
         {
             AlignmentResult AlignmentResultFormGrid = JsonConvert.DeserializeObject<AlignmentResult>(JobResult);
+            string Email = Repo.GetEmailByAlingmnetJobId(AlignmentResultFormGrid.JobId);
             string Decrypted = Serializer.Decrypt(AlignmentResultFormGrid.Result, "ResultComputing");
             Repo.FinalizeJob(AlignmentResultFormGrid.JobId, Decrypted);
-            MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com", AlignmentResultFormGrid.Email);
+            MailMessage EMailMessage = new MailMessage("mtidna2017@gmail.com", Email);
             EMailMessage.Subject = "Grid Notification";
             EMailMessage.IsBodyHtml = true;
             EMailMessage.Body = $"We Have done your Alignment Job, you can check it out in your history page! <a href='http://mtidna.azurewebsites.net/Display/{AlignmentResultFormGrid.JobId}'> Check my History Now </a>";

@@ -12,6 +12,7 @@ namespace DataAccessLayer.Services
         Task DeleteAlignmentJobAsync(string AlignmentJobID);
         Task AddAlignmentJobAsync(AlignmentJob Job);
         void AddAlignmentJob(AlignmentJob Job);
+        string GetEmailByAlingmnetJobId(string AlignmentJobId);
         Task AddAlignmentJobAsync(string SequenceA, string SequenceNameA, string SequenceB, string SequenceNameB, string UserId);
         void AddAlignmentJob(string SequenceA, string SequenceNameA, string SequenceB, string SequenceNameB, string UserId);
         IEnumerable<AlignmentJob> GetHistory(string UserID);
@@ -19,7 +20,7 @@ namespace DataAccessLayer.Services
         Task<IEnumerable<AlignmentJob>> GetAlignmentJobsAsync();
         IEnumerable<AlignmentJob> GetAlignmentJobs();
         Task<IEnumerable<string>> GetPendingAlignmentJobsAsync();
-        IEnumerable<GridInfo> GetPendingAlignmentJobs();
+        IEnumerable<string> GetPendingAlignmentJobs();
         void FinalizeJob(string AlignmentJobID, string AlignmentResult);
         Task FinalizeJobAsync(string AlignmentJobID, string AlignmentResult);
         bool IsFinished(string AlignmentJobID);
