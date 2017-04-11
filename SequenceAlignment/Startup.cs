@@ -54,6 +54,7 @@ namespace SequenceAlignment
             }
             app.UseResponseCompression();
             app.UseStaticFiles();
+            app.UseFileServer();
             app.UseIdentity();
             app.UseMvc(routes =>
             {

@@ -1,25 +1,26 @@
 ﻿@model SequenceAlignment.ViewModels.RegistrationViewModel
-<link href="~/css/Signup.css" rel="stylesheet" />
+
 <style>
     body {
         text-align: unset;
     }
 </style>
+<link href="~/css/Signup.css" rel="stylesheet" />
 <div class="register-photo">
     <div class="form-container">
         <form method="post" asp-controller="Account" asp-action="Signup">
             <h2 class="text-center"><strong>Create</strong> a new account.</h2>
             <div class="form-group">
-                <input type="text"  placeholder="UserName" class="form-control" asp-for="UserName" required/>
+                <input type="text" placeholder="UserName" class="form-control" asp-for="UserName" required />
             </div>
             <div class="form-group">
-                <input type="email"  placeholder="Email" class="form-control" asp-for="Email" required/>
+                <input type="email" placeholder="Email" class="form-control" asp-for="Email" required />
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Password" class="form-control" asp-for="Password" required/>
+                <input type="password" placeholder="Password" class="form-control" asp-for="Password" required />
             </div>
             <div class="form-group">
-                <input type="password"  placeholder="Password (repeat)" asp-for="ComparePassword" class="form-control" />
+                <input type="password" placeholder="Password (repeat)" asp-for="ComparePassword" class="form-control" />
             </div>
             <div class="form-group">
                 <div class="checkbox">

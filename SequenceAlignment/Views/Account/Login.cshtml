@@ -1,17 +1,17 @@
 ﻿@model SequenceAlignment.ViewModels.LoginViewModel
+<link href="~/css/Login.css" rel="stylesheet" />
 <style>
     body {
         text-align: unset;
     }
 </style>
-<link href="~/css/Login.css" rel="stylesheet" />
 
 <div class="login-clean">
     <form method="post" asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]">
         <h2 class="sr-only">Login Form</h2>
         <div class="illustration"><i class="glyphicon glyphicon-log-in"></i></div>
         <div class="form-group">
-            <input class="form-control" type="email"  placeholder="Email" asp-for="Email">
+            <input class="form-control" type="email" placeholder="Email" asp-for="Email">
         </div>
         <div class="form-group">
             <input class="form-control" type="password" placeholder="Password" asp-for="Password">

@@ -111,6 +111,7 @@ if (typeof jQuery === 'undefined') {
 
     var $parent = $(selector === '#' ? [] : selector)
 
+
     if (e) e.preventDefault()
 
     if (!$parent.length) {

@@ -3,48 +3,58 @@
         text-align: unset;
     }
 </style>
-
+<link href="~/css/Services.css" rel="stylesheet" />
 <div class="features-boxed">
     <div class="container">
         <div class="intro">
             <h2 class="text-center">Web Services</h2>
-            <p class="lead text-uppercase text-center">We provide a powerful API tools</p>
+            <p class="lead text-center"><strong>We provide a powerful API tools</strong></p>
         </div>
         <div class="row features">
             <div class="col-lg-6 col-md-4 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-align-center icon"></i>
-                    <h3 class="name"> Alignment</h3>
-                    <p class="description">Align Two Sequences With Maximum Length 20k </p><a class="btn btn-primary btn-block" role="button" asp-controller="WebService" asp-action="Align"><strong>Documentation</strong> </a>
-                </div>
+                <a asp-controller="WebService" asp-action="Align" display:block; absolute; style="text-decoration:none">
+                    <div class="box">
+                        <i class="glyphicon glyphicon-align-center icon"></i>
+                        <h3 class="name"> Alignment</h3>
+                        <p class="description"><strong>Two Sequences With Maximum Length 20k </strong></p>
+                    </div>
+                 </a>
             </div>
             <div class="col-lg-6 col-md-4 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-duplicate icon"></i>
-                    <h3 class="name">Similarity </h3>
-                    <p class="description">Get the Similarity of two sequences</p><a class="btn btn-primary btn-block" role="button" asp-controller="WebService" asp-action="Similarity"><strong>Documentation</strong> </a>
-                </div>
+                <a asp-controller="WebService" asp-action="Similarity" display:block; absolute; style="text-decoration:none">
+                    <div class="box">
+                        <i class="glyphicon glyphicon-duplicate icon"></i>
+                        <h3 class="name">Similarity </h3>
+                    <p class="description"><strong>Gets similarity between two Sequences, By Percentage </strong></p>
+                    </div>
+                </a>
             </div>
             <div class="col-md-4 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-filter icon"></i>
-                    <h3 class="name">Sequence Clean</h3>
-                    <p class="description">Clean your Sequence from any noise based upon the type of the sequence. </p><a class="btn btn-primary btn-block" role="button" asp-controller="WebService" asp-action="Clean"><strong>Documentation</strong> </a>
-                </div>
+                <a asp-controller="WebService" asp-action="Clean" display:block; absolute; style="text-decoration:none">
+                    <div class="box">
+                        <i class="glyphicon glyphicon-filter icon"></i>
+                        <h3 class="name">Sequence Clean</h3>
+                       <p class="description"><strong>Clean Sequence from noise based upon type of sequence </strong></p>
+                     </div>
+                </a>
             </div>
             <div class="col-md-4 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-scissors icon"></i>
-                    <h3 class="name">Splitter </h3>
-                    <p class="description">Split your large sequence into small chunks with specified length. </p><a class="btn btn-primary btn-block" role="button" asp-controller="WebService" asp-action="Splitter"><strong>Documentation</strong> </a>
-                </div>
+                  <a  asp-controller="WebService" asp-action="Splitter" display:block; absolute; style="text-decoration:none">
+                      <div class="box">
+                          <i class="glyphicon glyphicon-scissors icon"></i>
+                          <h3 class="name">Splitter </h3>
+                           <p class="description"><strong>Split your sequence into small chunks with specified length </strong></p>
+                      </div>
+                  </a>
             </div>
             <div class="col-md-4 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-random icon"></i>
-                    <h3 class="name">Sequence Generator</h3>
-                    <p class="description">Generate two sequences with specified similarity between them. </p><a class="btn btn-primary btn-block" role="button" asp-controller="WebService" asp-action="Generate"><strong>Documentation</strong> </a>
-                </div>
+                   <a asp-controller="WebService" asp-action="Generate" display:block; absolute; style="text-decoration:none">
+                       <div class="box">
+                           <i class="glyphicon glyphicon-random icon"></i>
+                           <h3 class="name">Sequence Generator</h3>
+                          <p class="description"><strong>Generate two sequences with match between them.</strong></p>
+                        </div>
+                   </a>
             </div>
         </div>
     </div>

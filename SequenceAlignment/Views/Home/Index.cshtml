@@ -1,23 +1,31 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-    <div class="carousel slide" data-ride="carousel" id="carousel-1">
+<link href="~/css/styles.min.css" rel="stylesheet" />
+<link href="~/css/cohome.css" rel="stylesheet" />
+    <div class="carousel slide" data-ride="carousel" id="carousel-1" >
         <div class="carousel-inner" role="listbox">
             <div class="item">
-                <img src="~/images/DNA.jpg" alt="Slide Image" />
-                <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5);">Sequence Alignment</h1>
-                <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5);">Sequence Alignment</h1>
-            </div>
+                <a asp-controller="Alignment" asp-action="Align">
+                    <img src="~/images/DNA.jpg" alt="Slide Image" />
+                    <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Sequence Alignment</h1>
+                    <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Sequence Alignment</h1>
+               </a>
+                    </div>
             <div class="item">
-                <img src="~/images/CloudComputing.jpg" alt="Slide Image" />
-                <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5);">Cloud Computing</h1>
-                <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5);">Cloud Computing</h1>
-            </div>
+                <a asp-controller="Alignment" asp-action="Grid">
+                    <img src="~/images/CloudComputing.jpg" alt="Slide Image" />
+                    <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Cloud Computing</h1>
+                    <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Cloud Computing</h1>
+               </a>
+                    </div>
             <div class="item active">
-                <img src="~/images/WebAPI.png" alt="Slide Image" />
-                <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5);">Web Service </h1>
-                <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5);">Web Service</h1>
-            </div>
+                <a asp-controller="WebService" asp-action="Index">
+                    <img src="~/images/WebAPI.png" alt="Slide Image" />
+                    <h1 class="visible-md-block hidden-xs hidden-sm hidden-lg" style="position:absolute;top:85%;left:17%;transform:translate(-50%,-50%);height:12%;width:35%;color:white;font-weight:500;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Web Service </h1>
+                    <h1 class="visible-lg-inline hidden-xs hidden-sm hidden-md" style="position:absolute;top:85%;left:15%;transform:translate(-50%,-50%);height:12%;width:30%;color:white;font-weight:700;background:rgba(0, 0, 0, 0.5); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Web Service</h1>
+                </a>
+             </div>
         </div>
         <div>
             <a class="left carousel-control" href="#carousel-1" role="button" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i><span class="sr-only">Previous</span></a>
@@ -29,56 +37,61 @@
             <li data-target="#carousel-1" data-slide-to="2" class="active"></li>
         </ol>
     </div>
-    <div class="features-boxed">
-        <div class="container">
-            <div class="intro">
-                <h1 class="text-center">Features </h1>
-                <p class="lead text-center"><strong>We Are Proud To Introduce You, The Most Useful Tools For Sequence Processing</strong></p>
-            </div>
-            <div class="row features">
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-align-left icon"></i>
-                        <h3 class="name">Simple Alignment</h3>
-                        <p class="description"><strong>Align Two Sequences </strong></p><a class="btn btn-primary btn-block" role="button" asp-controller="Alignment" asp-action="Align"><strong>Align</strong> </a>
+        <div class="features-boxed">
+            <div class="container">
+                <div class="intro">
+                    <h2 class="text-center">Just For Insight </h2>
+                </div>
+                <div class="row features">
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name"> Needleman Wunsch Algorithm</h3>
+                            <p class="description" style="text-align:left"> This is a global alignment algorithm, one of the first applications of dynamic programming to align biological sequences , Developed by S.Needlman & C.Wunsch </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name"> Parallel Needleman Wunsch </h3>
+                            <p class="description" style="text-align:left">This Algorithm modify the filling technique,It fill the matrix slice by slice. This new filing technique allow unlock the ability to use the parallel programming to speed up alignment computation time</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name"> Grid Computing</h3>
+                            <p class="description" style="text-align:left">This is software and hardware structure provides a high computing capabilities by sharing distributed resources like computers,storage space.The resources of grid computing structure must scheduled </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name">Scoring Matrix</h3>
+                            <p class="description" style="text-align:left">This is used to determine the relative score made by matching two characters in a sequence alignment , Usually log-odds of the likelihood of two characters being derived from a common character </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name">Clean Sequences</h3>
+                            <p class="description" style="text-align:left">This  clean any sequences based on (DNA,RNA or Protein ) from noise , Any character not belong to DNA,RNA or protein alphabet such as spaces, symbols, numbers,  will be removed</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name">Generate Sequences</h3>
+                            <p class="description" style="text-align:left">This Generate Two sequences type of DNA,RNA or Protein , with a consegetive match between them , that meaning with no gap , can decide the position of match Right, left or middle</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name">Split Sequences</h3>
+                            <p class="description" style="text-align:left">This Split Any length of sequence into small chunks , A chunk is defined as a familiar collection of more elementary units that have been inter-associated , anyone can decide The chunk length </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-sm-6 item ">
+                        <div class="box">
+                            <h3 class="text-center name">Sequence Similarity</h3>
+                            <p class="description" style="text-align:left">This calculate the similarity between any two sequences using edit distance algorithm , return result in a percantage format also get similarity between any long of sequences </p>
+                        </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-cloud icon"></i>
-                        <h3 class="name">Cloud Alignment</h3>
-                        <p class="description"><strong>Align Long Sequences</strong></p><a class="btn btn-primary btn-block" role="button" asp-controller="Alignment" asp-action="Grid"><strong>Align</strong> </a>
-                    </div>
                 </div>
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-filter icon"></i>
-                        <h3 class="name">Clean Sequence</h3>
-                        <p class="description"><strong> Clean Sequence&#39;s Noise</strong> </p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Clean"><strong>Clean </strong> </a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-scissors icon"></i>
-                        <h3 class="name">Split Sequence</h3>
-                        <p class="description"><strong>Split long sequence into small blocks </strong></p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Splitter"><strong>Split</strong> </a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-duplicate icon"></i>
-                        <h3 class="name">Similarity </h3>
-                        <p class="description"><strong>The Similarity between two Sequences</strong></p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Similarity"><strong>Get Simillarity</strong> </a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 item">
-                    <div class="box">
-                        <i class="glyphicon glyphicon-random icon"></i>
-                        <h3 class="name">Generate Sequence</h3>
-                        <p class="description"><strong>Generate Random Two Sequences</strong></p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Generate"><strong>Generate</strong> </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+        <script src="~/js/cohome.js"></script>

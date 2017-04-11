@@ -1,0 +1,1 @@
+var activeEl; (function () { var a = $(".btn-nav"); $(a[activeEl]).addClass("active"), $(".btn-nav").click(function () { $(a[activeEl]).removeClass("active"), $(this).addClass("active"), activeEl = $(".btn-nav").index(this) }) });

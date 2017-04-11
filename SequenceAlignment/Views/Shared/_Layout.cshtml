@@ -1,74 +1,104 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="~/css/Nav.css" rel="stylesheet" />
     <link href="~/css/footer.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+    <link href="~/css/MUSA_navbar-metro1.css" rel="stylesheet" />
+    <link href="~/css/header2.css" rel="stylesheet" />
     <title>@ViewData["Title"] - Sequence Alignment</title>
 </head>
 <body>
-
-    <div class="btn-group btn-group-justified">
-        <div class="btn-group">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-nav ">
-                    <span class="glyphicon glyphicon-home"></span>
-                    <p>Home</p>
-                </a>
-        </div>
-        <div class="btn-group">
-            <a  asp-controller="Alignment" asp-action="Index" class="btn btn-nav">
-                <span class="glyphicon glyphicon-align-center"></span>
-                <p>Alignment</p>
+    <div class="btn-group btn-group-justified ">
+    <div class="btn-group hidden-xs ">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-nav hidden-xs ">
+            <span class="glyphicon">
+                <img class="img-responsive " src="~/images/Logo1.jpg" width="40" height="40" />
+            </span>
+            <p>MTIDNA</p>
+        </a>
+    </div>
+    <div class="btn-group  hidden-xs ">
+        <a asp-controller="Service" asp-action="Index" class="btn btn-nav  hidden-xs">
+            <span class="glyphicon glyphicon-tasks"></span>
+            <p>Services</p>
+        </a>
+    </div>
+    <div class="btn-group  hidden-xs ">
+        <a asp-controller="WebService" asp-action="Index" class="btn btn-nav  hidden-xs">
+            <span class="glyphicon glyphicon-globe"></span>
+            <p>WebAPI</p>
+        </a>
+    </div>
+    <div class="btn-group  hidden-xs">
+        <a asp-controller="Home" asp-action="Contact" class="btn btn-nav  hidden-xs">
+            <span class="glyphicon glyphicon-envelope"></span>
+            <p>Contact Us</p>
+        </a>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="btn-group  hidden-xs">
+            <a asp-controller="Profile" asp-action="Index" class="btn btn-nav  hidden-xs">
+                <span class="glyphicon glyphicon-user"></span>
+                <p>History</p>
             </a>
         </div>
-        <div class="btn-group">
-            <a asp-controller="Service" asp-action="Index" class="btn btn-nav">
-                <span class="glyphicon glyphicon-wrench"></span>
-                <p>Serives</p>
-            </a>
-        </div>
-        <div class="btn-group">
-            <a asp-controller="WebService" asp-action="Index" class="btn btn-nav">
-                <span class="glyphicon glyphicon-globe"></span>
-                <p>Web API</p>
-            </a>
-        </div>
-        <div class="btn-group">
-            <a asp-controller="Home" asp-action="About" class="btn btn-nav">
-                <span class="glyphicon glyphicon-info-sign"></span>
-                <p>About</p>
-            </a>
-        </div>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <div class="btn-group">
-                <a asp-controller="Profile" asp-action="Index" class="btn btn-nav">
-                    <span class="glyphicon glyphicon-user"></span>
-                    <p>History</p>
-                </a>
-            </div>
-            <div class="btn-group">
-                <a asp-controller="Account" asp-action="Logout" class="btn btn-nav">
+            <div class="btn-group  hidden-xs">
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-nav  hidden-xs">
                     <span class="glyphicon glyphicon-log-out"></span>
                     <p>Logout</p>
                 </a>
             </div>
-        }
-        else
-        {
-            <div class="btn-group">
-                <a asp-controller="Account" asp-action="Login" class="btn btn-nav">
-                    <span class="glyphicon glyphicon-log-in"></span>
-                    <p>Login</p>
-                </a>
-            </div>
+    }
+    else
+    {
+        <div class="btn-group hidden-xs">
+            <a class="btn btn-nav hidden-xs" role="button" asp-controller="Account" asp-action="Login">
+                <span class="glyphicon glyphicon-log-in"></span>
+                <p>Login</p>
+            </a>
+        </div>
+          
+        
+      
+            <div class="btn-group hidden-xs">
+                    <a  role="button" asp-controller="Account" asp-action="Signup" class="btn btn-nav  hidden-xs">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        <p>Sign Up</p>
+                    </a>
+                </div>
 
         }
       
     </div>
-  
+    <div class="vertical-nav hidden-lg hidden-md hidden-sm "></div>
+    <nav class="navbar navbar-default navbar-side hidden-lg hidden-md hidden-sm">
+        <div class="container-fluid hidden-lg hidden-md hidden-sm ">
+            <div class="navbar-header ">
+                <a class="navbar-brand visible-xs-block visible-sm-block visible-xs-inline visible-sm-inline visible-xs-inline-block visible-sm-inline-block" asp-controller="Home" asp-action="Index"> <img class="img-circle" src="~/images/Logo1.jpg" width="60" height="35" style="width:33px;padding-bottom:3px;padding-right:0px;padding-left:0px;padding-top:0px;"></a>
+                <button class="navbar-toggle collapsed visible-xs-block visible-sm-block visible-xs-inline visible-sm-inline visible-xs-inline-block visible-sm-inline-block "
+                        data-toggle="collapse" data-target="#navcol-1">
+                    <span class="show"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse  " id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li role="presentation"><a asp-controller="Service" asp-action="Index">Services </a></li>
+                    <li role="presentation"><a asp-controller="WebService" asp-action="Index">WebAPi </a></li>
+                    <li role="presentation"><a asp-controller="Home" asp-action="Contact">ContactUs </a></li>
+                    <li role="presentation"><a href="#Login" data-toggle="modal">Login </a></li>
+                    <li role="presentation"><a href="#signup" data-toggle="modal">SignUp </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section id="vertical-menu">
+        <div class="list-group hidden-lg hidden-md"></div>
+    </section>
     <div id="HomeIndex">
 
     </div>
@@ -78,20 +108,19 @@
         <footer>
             <ul class="list-inline">
                 <li><a asp-action="Index" asp-controller="Home">Home</a></li>
-                <li><a asp-action="Index" asp-controller="Alignment">Alignment </a></li>
                 <li><a asp-action="Index" asp-controller="Service">Services </a></li>
                 <li><a asp-action="Index" asp-controller="WebService">WebAPI </a></li>
                 <li><a asp-action="About" asp-controller="Home">About </a></li>
                 <li><a asp-action="Contact" asp-controller="Home">Contact </a></li>
 
             </ul>
-            <p class="copyright">MTI © 2017</p>
+            <p class="copyright">MTIDNA © 2017</p>
         </footer>
     </div>
-   
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="~/js/MUSA_navbar-metro.js"></script>
+    <script src="~/js/header2.min.js"></script>
     <script src="~/js/File.js"></script>
-
 </body>
 </html>

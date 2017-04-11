@@ -14,7 +14,7 @@
             <textarea placeholder="Sequence" asp-for="Sequence" class="form-control" ng-model="Sequence" pattern="^[a-zA-Z]+$"></textarea>
         </div>
         <div class="form-group" ng-show="Sequence.length == undefined || Sequence.length == 0">
-            <span class="label label-default">OR Upload File Contains the Sequence</span>
+            <span class="label label-default" style="font-size:12px;">OR Upload File Contains the Sequence</span>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                 <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
                     <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="form-group">
-            <input type="number" asp-for="Divider" placeholder="Chuck Length" inputmode="numeric" required class="form-control" min="1"/>
+            <input type="number" asp-for="Divider" placeholder="Chuck Length" inputmode="numeric" required class="form-control" min="1" />
         </div>
         <div class="form-group">
             <button class="btn btn-primary btn-block" type="submit">Split </button>

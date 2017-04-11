@@ -2,23 +2,88 @@
 @{
     ViewData["Title"] = "Contact";
 }
+<link href="~/css/Contactus.min.css" rel="stylesheet" />
+    <div style= "background-image: url('../images/Pattern.png');">
+        <div class="jumbotron-contact jumbotron-contact-sm" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12" >
+                        <h2 class="h2" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                            Feel Free To Contact Us
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" >
+            <form>
+                <div class="" style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; text-align:center">
+                    <legend class="" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align:center"><span></span>Your Message Make Us Happy</legend>
+                    <address>
+                        <strong>We Are Happy to Visit Us. </strong><br>
+                        We will Respone to Your Message As Soon As Possible.<br>
+                        We will Do Our Utmost Best to Help you. <br>
+                        In Some Conditions Depend on Your Message , <br>
+                        You will be asked to Send Your Phone Number to Contact You. <br>
+                        Thanks For Your Trust .<br>
+                    </address>
+                </div>
+            </form>
+        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="well well-sm">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group" asp-controller="Home" asp-action="Contact">
+                                            <label for="name">
+                                                Name
+                                            </label>
+                                            <input type="text" class="form-control" id="name" placeholder="Enter Your Name" required="required" asp-for="UserName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">
+                                                Email Address
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-envelope"></span>
+                                                </span>
+                                                <input type="email" class="form-control" id="email" placeholder="Enter Your Email Address " required="required" asp-for="Email" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subject">
+                                                Subject
+                                            </label>
+                                            <select id="subject" name="subject" class="form-control" required="required">
 
-<link href="~/css/Contact.css" rel="stylesheet" />
-
-<div class="contact-clean">
-    <form method="post">
-        <h2 class="text-center">Contact us</h2>
-        <div class="form-group">
-            <input class="form-control" type="text" name="name" placeholder="Name" asp-for="UserName" required/>
+                                                <option value="service">Report an Issue</option>
+                                                <option value="suggestions">Suggestions</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">
+                                                Message
+                                            </label>
+                                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required"
+                                                      placeholder="Enter Your Message Here " asp-for="Message" maxlength="1000"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary pull-right" id="btnContactUs">
+                                            Send Message
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email" asp-for="Email" required/>
-        </div>
-        <div class="form-group">
-            <textarea class="form-control" rows="14" name="message" placeholder="Message" required maxlength="2000" asp-for="Message"></textarea>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" type="submit"> Send </button>
-        </div>
-    </form>
-</div>

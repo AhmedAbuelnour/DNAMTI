@@ -1,41 +1,66 @@
 ﻿
 <link href="~/css/Services.css" rel="stylesheet" />
-
-<div class="features-boxed">
-    <div class="container">
-        <div class="intro">
-            <h2 class="text-center">Services </h2>
-            <p class="lead text-center"><strong>We Provide some useful tools for dealing with Biology Sequences.</strong></p>
-        </div>
-        <div class="row features">
-            <div class="col-md-6 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-scissors icon"></i>
-                    <h3 class="name">Spliter </h3>
-                    <p class="description">Split your sequence into small chunks.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Splitter"><strong>Split</strong> </a>
-                </div>
+    <div class="features-boxed">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Services </h2>
+                <p class="lead text-center"><strong>We Provide some useful tools for dealing with Biology Sequences.</strong></p>
             </div>
-            <div class="col-md-6 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-random icon"></i>
-                    <h3 class="name">Sequence Generator </h3>
-                    <p class="description">Generate two sequences.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Generate"><strong>Generate</strong> </a>
+            <div class="row features">
+                <div class="col-lg-offset-0 col-md-6 col-sm-6 item">
+                    <a asp-controller="Alignment" asp-action="Align" display:block; absolute; style="text-decoration:none">
+                        <div class="box">
+                            <i class="glyphicon glyphicon-align-center icon" data-bs-hover-animate="pulse"></i>
+                            <h3 class="name">Alignment </h3>
+                        <p class="description"><strong>Align Two Sequences With Maximum Length 20k </strong></p>
+                         </div>
+                    </a>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-filter icon"></i>
-                    <h3 class="name">Cleaner </h3>
-                    <p class="description">Clean your Sequence from any noise.</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Clean"><strong>Clean</strong> </a>
+                <div class="col-lg-offset-0 col-md-6 col-sm-6 item">
+                    <a asp-controller="Alignment" asp-action="Grid" display:block; absolute; style="text-decoration:none">
+                        <div class="box">
+                            <i class="glyphicon glyphicon-cloud icon" data-bs-hover-animate="pulse"></i>
+                            <h3 class="name">Cloud Alignment</h3>
+                            <p class="description"><strong>Align Two sequences With Minimum Length 20k</strong> </p>
+                        </div>
+                        </a>
+                 </div>
+                <div class="col-lg-offset-0 col-md-6 col-sm-6 item">
+                        <a asp-controller="Service" asp-action="Splitter" display:block; absolute; style="text-decoration:none">
+                            <div class="box">
+                                <i class="glyphicon glyphicon-scissors icon" data-bs-hover-animate="pulse"></i>
+                                <h3 class="name">Splitter </h3>
+                        <p class="description"><strong>Split sequence into small chunks with specified length.</strong></p>
+                            </div>
+                       </a>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-6 item">
-                <div class="box">
-                    <i class="glyphicon glyphicon-duplicate icon"></i>
-                    <h3 class="name">Similarity </h3>
-                    <p class="description">Gets the similarity between two Sequences</p><a class="btn btn-primary btn-block" role="button" asp-controller="Service" asp-action="Similarity"><strong>Get Similarity</strong> </a>
+                <div class="col-md-6 col-sm-6 item">
+                        <a asp-controller="Service" asp-action="Generate" display:block; absolute; style="text-decoration:none">
+                            <div class="box">
+                                <i class="glyphicon glyphicon-random icon" data-bs-hover-animate="pulse"></i>
+                                <h3 class="name">Sequence Generator </h3>
+                            <p class="description"><strong>Generate two sequences with match between them.</strong></p>
+                           </div>
+                       </a>
+                </div>
+                <div class="col-md-6 col-sm-6 item">
+                    <a asp-controller="Service" asp-action="Clean" display:block; absolute; style="text-decoration:none">
+                        <div class="box">
+                            <i class="glyphicon glyphicon-filter icon" data-bs-hover-animate="pulse"></i>
+                            <h3 class="name">Cleaner </h3>
+                            <p class="description"><strong>Clean Sequence from noise based upon type of sequence.</strong></p>
+                          </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-sm-6 item">
+                    <a asp-controller="Service" asp-action="Similarity" display:block; absolute; style="text-decoration:none">
+                        <div class="box">
+                            <i class="glyphicon glyphicon-duplicate icon" data-bs-hover-animate="pulse"></i>
+                            <h3 class="name">Similarity </h3>
+                            <p class="description"><strong>Gets similarity between two Sequences, By Percentage </strong></p>
+                         </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>

@@ -8,18 +8,28 @@
   <ItemGroup>
     <Content Include="wwwroot\css\AboutCSS.css" />
     <Content Include="wwwroot\css\AlignSimple.css" />
-    <Content Include="wwwroot\css\Contact.css" />
+    <Content Include="wwwroot\css\bootstrap.min.css" />
+    <Content Include="wwwroot\css\cohome.css" />
+    <Content Include="wwwroot\css\Contactus.min.css" />
+    <Content Include="wwwroot\css\flat-form.css" />
     <Content Include="wwwroot\css\footer.css" />
+    <Content Include="wwwroot\css\header2.css" />
     <Content Include="wwwroot\css\Login.css" />
-    <Content Include="wwwroot\css\Nav.css" />
+    <Content Include="wwwroot\css\MUSA_navbar-metro1.css" />
     <Content Include="wwwroot\css\Notify.css" />
+    <Content Include="wwwroot\css\Reset.css" />
     <Content Include="wwwroot\css\Services.css" />
-    <Content Include="wwwroot\css\Signup.css" />
+    <Content Include="wwwroot\css\SignUp.css" />
     <Content Include="wwwroot\css\System-Status.css" />
+    <Content Include="wwwroot\images\Align.png" />
     <Content Include="wwwroot\images\AlignDNA.jpg" />
     <Content Include="wwwroot\images\Grid.jpg" />
+    <Content Include="wwwroot\images\Logo1.jpg" />
+    <Content Include="wwwroot\images\Pattern.png" />
+    <Content Include="wwwroot\js\cohome.js" />
     <Content Include="wwwroot\js\File.js" />
-    <Content Include="wwwroot\js\Nav.js" />
+    <Content Include="wwwroot\js\header2.min.js" />
+    <Content Include="wwwroot\js\MUSA_navbar-metro.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Gray.Microsoft.AspNetCore.SignalR.Server" Version="0.2.0-alpha1" />
