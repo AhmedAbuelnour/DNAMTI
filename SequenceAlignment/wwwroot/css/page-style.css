@@ -1,0 +1,69 @@
+/* ------------------------------------------
+	Page style - not required for forms
+------------------------------------------ */
+body {
+	font-family: Gafata, 'Open Sans', Arial, sans-serif;
+}
+
+h2 {
+	margin: 0 0 ;
+}
+
+h3 {
+	margin: 0 0 ;
+}
+
+.content {
+    border: 1px solid #eee;
+    border-bottom-width: 5px;
+    background: #fff;
+
+
+   
+}
+
+.sidebar .nav {
+    margin-bottom: 25px;
+    background: #fcfcfc;
+    margin-left: -20px;
+    margin-top:25px;
+    width: 257px;
+
+}
+
+.sidebar .nav-stacked > li + li {
+    margin: 0;
+ 
+}
+
+.sidebar .nav-pills li a {
+    color: #333;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    height: 90px;
+    width: 257px;
+}
+
+.sidebar .nav-pills > li.active > a,
+.sidebar .nav-pills > li > a:hover,
+.sidebar .nav-pills > li > a:focus {
+    color: #fff;
+    background: #337AB7;
+    -webkit-box-shadow: 3px 0 0 #337AB7;
+    -moz-box-shadow: 3px 0 0 #337AB7;
+    box-shadow: 3px 0 0 #337AB7;
+
+
+}
+
+.sidebar .nav-pills li a .new {
+	margin: 0 5px;
+	padding: 1px 3px;
+	font-family: Arial, sans-serif;
+	font-size: 9px;
+	text-transform: uppercase;
+	border: 1px solid #900;
+	color: #fff;
+	background: #f55;
+}

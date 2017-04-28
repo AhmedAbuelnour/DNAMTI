@@ -16,7 +16,7 @@
                             <tbody>
                                 <tr>
                                     <td>URL </td>
-                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/clean/sequence/alphabet</td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/clean</td>
                                 </tr>
                                 <tr>
                                     <td>Method Type</td>
@@ -24,25 +24,45 @@
                                 </tr>
                                 <tr>
                                     <td>Sequence </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The Sequence that should be cleaned.</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>The Sequence that Contains Noise.</td>
                                 </tr>
                                 <tr>
                                     <td>Alphabet </td>
-                                    <td><i class="glyphicon glyphicon-font"></i>The allowed alphabet of the sequence.</td>
+                                    <td><i class="glyphicon glyphicon-font"></i>The allowed alphabet in order to clean sequence.</td>
+                                </tr>
+                                <tr>
+                                    <td>Allowed Alphabet</td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i> DNA , RNA , Protein</td>
                                 </tr>
                                 <tr>
                                     <td>Return </td>
                                     <td><i class="glyphicon glyphicon-arrow-down"></i> Cleaned Sequence.</td>
                                 </tr>
+                                
                                 <tr>
-                                    <td>Example </td>
-                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net/api/webservice/clean/TGAACFDAAT/AmbiguousDNA </td>
-                                </tr>
-                                <tr>
-                                    <td>Allowed Alphabet</td>
-                                    <td><i class="glyphicon glyphicon-ok-sign"></i> AmbiguousDNA , UnambiguousDNA , AmbiguousRNA , UnambiguousRNA , Protein</td>
-                                </tr>
-                            </tbody>
+                                    <td>.NET C# Example </td>
+                                    <td>
+                                        <pre>
+    static void Main()
+    {
+        string Json = "{'Sequence':'ATGGATCTGA', 'Alphabet': 'DNA' }";
+
+        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Clean", Json).Result);
+    }
+    static async Task<string> PostAsync<T>(string Url, string JSON)
+    {
+        using (HttpClient Client = new HttpClient())
+        {
+            using (ByteArrayContent ByteContent = new ByteArrayContent(Encoding.UTF8.GetBytes(JSON)))
+            {
+                ByteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await (await Client.PostAsync(Url, ByteContent)).Content.ReadAsStringAsync();
+            }
+        }
+    }
+                                        </pre>
+                                    </td>
+</tbody>
                         </table>
                     </div>
                 </div>

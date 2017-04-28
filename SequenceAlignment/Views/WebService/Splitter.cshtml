@@ -16,7 +16,7 @@
                             <tbody>
                                 <tr>
                                     <td>URL </td>
-                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/splitter/Sequence/ChunkLength</td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/splitter</td>
                                 </tr>
                                 <tr>
                                     <td>Method Type</td>
@@ -24,7 +24,7 @@
                                 </tr>
                                 <tr>
                                     <td>Sequence </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The Sequence that should be splitted.</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>The Sequence to be splitted  .</td>
                                 </tr>
                                 <tr>
                                     <td>ChunkLength </td>
@@ -32,12 +32,31 @@
                                 </tr>
                                 <tr>
                                     <td>Return </td>
-                                    <td><i class="glyphicon glyphicon-arrow-down"></i> Json of splitted sequences.</td>
+                                    <td><i class="glyphicon glyphicon-arrow-down"></i>Json of splitted sequence.</td>
                                 </tr>
                                 <tr>
-                                    <td>Example </td>
-                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net/api/webservice/splitter/TGAACTTAAT/5 </td>
-                                </tr>
+                                    <td>.NET C# Example </td>
+                                    <td>
+                                        <pre>
+    static void Main()
+    {
+        string Json = "{'Sequence':'ATGGATCTGA', 'ChunkLength': 10 }";
+
+        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Splitter", Json).Result);
+    }
+    static async Task<string> PostAsync<T>(string Url, string JSON)
+    {
+        using (HttpClient Client = new HttpClient())
+        {
+            using (ByteArrayContent ByteContent = new ByteArrayContent(Encoding.UTF8.GetBytes(JSON)))
+            {
+                ByteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await (await Client.PostAsync(Url, ByteContent)).Content.ReadAsStringAsync();
+            }
+        }
+    }
+                                        </pre>
+                                    </td>
                             </tbody>
                         </table>
                     </div>

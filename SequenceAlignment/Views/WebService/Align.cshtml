@@ -16,23 +16,27 @@
                             <tbody>
                                 <tr>
                                     <td>URL </td>
-                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/align/SequenceA/SequenceB/ScoreMatrix/Email</td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/align</td>
                                 </tr>
                                 <tr>
                                     <td>Method Type</td>
                                     <td><i class="glyphicon glyphicon-send"></i>POST</td>
                                 </tr>
                                 <tr>
-                                    <td>SequenceA </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The First Sequence To be aligned.</td>
+                                    <td>FirstSequence</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>First Sequence To be aligned.</td>
                                 </tr>
                                 <tr>
-                                    <td>SequenceB</td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The Second Sequence To be aligned.</td>
+                                    <td>SecondSequence</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>Second Sequence To be aligned.</td>
                                 </tr>
                                 <tr>
-                                    <td>Score Matrix</td>
+                                    <td>ScoringMatrixName</td>
                                     <td><i class="glyphicon glyphicon-screenshot"></i>Identifing score Matrix </td>
+                                </tr>
+                                <tr>
+                                    <td>Allowed Scoring Matrix </td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i>Identity , BLOSUM(35,40,45,50,60,62,65,70,75,80,85,90,95) , PAM(50,100,120,150,160,200,220,250,280,300) </td>
                                 </tr>
                                 <tr>
                                     <td>Email </td>
@@ -40,17 +44,33 @@
                                 </tr>
                                 <tr>
                                     <td>Return </td>
-                                    <td><i class="glyphicon glyphicon-arrow-down"></i> Alignment Result</td>
+                                    <td><i class="glyphicon glyphicon-arrow-down"></i>Alignment Result</td>
                                 </tr>
                                 <tr>
-                                    <td>Example </td>
-                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net/api/webservice/align/TGAAC/TTAAT/Identity/example@example.com </td>
-                                </tr>
-                                <tr>
-                                    <td>Allowed Scoring Matrix </td>
-                                    <td><i class="glyphicon glyphicon-ok-sign"></i> Identity , BLOSUM(35,40,45,50,60,62,65,70,75,80,85,90,95) , PAM(50,100,120,150,160,200,220,250,280,300) </td>
-                                </tr>
-                            </tbody>
+                                    <td>.NET C# Example </td>
+                                    <td>
+                                        <pre>
+    static void Main()
+    {
+        string Json = "{'FirstSequence':'ATGGATCTGA', 'SecondSequence': 'ACCGGTAA' , 
+                        'ScoringMatrixName' : 'Identity' ,  'Email':'example@example.com'}";
+
+        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Clean", Json).Result);
+    }
+    static async Task<string> PostAsync<T>(string Url, string JSON)
+    {
+        using (HttpClient Client = new HttpClient())
+        {
+            using (ByteArrayContent ByteContent = new ByteArrayContent(Encoding.UTF8.GetBytes(JSON)))
+            {
+                ByteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await (await Client.PostAsync(Url, ByteContent)).Content.ReadAsStringAsync();
+            }
+        }
+    }
+                                        </pre>
+                                    </td>
+</tbody>
                         </table>
                     </div>
                 </div>

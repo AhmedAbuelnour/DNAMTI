@@ -16,44 +16,63 @@
                             <tbody>
                                 <tr>
                                     <td>URL </td>
-                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/generate/Alphabet/SequencesLength/ConsecutiveMatch/Position</td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/generate</td>
                                 </tr>
                                 <tr>
                                     <td>Method Type</td>
                                     <td><i class="glyphicon glyphicon-send"></i>POST</td>
                                 </tr>
                                 <tr>
-                                    <td>Alphabet </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The allowed alphabet of the sequence.</td>
-                                </tr>
-                                <tr>
                                     <td>SequencesLength </td>
-                                    <td><i class="glyphicon glyphicon-font"></i>The length of the two generated sequences. </td>
+                                    <td><i class="glyphicon glyphicon-font"></i>The length of two generated sequences. </td>
                                 </tr>
                                 <tr>
-                                    <td>ConsecutiveMatch </td>
-                                    <td><i class="glyphicon glyphicon-text-width"></i> Length of the consecutive match letters between the two generated sequences.</td>
-                                </tr>
-                                <tr>
-                                    <td>Position </td>
-                                    <td><i class="glyphicon glyphicon-screenshot"></i> Define where you want your consecutive match to be located in the generated sequences.</td>
-                                </tr>
-                                <tr>
-                                    <td>Return </td>
-                                    <td><i class="glyphicon glyphicon-arrow-down"></i> Two generated Sequences.</td>
+                                    <td>Alphabet </td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>The allowed alphabet in order to Generate sequences.</td>
                                 </tr>
                                 <tr>
                                     <td>Allowed Alphabet</td>
-                                    <td><i class="glyphicon glyphicon-ok-sign"></i> AmbiguousDNA , UnambiguousDNA , AmbiguousRNA , UnambiguousRNA , Protein</td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i>DNA ,RNA , Protein</td>
+                                </tr>
+                                <tr>
+                                    <td>ConsecutiveMatch </td>
+                                    <td><i class="glyphicon glyphicon-text-width"></i>The Length of match between two generated sequences.</td>
+                                </tr>
+                                <tr>
+                                    <td>Position </td>
+                                    <td><i class="glyphicon glyphicon-screenshot"></i>The Position of consecutive Match into two generated sequences.</td>
                                 </tr>
                                 <tr>
                                     <td>Allowed Positions</td>
-                                    <td><i class="glyphicon glyphicon-ok-sign"></i> L for Left , R for Right , M for Middle</td>
+                                    <td><i class="glyphicon glyphicon-ok-sign"></i>Middle , Right , Left </td>
                                 </tr>
                                 <tr>
-                                    <td>Example </td>
-                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net/api/webservice/generate/AmbiguousDNA/100/10/L </td>
+                                    <td>Return </td>
+                                    <td><i class="glyphicon glyphicon-arrow-down"></i>Two generated Sequences with consecutive Match.</td>
                                 </tr>
+                                <tr>
+                                    <td>.NET C# Example </td>
+                                    <td>
+                                        <pre>
+    static void Main()
+    {
+        string Json = "{'Alphabet':'DNA', 'SequencesLength': 100 , 'ConsecutiveMatch': 10 , 'Position':'Middle'}";
+
+        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Generate", Json).Result);
+    }
+    static async Task<string> PostAsync<T>(string Url, string JSON)
+    {
+        using (HttpClient Client = new HttpClient())
+        {
+            using (ByteArrayContent ByteContent = new ByteArrayContent(Encoding.UTF8.GetBytes(JSON)))
+            {
+                ByteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await (await Client.PostAsync(Url, ByteContent)).Content.ReadAsStringAsync();
+            }
+        }
+    }
+                                        </pre>
+                                    </td>
                             </tbody>
                         </table>
                     </div>

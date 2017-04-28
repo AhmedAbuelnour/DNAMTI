@@ -16,27 +16,47 @@
                             <tbody>
                                 <tr>
                                     <td>URL </td>
-                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/Similarity/SequenceA/SequenceB</td>
+                                    <td><i class="glyphicon glyphicon-link"></i>http://mtidna.azurewebsites.net/api/webservice/Similarity</td>
                                 </tr>
                                 <tr>
                                     <td>Method Type</td>
                                     <td><i class="glyphicon glyphicon-send"></i>POST</td>
                                 </tr>
                                 <tr>
-                                    <td>SequenceA </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i>The first sequence of similarity.</td>
+                                    <td>FirstSequence</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>First Sequence of Similarity </td>
                                 </tr>
                                 <tr>
-                                    <td>SequenceB </td>
-                                    <td><i class="glyphicon glyphicon-text-background"></i> The second sequence of similarity.</td>
+                                    <td>SecondSequence</td>
+                                    <td><i class="glyphicon glyphicon-text-background"></i>Second Sequence of Similarity</td>
                                 </tr>
                                 <tr>
                                     <td>Return </td>
-                                    <td><i class="glyphicon glyphicon-arrow-down"></i> The Percentage of the similarity of the two sequences.</td>
+                                    <td><i class="glyphicon glyphicon-arrow-down"></i> The Percentage of  similarity between the two sequences.</td>
                                 </tr>
                                 <tr>
-                                    <td>Example </td>
-                                    <td><i class="glyphicon glyphicon-check"></i> http://mtidna.azurewebsites.net/api/webservice/similarity/TGAACFDAAT/TGTTGFDAAT </td>
+                                    <td>.NET C# Example </td>
+                                    <td>
+                                        <pre>
+    static void Main()
+    {
+        string Json = "{'FirstSequence':'ATGGATCTGA', 'SecondSequence': 'TGATTCAATA' }";
+
+        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Similarity", Json).Result);
+    }
+    static async Task<string> PostAsync<T>(string Url, string JSON)
+    {
+        using (HttpClient Client = new HttpClient())
+        {
+            using (ByteArrayContent ByteContent = new ByteArrayContent(Encoding.UTF8.GetBytes(JSON)))
+            {
+                ByteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await (await Client.PostAsync(Url, ByteContent)).Content.ReadAsStringAsync();
+            }
+        }
+    }
+                                        </pre>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
