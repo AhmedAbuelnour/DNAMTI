@@ -1,22 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BioEdge.Alignment;
+using BioEdge.Matrices;
+using BioEdge.MatricesHelper;
+using DataAccessLayer.Models;
+using DataAccessLayer.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using BioEdge.MatricesHelper;
-using DataAccessLayer.Services;
-using BioEdge.Matrices;
-using BioEdge.Alignment;
-using System.Text;
-using DataAccessLayer.Models;
+using SequenceAlignment.APIModel;
 using SequenceAlignment.Services;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mail;
-using System.Net;
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SequenceAlignment.Controllers
 {
@@ -60,31 +57,31 @@ namespace SequenceAlignment.Controllers
         {
             return View();
         }
-        [HttpPost("[action]/{FirstSequence}/{SecondSequence}/{ScoringMatrixName}/{Email}")]
-        public async Task<string> Align(string FirstSequence, string SecondSequence,string ScoringMatrixName, string Email)
+        [HttpPost("[action]")]
+        public async Task<string> Align([FromBody]AlignAPIModel Model)
         {
-            if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
+            if (string.IsNullOrWhiteSpace(Model.FirstSequence) || string.IsNullOrWhiteSpace(Model.SecondSequence))
                 return "Sequence Can't be empty";
-            if (FirstSequence.Length > 20000 || SecondSequence.Length > 20000)
+            if (Model.FirstSequence.Length > 20000 || Model.SecondSequence.Length > 20000)
                 return "Sequence length Can't be greater than 20K";
 
-            if (!Regex.IsMatch(FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(SecondSequence, @"^[a-zA-Z]+$"))
+            if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
 
-            IdentityUser MyUser = await UserManager.FindByEmailAsync(Email);
+            IdentityUser MyUser = await UserManager.FindByEmailAsync(Model.Email);
             if(MyUser == null)
                 return "You have to sign-up first to be able to use our alignmnet serive";
 
-            AlignmentJob JobFound = Repo.AreExist(FirstSequence, SecondSequence);
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence);
             if (JobFound == null)
             {
                 JobFound = new AlignmentJob()
                 {
                     AlignmentID = Guid.NewGuid().ToString(),
                     Algorithm = "ParallelNeedlemanWunsch",
-                    ScoringMatrix = ScoringMatrixName.ToUpper(),
-                    FirstSequenceHash = Helper.SHA1HashStringForUTF8String(FirstSequence),
-                    SecondSequenceHash = Helper.SHA1HashStringForUTF8String(SecondSequence),
+                    ScoringMatrix = Model.ScoringMatrixName.ToUpper(),
+                    FirstSequenceHash = Helper.SHA1HashStringForUTF8String(Model.FirstSequence),
+                    SecondSequenceHash = Helper.SHA1HashStringForUTF8String(Model.SecondSequence),
                     FirstSequenceName = "Web Service Call",
                     SecondSequenceName = "Web Service Call",
                     GapOpenPenalty = -2,
@@ -105,7 +102,7 @@ namespace SequenceAlignment.Controllers
                 float AlignmentScore = 0.0f;
                 await Task.Run(() =>
                 {
-                    AlignedSequences Result = AlgorithmInstance.Align(FirstSequence, SecondSequence, ScoringMatrixInstance, -8);
+                    AlignedSequences Result = AlgorithmInstance.Align(Model.FirstSequence, Model.SecondSequence, ScoringMatrixInstance, -8);
                     AlignmentResult = Result.StandardFormat(210);
                     AlignmentScore = Result.AlignmentScore(ScoringMatrixInstance);
                 });
@@ -113,7 +110,7 @@ namespace SequenceAlignment.Controllers
                                                    AlignmentScore,
                                                    JobFound.AlignmentID,
                                                    "ParallelNeedlemanWunsch",
-                                                   ScoringMatrixName,
+                                                    Model.ScoringMatrixName,
                                                    -8,
                                                    -2,
                                                    -2);
@@ -124,64 +121,63 @@ namespace SequenceAlignment.Controllers
             else
                 return Encoding.UTF8.GetString(JobFound.ByteText);
         } 
-        [HttpPost("[action]/{Sequence}/{Alphabet}")]
-        public string Clean(string Sequence, string Alphabet)
+        [HttpPost("[action]")]
+        public string Clean([FromBody]CleanAPIModel Model)
         {
-            if (string.IsNullOrWhiteSpace(Sequence))
+            if (string.IsNullOrWhiteSpace(Model.Sequence))
                 return "Sequence Can't be empty";
-            if(!Regex.IsMatch(Sequence, @"^[a-zA-Z]+$"))
+            if(!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
 
             string CleanSequence = string.Empty;
-            if (Alphabet == "UnambiguousDNA")
-                CleanSequence = Helper.CleanUp(Sequence, Helper.UnambiguousDNA);
-            else if (Alphabet == "UnambiguousRNA")
-                CleanSequence = Helper.CleanUp(Sequence, Helper.UnambiguousRNA);
+            if (Model.Alphabet == "UnambiguousDNA")
+                CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousDNA);
+            else if (Model.Alphabet == "UnambiguousRNA")
+                CleanSequence = Helper.CleanUp(Model.Sequence, Helper.UnambiguousRNA);
             else
-                CleanSequence = Helper.CleanUp(Sequence, Helper.Protein);
+                CleanSequence = Helper.CleanUp(Model.Sequence, Helper.Protein);
             return CleanSequence;
         }
-        [HttpPost("[action]/{FirstSequence}/{SecondSequence}")]
-        public string Similarity(string FirstSequence, string SecondSequence)
+        [HttpPost("[action]")]
+        public string Similarity([FromBody]SimilarityAPIModel Model)
         {
-            if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
+            if (string.IsNullOrWhiteSpace(Model.FirstSequence) || string.IsNullOrWhiteSpace(Model.SecondSequence))
                 return "Sequence Can't be empty";
-            if (FirstSequence.Length > 20000 || SecondSequence.Length > 20000)
+            if (Model.FirstSequence.Length > 20000 || Model.SecondSequence.Length > 20000)
                 return "Sequence length Can't be greater than 20K";
-            if (!Regex.IsMatch(FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(SecondSequence, @"^[a-zA-Z]+$"))
+            if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
-            return $"{BioEdge.MatricesHelper.Similarity.CalculateSimilarity(FirstSequence,SecondSequence) * 100} %";
+            return $"{BioEdge.MatricesHelper.Similarity.CalculateSimilarity(Model.FirstSequence, Model.SecondSequence) * 100} %";
         }
-        [HttpPost("[action]/{Sequence}/{ChunkLength}")]
-        public string Splitter(string Sequence ,int ChunkLength)
+        [HttpPost("[action]")]
+        public string Splitter([FromBody]SplitterAPIModel Model)
         {
-            if (string.IsNullOrWhiteSpace(Sequence))
+            if (string.IsNullOrWhiteSpace(Model.Sequence))
                 return "Sequence Can't be empty";
-            if (!Regex.IsMatch(Sequence, @"^[a-zA-Z]+$"))
+            if (!Regex.IsMatch(Model.Sequence, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
-            return JsonConvert.SerializeObject(Helper.SequenceSpliter(Sequence, ChunkLength).ToList());
+            return JsonConvert.SerializeObject(Helper.SequenceSpliter(Model.Sequence, Model.ChunkLength).ToList());
         }
-        [HttpPost("[action]/{Alphabet}/{ChunkLength}/{ConsecutiveMatch:int}/{Position}")]
-        public string Generate(string Alphabet, int SequencesLength,int ConsecutiveMatch, char Position)
+        [HttpPost("[action]")]
+        public string Generate([FromBody]GenerateAPIModel Model)
         {
             Tuple<string, string> GeneratedSequences;
-            if (SequencesLength < 1)
+            if (Model.SequencesLength < 1)
                 return "Generated Sequences must be greater than 0";
-            if (string.IsNullOrWhiteSpace(Alphabet))
+            if (string.IsNullOrWhiteSpace(Model.Alphabet))
                 return "Alphabet Can't be empty";
-            if (!Regex.IsMatch(Alphabet, @"^[a-zA-Z]+$"))
+            if (!Regex.IsMatch(Model.Alphabet, @"^[a-zA-Z]+$"))
                 return "Sequence must contains only characters";
 
           
-            if (Alphabet == "UnambiguousDNA")
-                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousDNA, ConsecutiveMatch, Position);
-            else if (Alphabet == "UnambiguousRNA")
-                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.UnambiguousRNA, ConsecutiveMatch, Position);
+            if (Model.Alphabet == "UnambiguousDNA")
+                GeneratedSequences = Helper.GenerateSequences(Model.SequencesLength, Helper.UnambiguousDNA, Model.ConsecutiveMatch, Model.Position);
+            else if (Model.Alphabet == "UnambiguousRNA")
+                GeneratedSequences = Helper.GenerateSequences(Model.SequencesLength, Helper.UnambiguousRNA, Model.ConsecutiveMatch, Model.Position);
             else
-                GeneratedSequences = Helper.GenerateSequences(SequencesLength, Helper.Protein, ConsecutiveMatch, Position);
+                GeneratedSequences = Helper.GenerateSequences(Model.SequencesLength, Helper.Protein, Model.ConsecutiveMatch, Model.Position);
 
             return $"'SequenceA:{GeneratedSequences.Item1}',SequenceB:{GeneratedSequences.Item2}";
         }
-
     }
 }

@@ -176,9 +176,16 @@ namespace SequenceAlignment.Controllers
                     ByteText = Helper.SetTextGrid(FirstSequence, SecondSequence),
                     UserFK = User.FindFirstValue(ClaimTypes.NameIdentifier) });
                 // Sending to the Grid, that there is a job is required from you
-                var connection = new HubConnection(@"http://localhost:55524"); // Setting the URL of the SignalR server
-                var _hub = connection.CreateHubProxy("GridHub"); // Setting the Hub Communication
+                // New up instance of SignalR HubConnection with the URL of the SignalR Server Hosting.
+                HubConnection connection = new HubConnection(@"http://mtidna.azurewebsites.net"); 
+
+                // Connect to the Grid SignalR Hub.
+                IHubProxy _hub = connection.CreateHubProxy("GridHub"); 
+
+                // Connecting to the server.
                 await connection.Start(); // Start the connection 
+
+                // 
                 await _hub.Invoke("SendToGrid", Newtonsoft.Json.JsonConvert.SerializeObject(new GridInfo { AlignmentJobId = AlignmentID, Email = (await UserManager.FindByIdAsync(Repo.GetAlignmentJobById(AlignmentID).UserFK)).Email })); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
                 return View("Notify", AlignmentID);
             }

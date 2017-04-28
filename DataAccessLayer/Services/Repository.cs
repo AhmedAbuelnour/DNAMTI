@@ -6,8 +6,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using BioEdge.MatricesHelper;
-using BioEdge.Alignment;
 
 namespace DataAccessLayer.Services
 {
@@ -17,7 +15,6 @@ namespace DataAccessLayer.Services
         public Repository(AlignmentDbContext _db)
         {
             db = _db;
-            db.Database.EnsureCreated();
         }
         public string GetEmailByAlingmnetJobId(string AlignmentJobId)
         {
