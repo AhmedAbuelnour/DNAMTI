@@ -19,12 +19,12 @@
 }
 
 .contact-clean form {
-    max-width: 700px;
+    max-width: 1250px;
     width: 90%;
     margin: 0 auto;
     background-color: #fff;
     padding: 40px;
-    border-radius: 4px;
+    border-radius: 10px;
     color: #505e6c;
     box-shadow: 1px 1px 5px rgba(0,0,0,.1)
 }

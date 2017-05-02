@@ -11,15 +11,19 @@
         <form method="post" asp-controller="Account" asp-action="Signup">
             <h2 class="text-center"><strong>Create</strong> a new account.</h2>
             <div class="form-group">
+                <label style="font-size:15px;">Enter Your UserName</label>
                 <input type="text" placeholder="UserName" class="form-control" asp-for="UserName" required />
             </div>
             <div class="form-group">
+                <label style="font-size:15px;">Enter Your Email</label>
                 <input type="email" placeholder="Email" class="form-control" asp-for="Email" required />
             </div>
             <div class="form-group">
+                <label style="font-size:15px;">Enter Your Password</label>
                 <input type="password" placeholder="Password" class="form-control" asp-for="Password" required />
             </div>
             <div class="form-group">
+                <label style="font-size:15px;">Repeat Your Password</label>
                 <input type="password" placeholder="Password (repeat)" asp-for="ComparePassword" class="form-control" />
             </div>
             <div class="form-group">

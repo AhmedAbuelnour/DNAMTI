@@ -10,15 +10,16 @@
     <form asp-controller="Alignment" asp-action="Align" name="AlignmentForm" enctype="multipart/form-data">
         <h1 class="text-center"> Alignment </h1>
         <div class="form-group">
-            <span class="label label-info " style="font-size:12px;">Give your first sequence a name</span>
+            <label style="font-size:15px;">Give your first sequence a name</label>
             <input asp-for="FirstSequenceName" type="text" placeholder="What does your first sequence represent?" required class="form-control" maxlength="50" />
         </div>
         <div class="form-group">
+            <label style="font-size:15px;">Enter your first sequence</label>
             <textarea asp-for="FirstSequence" name="FirstSequence" ng-model="FirstSequence" pattern="^[a-zA-Z]+$" placeholder="Enter First Sequence" maxlength="20000" class="form-control"></textarea>
         </div>
 
         <div class="form-group has-success" ng-show="FirstSequence.length == undefined || FirstSequence.length == 0 ">
-            <span class="label label-default" style="font-size:12px;">OR Upload File Contains The First Sequence</span>
+            <label style="font-size:15px;">Upload File Contains The First Sequence</label>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                 <div class="form-control" data-trigger="fileinput">
                     <i class="glyphicon glyphicon-file fileinput-exists"></i>
@@ -33,14 +34,15 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="label label-info" style="font-size:12px;">Give your second sequence a name</span>
+            <label style="font-size:15px;">Give your second sequence a name</label>
             <input type="text" asp-for="SecomdSequenceName" placeholder="What does your second sequence represent?" required class="form-control" maxlength="50" />
         </div>
         <div class="form-group">
+            <label style="font-size:15px;">Enter your second sequence</label>
             <textarea asp-for="SecondSequence" pattern="^[a-zA-Z]+$" name="SecondSequence" ng-model="SecondSequence" placeholder="Enter Second Sequence" maxlength="20000" class="form-control"></textarea>
         </div>
         <div class="form-group has-success" ng-show="SecondSequence.length == undefined || SecondSequence.length == 0 ">
-            <span class="label label-default" style="font-size:12px;">OR Upload File Contains The Second Sequence</span>
+            <label style="font-size:15px;">Upload File Contains The Second Sequence</label>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                 <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
                     <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
@@ -49,7 +51,7 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="label label-info" style="font-size:12px;">Select Score Matrix</span>
+            <label style="font-size:15px;">Select Score Matrix</label>
             <select class="form-control" asp-for="ScoringMatrix">
                 <optgroup label="Identity">
                     <option value="Identity" selected>Identity</option>
@@ -83,7 +85,7 @@
             </select>
         </div>
         <div class="form-group">
-            <span class="label label-info" style="font-size:12px;">Select Alignment Algorithm</span>
+            <label style="font-size:15px;">Select Alignment Algorithm</label>
             <select class="form-control" asp-for="Algorithm">
                 <option value="NeedlemanWunsch">Needleman-Wunsch</option>
                 <option value="ParallelNeedlemanWunsch" selected>Parallel Needleman-Wunsch</option>
@@ -92,15 +94,15 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-4">
-                    <span class="label label-info" style="font-size:12px;">Gap Value</span>
+                    <label style="font-size:15px;">Gap Value</label>
                     <input type="number" required step="1" asp-for="Gap" placeholder="Gap Value" inputmode="numeric" value="-8" class="form-control" />
                 </div>
                 <div class="col-md-4">
-                    <span class="label label-info" style="font-size:12px;">Gap Open Penalty </span>
+                    <label style="font-size:15px;">Gap Open Penalty</label>
                     <input type="number" required value="-2" asp-for="GapOpenPenalty" inputmode="numeric" placeholder="Gap Open Penality" step="1" class="form-control" />
                 </div>
                 <div class="col-md-4">
-                    <span class="label label-info" style="font-size:12px;">Gap Extension Penalty</span>
+                    <label style="font-size:15px;">Gap Extension Penalty</label>
                     <input type="number" required value="-2" asp-for="GapExtensionPenalty" placeholder="Gap Extension Penality" step="1" class="form-control" inputmode="numeric" />
                 </div>
             </div>
@@ -115,8 +117,14 @@
                 <input type="radio" name="DownloadDirectly" asp-for="DownloadDirectly" value="2">Show Alignment Result online.
             </label>
         </div>
-        <div class="form-group">
-            <button class="btn btn-primary btn-block" type="submit"> Align </button>
+        <div class="form-group text-center">
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6">
+                    <button class="btn btn-primary btn-block" type="submit">Align</button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
         </div>
     </form>
 </div>

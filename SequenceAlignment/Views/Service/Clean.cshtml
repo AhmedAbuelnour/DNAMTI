@@ -11,10 +11,11 @@
     <form method="post" asp-controller="Service" asp-action="Clean" enctype="multipart/form-data">
         <h1 class="text-center">Clean </h1>
         <div class="form-group">
+            <label style="font-size:15px;">Enter Your Sequence</label>
             <textarea placeholder="Sequence" asp-for="Sequence" class="form-control" ng-model="Sequence" pattern="^[a-zA-Z]+$"></textarea>
         </div>
         <div class="form-group" ng-show="Sequence.length == undefined || Sequence.length == 0">
-            <span class="label label-default" style="font-size:12px;">OR Upload File Contains the Sequence</span>
+            <label style="font-size:15px;">Upload File Contains the Sequence</label>
             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                 <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i><span class="fileinput-filename"></span></div><span class="input-group-addon btn btn-default btn-file">
                     <span class="fileinput-new">Choose file</span><span class="fileinput-exists">Change</span>
@@ -23,15 +24,21 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="label label-default" style="font-size:12px;">Select Sequence Type</span>
+            <label style="font-size:15px;">Select Sequence Type</label>
             <select class="form-control" asp-for="Alphabet">
                 <option value="DNA" selected>DNA</option>
                 <option value="RNA">RNA</option>
                 <option value="Protein">Protein</option>
             </select>
         </div>
-        <div class="form-group">
-            <button class="btn btn-primary btn-block" type="submit"> Clean </button>
+        <div class="form-group text-center">
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6">
+                    <button class="btn btn-primary btn-block" type="submit">Clean</button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
         </div>
     </form>
 </div>

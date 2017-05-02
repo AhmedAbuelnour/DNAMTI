@@ -1,15 +1,15 @@
 ﻿.login-clean {
-    background: #f1f7fc;
+    background-image: url('../images/pattern.png');
     padding: 80px 0
 }
 
     .login-clean form {
-        max-width: 320px;
+        max-width: 650px;
         width: 90%;
         margin: 0 auto;
         background-color: #fff;
         padding: 40px;
-        border-radius: 4px;
+        border-radius: 10px;
         color: #505e6c;
         box-shadow: 1px 1px 5px rgba(0,0,0,.1)
     }

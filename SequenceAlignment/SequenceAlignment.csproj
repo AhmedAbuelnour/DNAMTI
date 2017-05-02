@@ -15,7 +15,6 @@
     <Content Include="wwwroot\css\Login.css" />
     <Content Include="wwwroot\css\MUSA_navbar-metro1.css" />
     <Content Include="wwwroot\css\Notify.css" />
-    <Content Include="wwwroot\css\page-style.css" />
     <Content Include="wwwroot\css\Reset.css" />
     <Content Include="wwwroot\css\Services.css" />
     <Content Include="wwwroot\css\SignUp.css" />
