@@ -3,11 +3,13 @@ using BioEdge.Matrices;
 using BioEdge.MatricesHelper;
 using DataAccessLayer.Models;
 using DataAccessLayer.Services;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SequenceAlignment.APIModel;
+using SequenceAlignment.GridServiceAPI;
 using SequenceAlignment.Services;
 using System;
 using System.Linq;
@@ -178,6 +180,75 @@ namespace SequenceAlignment.Controllers
                 GeneratedSequences = Helper.GenerateSequences(Model.SequencesLength, Helper.Protein, Model.ConsecutiveMatch, Model.Position);
 
             return $"'SequenceA:{GeneratedSequences.Item1}',SequenceB:{GeneratedSequences.Item2}";
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Grid([FromBody]GridAPI Model)
+        {
+            if (Model.FirstSequence == null || Model.SecondSequence == null)
+                return BadRequest();
+            if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$"))
+                return BadRequest();
+            //if (Model.FirstSequence.Length <= 20000 || Model.FirstSequence.Length <= 20000)
+            //    return BadRequest();
+
+            // Check for earlier exist
+            AlignmentJob SeqFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence, Model.ScoringMatrix);
+            if (SeqFound == null) // Means the user didn't  submit these sequences before.
+            {
+                string AlignmentID = Guid.NewGuid().ToString();
+                // Storing in the database
+                await Repo.AddAlignmentJobAsync(new AlignmentJob
+                {
+                    AlignmentID = AlignmentID,
+                    ScoringMatrix = Model.ScoringMatrix,
+                    Algorithm = "Edge",
+                    FirstSequenceHash = Helper.SHA1HashStringForUTF8String(Model.FirstSequence),
+                    SecondSequenceHash = Helper.SHA1HashStringForUTF8String(Model.SecondSequence),
+                    FirstSequenceName = "Sequence First Name",
+                    SecondSequenceName = "Sequence Second Name",
+                    IsAlignmentCompleted = false,
+                    ByteText = Helper.SetTextGrid(Model.FirstSequence, Model.SecondSequence),
+                    UserFK = (await UserManager.FindByEmailAsync(Model.Email)).Id
+                });
+                // Sending to the Grid, that there is a job is required from you
+                // New up instance of SignalR HubConnection with the URL of the SignalR Server Hosting.
+                HubConnection connection = new HubConnection(@"http://mtidna.azurewebsites.net");
+                // Connect to the Grid SignalR Hub.
+                IHubProxy _hub = connection.CreateHubProxy("GridHub");
+                // Connecting to the server.
+                await connection.Start(); // Start the connection 
+                await _hub.Invoke("SendToGrid", Newtonsoft.Json.JsonConvert.SerializeObject(new GridInfo { AlignmentJobId = AlignmentID, Email = Model.Email })); // Invoke Alignment SignalR Method, and pass the Job Id to the Grid.
+                return Ok("Grid OK");
+            }
+            else
+            {
+                if (SeqFound.IsAlignmentCompleted == false)
+                {
+                    return Ok("Grid Wait"); // Returning the same Alignment ID
+                }
+                else // the grid already alignment them , so no action is required from the grid, the user can download a text file directly.
+                {
+                    return Ok("Grid Check History");
+                }
+            }
+        }
+
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login([FromBody]LoginAPI Model)
+        {
+            if (Model.Email == null || Model.Password == null)
+                return BadRequest();
+            IdentityUser User = await UserManager.FindByEmailAsync(Model.Email);
+            if (User is null)
+                return BadRequest("Email Not Correct");
+            if(await UserManager.CheckPasswordAsync(User, Model.Password))  return Ok();
+            else  return BadRequest("Passowrd Not Correct");
         }
     }
 }
