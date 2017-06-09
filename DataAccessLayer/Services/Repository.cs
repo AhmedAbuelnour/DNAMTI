@@ -241,7 +241,8 @@ namespace DataAccessLayer.Services
             HtmlBuilder.Append("MTI - DNA Alignment");
             return Encoding.UTF8.GetBytes(HtmlBuilder.ToString());
         }      
-        public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix)
+     
+        public AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix , int Gap)
         {
             if (string.IsNullOrWhiteSpace(FirstSequence) || string.IsNullOrWhiteSpace(SecondSequence))
                 throw new Exception("Can't pass empty string as a sequence");
@@ -249,17 +250,14 @@ namespace DataAccessLayer.Services
             string SecondSequenceHash = SHA1HashStringForUTF8String(SecondSequence);
             AlignmentJob LocalSequence = db.AlignmentJobs.AsEnumerable().SingleOrDefault(Seq =>
             {
-                if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                if (Seq.FirstSequenceHash == FirstSequenceHash && Seq.SecondSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix && Seq.Gap == Gap)
                     return true;
-                else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix)
+                else if (Seq.SecondSequenceHash == FirstSequenceHash && Seq.FirstSequenceHash == SecondSequenceHash && Seq.ScoringMatrix == ScoreMatrix  && Seq.Gap == Gap )
                     return true;
                 else
                     return false;
             });
-
-            if (LocalSequence == null)
-                return null;
-            return LocalSequence;
+            return LocalSequence is null ? null : LocalSequence;
         }
     }
 }

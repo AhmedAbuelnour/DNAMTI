@@ -53,7 +53,7 @@ namespace SequenceAlignment.Controllers
                     }
                     catch
                     {
-                        return View("Error", new ErrorViewModel { Message = "Coludn't Send a confirmation email", Solution = "Try to send a cinfirmation email later" });
+                        return View("Error", new ErrorViewModel { Message = "Could not Send a confirmation email", Solution = "Try to send a confirmation email later" });
                     }
 
                     return RedirectToAction("Index", "Home");
@@ -129,7 +129,7 @@ namespace SequenceAlignment.Controllers
                 }
                 catch
                 {
-                    return View("Error", new ErrorViewModel { Message = "Coludn't reset the password", Solution = "Try again later" });
+                    return View("Error", new ErrorViewModel { Message = "Could not reset the password", Solution = "Try again later" });
                 }
                 return View("CheckEmail");
             }

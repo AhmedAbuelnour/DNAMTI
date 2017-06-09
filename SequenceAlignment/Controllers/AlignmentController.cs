@@ -27,11 +27,13 @@ namespace SequenceAlignment.Controllers
         {
             Repo = _Repo;
             UserManager = _UserManager;
+            
         }
         [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
+
         }
         [HttpGet]
         public IActionResult Align()
@@ -41,6 +43,7 @@ namespace SequenceAlignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Align(SequenceViewModel Model, IFormFile FirstFile, IFormFile SecondFile)
         {
+            
             if (!string.IsNullOrWhiteSpace(Model.FirstSequence))
                 Model.FirstSequence = Model.FirstSequence.Trim().Replace(" ", string.Empty).ToUpper();
             if (!string.IsNullOrWhiteSpace(Model.SecondSequence))
@@ -50,7 +53,7 @@ namespace SequenceAlignment.Controllers
                 if(FirstFile.ContentType == "text/plain")
                 {
                     string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper();
-                    if (FirstSequence.Length > 20000)
+                    if (FirstSequence.Length > 10000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (FirstSequence.Length == 0)
                         return View("Error", new ErrorViewModel { Message = "You Can't send a sequence of 0 Length", Solution = "You should send a sequence greater than 0 length" });
@@ -67,7 +70,7 @@ namespace SequenceAlignment.Controllers
                 if (SecondFile.ContentType == "text/plain")
                 {
                     string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ",string.Empty).ToUpper();
-                    if (SecondSequence.Length > 20000)
+                    if (SecondSequence.Length > 10000)
                         return RedirectToAction("Grid", "Alignment");
                     else if (SecondSequence.Length == 0)
                         return View("Error", new ErrorViewModel { Message = "You Can't send a sequence of 0 Length", Solution = "You should send a sequence greater than 0 length" });
@@ -81,11 +84,11 @@ namespace SequenceAlignment.Controllers
             }
             if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null))
             {
-                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+                return View("Error", new ErrorViewModel { Message = "You Can't enter an empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             }
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
-            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence,Model.ScoringMatrix);
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence,Model.SecondSequence,Model.ScoringMatrix , Model.Gap );
             if (JobFound == null)
             {
                 JobFound = new AlignmentJob()
@@ -104,6 +107,7 @@ namespace SequenceAlignment.Controllers
                 };
                 SequenceAligner AlgorithmInstance = DynamicInvoke.GetAlgorithm(Model.Algorithm);
                 ScoringMatrix ScoringMatrixInstance = DynamicInvoke.GetScoreMatrix(Model.ScoringMatrix);
+                
                 string AlignmentResult = string.Empty;
                 float AlignmentScore = 0.0f;
 
@@ -149,17 +153,17 @@ namespace SequenceAlignment.Controllers
             if (Model.FirstSequenceName.Length > 50 || Model.SecomdSequenceName.Length > 50)
                 return View("Error", new ErrorViewModel { Message = "You Can't enter a sequence name greater than 50 character", Solution = "You should name your sequence with a name less than or equal to 50 character" });
             if (FirstFile == null || SecondFile == null || FirstFile.ContentType != "text/plain" || SecondFile.ContentType != "text/plain")
-                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+                return View("Error", new ErrorViewModel { Message = "You Can't enter an empty File", Solution = "You have to upload a file contains the sequence" });
             string FirstSequence = (await Helper.ConvertFileByteToByteStringAsync(FirstFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
             string SecondSequence = (await Helper.ConvertFileByteToByteStringAsync(SecondFile)).Trim().Replace(" ", string.Empty).ToUpper(); 
 
             if (!Regex.IsMatch(FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(SecondSequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
 
-            if (FirstSequence.Length <= 20000 || SecondSequence.Length <= 20000)
+            if (FirstSequence.Length <= 10000 || SecondSequence.Length <= 10000)
                return RedirectToAction("Align", "Alignment");
             // Check for earlier exist
-            AlignmentJob SeqFound = Repo.AreExist(FirstSequence,SecondSequence,Model.ScoringMatrix);
+            AlignmentJob SeqFound = Repo.AreExist(FirstSequence,SecondSequence,Model.ScoringMatrix,Model.Gap);
             if (SeqFound == null) // Means the user didn't  submit these sequences before.
             {
                 string AlignmentID = Guid.NewGuid().ToString();

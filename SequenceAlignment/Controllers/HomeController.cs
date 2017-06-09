@@ -43,7 +43,7 @@ namespace SequenceAlignment.Controllers
                 }
                 catch
                 {
-                    return View("Error", new ErrorViewModel { Message = "Coludn't Send the email", Solution = "Try again later" });
+                    return View("Error", new ErrorViewModel { Message = "Couldn't Send the email", Solution = "Try again later" });
                 }
             }
             

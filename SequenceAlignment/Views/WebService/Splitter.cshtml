@@ -40,7 +40,7 @@
                                         <pre>
     static void Main()
     {
-        string Json = "{'Sequence':'ATGGATCTGA', 'ChunkLength': 10 }";
+        string Json = "{'Sequence':'ATGGATCTGA', 'ChunkLength': 5 }";
 
         Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Splitter", Json).Result);
     }

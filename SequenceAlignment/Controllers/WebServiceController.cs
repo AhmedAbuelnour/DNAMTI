@@ -74,7 +74,7 @@ namespace SequenceAlignment.Controllers
             if(MyUser == null)
                 return "You have to sign-up first to be able to use our alignmnet serive";
 
-            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence);
+            AlignmentJob JobFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence,Model.ScoringMatrixName,-8);
             if (JobFound == null)
             {
                 JobFound = new AlignmentJob()
@@ -196,7 +196,7 @@ namespace SequenceAlignment.Controllers
             //    return BadRequest();
 
             // Check for earlier exist
-            AlignmentJob SeqFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence, Model.ScoringMatrix);
+            AlignmentJob SeqFound = Repo.AreExist(Model.FirstSequence, Model.SecondSequence, Model.ScoringMatrix,Model.Gap);
             if (SeqFound == null) // Means the user didn't  submit these sequences before.
             {
                 string AlignmentID = Guid.NewGuid().ToString();
@@ -248,7 +248,7 @@ namespace SequenceAlignment.Controllers
             if (User is null)
                 return BadRequest("Email Not Correct");
             if(await UserManager.CheckPasswordAsync(User, Model.Password))  return Ok();
-            else  return BadRequest("Passowrd Not Correct");
+            else  return BadRequest("Password Not Correct");
         }
     }
 }

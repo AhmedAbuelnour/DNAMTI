@@ -1,0 +1,181 @@
+.highlight-phone {
+    color: #313437;
+    background-image: url('../images/pattern.png');
+    padding: 50px 0 55px;
+    overflow: hidden
+}
+
+    .highlight-phone p {
+        color: #7d8285
+    }
+
+    .highlight-phone h2 {
+        font-weight: 700;
+        margin-bottom: 35px;
+        line-height: 1.5;
+        padding-top: 0;
+        margin-top: 0;
+        color: inherit
+    }
+
+    .highlight-phone .intro {
+        font-size: 18px;
+        max-width: 500px;
+        line-height: 1.5
+    }
+
+@media (max-width:767px) {
+    .highlight-phone {
+        text-align: center
+    }
+
+        .highlight-phone .intro {
+            max-width: none
+        }
+}
+
+.highlight-phone .intro p {
+    margin-bottom: 35px
+}
+
+.highlight-phone .intro .btn {
+    padding: 16px 32px;
+    border: none;
+    background: 0 0;
+    box-shadow: none;
+    text-shadow: none;
+    opacity: .9;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .4px;
+    line-height: 1
+}
+
+    .highlight-phone .intro .btn:hover {
+        opacity: 1
+    }
+
+    .highlight-phone .intro .btn:active {
+        transform: translateY(1px)
+    }
+
+.highlight-phone .intro .btn-primary {
+    background-color: #055ada;
+    color: #fff
+}
+
+.highlight-phone .iphone-mockup {
+    position: relative;
+    max-width: 260px;
+    margin-top: -30px;
+    margin-bottom: -230px;
+    transform: rotate(-15deg)
+}
+
+    .highlight-phone .iphone-mockup img.device {
+        width: 100%;
+        height: auto
+    }
+
+    .highlight-phone .iphone-mockup .screen {
+        position: absolute;
+        width: 88%;
+        height: 77%;
+        top: 12%;
+        border-radius: 2px;
+        left: 6%;
+        border: 1px solid #444;
+        overflow: hidden;
+        background: url(screen-content-iphone-6.jpg) center;
+        background-size: cover
+    }
+
+        .highlight-phone .iphone-mockup .screen:before {
+            content: '';
+            background-color: #fff;
+            position: absolute;
+            width: 70%;
+            height: 140%;
+            top: -12%;
+            right: -60%;
+            transform: rotate(-19deg);
+            opacity: .2
+        }
+
+#team .text-muted {
+    color: #777
+}
+
+#team a, #team a.active, #team a:active, #team a:focus, #team a:hover {
+    outline: 0
+}
+
+    #team a.active, #team a:active, #team a:focus, #team a:hover {
+        color: #fec503
+    }
+
+section#team {
+    padding: 100px 0
+}
+
+    section#team h2.section-heading {
+        font-size: 40px;
+        margin-top: 0;
+        margin-bottom: 15px
+    }
+
+    section#team h3.section-subheading {
+        font-size: 16px;
+        text-transform: none;
+        font-weight: 400;
+        margin-bottom: 75px
+    }
+
+@media (min-width:768px) {
+    section#team {
+        padding: 150px 0
+    }
+}
+
+.team-member {
+    text-align: center;
+    margin-bottom: 50px
+}
+
+    .team-member img {
+        margin: 0 auto;
+        border: 7px solid #fff
+    }
+
+    #team ul.social-buttons, .team-member h4 {
+        margin-bottom: 0
+    }
+
+    .team-member h4 {
+        margin-top: 25px;
+        text-transform: none
+    }
+
+    .team-member p {
+        margin-top: 0
+    }
+
+#team ul.social-buttons li a {
+    display: block;
+    background-color: #222;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    font-size: 20px;
+    line-height: 40px;
+    color: #fff;
+    outline: 0;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    transition: all .3s
+}
+
+    #team ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons li a:hover {
+        background-image: url('../images/pattern.png');
+    }

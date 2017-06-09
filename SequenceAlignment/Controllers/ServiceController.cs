@@ -34,7 +34,7 @@ namespace SequenceAlignment.Controllers
         public async Task<IActionResult> Clean(CleanSequenceViewModel Model , IFormFile SequenceFile)
         {
             if(string.IsNullOrWhiteSpace(Model.Sequence) && SequenceFile == null)
-                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+                return View("Error", new ErrorViewModel { Message = "You Can't enter an empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
 
             if (string.IsNullOrEmpty(Model.Sequence))
                 if (SequenceFile.ContentType != "text/plain")
@@ -65,9 +65,9 @@ namespace SequenceAlignment.Controllers
         public IActionResult Generate(GenerateSequenceViewModel Model)
         {
             if(Model.SequenceLength <= 0)
-                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with length of 0 or less", Solution = "You should should use length greater than or equal to 1" });
+                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with length of 0 or less", Solution = "You should use length greater than or equal to 1" });
             if(Model.ConsecutiveMatch >= Model.SequenceLength || Model.ConsecutiveMatch < 0)
-                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with Consecutive Match length equal to or greater than sequence length", Solution = "You should should use length greater than or equal to 1" });
+                return View("Error", new ErrorViewModel { Message = "You Can't generate a sequence with Consecutive Match length equal to or greater than sequence length", Solution ="You should use length greater than or equal 1" });
 
             Tuple<string, string> CleanSequence;
             if (Model.Alphabet == "DNA")
@@ -123,7 +123,7 @@ namespace SequenceAlignment.Controllers
                     Model.SecondSequence = SecondSequence;
             }
             if ((Model.FirstSequence == null && FirstFile == null) || (Model.SecondSequence == null && SecondFile == null) )
-                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+                return View("Error", new ErrorViewModel { Message = "You Can't enter an empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
 
             if (!Regex.IsMatch(Model.FirstSequence, @"^[a-zA-Z]+$") || !Regex.IsMatch(Model.SecondSequence, @"^[a-zA-Z]+$"))
                 return View("Error", new ErrorViewModel { Message = "Your sequence must contains only characters", Solution = "Send sequence contains only characters" });
@@ -155,7 +155,7 @@ namespace SequenceAlignment.Controllers
         public async Task<IActionResult> Splitter(SplitterViewModel Model, IFormFile SequenceFile)
         {
             if (Model.Sequence == null && SequenceFile == null)
-                return View("Error", new ErrorViewModel { Message = "You Can't empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
+                return View("Error", new ErrorViewModel { Message = "You Can't enter an empty sequence", Solution = "You have to enter the sequence or either upload a file contains the sequence" });
             if (SequenceFile != null)
                 if (SequenceFile.ContentType != "text/plain")
                     return View("Error", new ErrorViewModel { Message = "You Can't upload a file of any type rather than txt file format", Solution = "You should upload a file of txt file format" });

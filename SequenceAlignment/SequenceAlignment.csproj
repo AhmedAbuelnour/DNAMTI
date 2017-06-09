@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\css\AboutCSS.css" />
+    <Content Include="wwwroot\css\About.css" />
     <Content Include="wwwroot\css\AlignSimple.css" />
     <Content Include="wwwroot\css\cohome.css" />
     <Content Include="wwwroot\css\Contactus.min.css" />
@@ -20,11 +20,19 @@
     <Content Include="wwwroot\css\SignUp.css" />
     <Content Include="wwwroot\css\styles.min.css" />
     <Content Include="wwwroot\css\System-Status.css" />
+    <Content Include="wwwroot\css\Windows.css" />
     <Content Include="wwwroot\images\Align.png" />
     <Content Include="wwwroot\images\AlignDNA.jpg" />
     <Content Include="wwwroot\images\Grid.jpg" />
     <Content Include="wwwroot\images\Logo1.jpg" />
     <Content Include="wwwroot\images\Pattern.png" />
+    <Content Include="wwwroot\images\rsz_10646964_133374897036488_387698077498336650_n.jpg" />
+    <Content Include="wwwroot\images\rsz_1208703_1387064071521034_1289878417_n.jpg" />
+    <Content Include="wwwroot\images\rsz_13131234_489150057957553_8296982979161747103_o.jpg" />
+    <Content Include="wwwroot\images\rsz_14883657_10157761748720565_3535877142929054600_o.jpg" />
+    <Content Include="wwwroot\images\rsz_18275038_331479883935674_1740942691146229811_n.jpg" />
+    <Content Include="wwwroot\images\rsz_1b612_20160215_111243.jpg" />
+    <Content Include="wwwroot\images\rsz_facebook-avatar.jpg" />
     <Content Include="wwwroot\js\cohome.js" />
     <Content Include="wwwroot\js\fancySelect.js" />
     <Content Include="wwwroot\js\File.js" />

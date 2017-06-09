@@ -24,8 +24,7 @@ namespace DataAccessLayer.Services
         Task FinalizeJobAsync(string AlignmentJobID, string AlignmentResult);
         bool IsFinished(string AlignmentJobID);
         Task<bool> IsFinishedAsync(string AlignmentJobID);
-        AlignmentJob AreExist(string FirstSequence, string SecondSequence);
-        AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix);
+        AlignmentJob AreExist(string FirstSequence, string SecondSequence, string ScoreMatrix , int Gap);
 
         Tuple<string, string> GetSubmittedSequences(string AlignmentJobID);
 
