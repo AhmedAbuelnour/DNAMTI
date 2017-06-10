@@ -42,7 +42,7 @@
     {
         string Json = "{'FirstSequence':'ATGGATCTGA', 'SecondSequence': 'TGATTCAATA' }";
 
-        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Similarity", Json).Result);
+        Console.WriteLine(PostAsync("http://mtidna.azurewebsites.net/api/WebService/Similarity", Json).Result);
     }
     static async Task<string> PostAsync<T>(string Url, string JSON)
     {

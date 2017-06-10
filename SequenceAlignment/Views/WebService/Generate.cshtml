@@ -58,7 +58,7 @@
     {
         string Json = "{'Alphabet':'DNA', 'SequencesLength': 100 , 'ConsecutiveMatch': 10 , 'Position':'Middle'}";
 
-        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Generate", Json).Result);
+        Console.WriteLine(PostAsync("http://mtidna.azurewebsites.net/api/WebService/Generate", Json).Result);
     }
     static async Task<string> PostAsync<T>(string Url, string JSON)
     {

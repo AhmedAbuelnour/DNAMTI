@@ -42,7 +42,7 @@
     {
         string Json = "{'Sequence':'ATGGATCTGA', 'ChunkLength': 5 }";
 
-        Console.WriteLine(PostAsync("http://localhost:55524/api/WebService/Splitter", Json).Result);
+        Console.WriteLine(PostAsync("http://mtidna.azurewebsites.net/api/WebService/Splitter", Json).Result);
     }
     static async Task<string> PostAsync<T>(string Url, string JSON)
     {
