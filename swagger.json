@@ -1,0 +1,202 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Neo.Lifestyle.Admin.API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/admin/leaderboard/prize": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "get leaderboard configurations",
+        "description": "",
+        "operationId": "get-leaderboard-prize",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Leaderboard.Dtos.PrizeDto_Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "update leaderboard configurations",
+        "operationId": "update-leaderboard-prize",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Leaderboard.Dtos.PrizeDto_Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Leaderboard.Dtos.PrizeDto_Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/configuration/points": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "get configuration points",
+        "operationId": "get-configuration-points",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Formulas.Dtos.FormulaKPIDto_Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "update configuration points",
+        "operationId": "update-configuration-points",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Formulas.Dtos.FormulaKPIDto_Request"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeoLifeStyle.Application.Features.Admin.Formulas.Dtos.FormulaKPIDto_Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NeoLifeStyle.Application.Features.Admin.Formulas.Dtos.FormulaKPIDto_Request": {
+        "type": "object",
+        "properties": {
+          "kpiId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NeoLifeStyle.Application.Features.Admin.Formulas.Dtos.FormulaKPIDto_Response": {
+        "type": "object",
+        "properties": {
+          "kpiId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NeoLifeStyle.Application.Features.Admin.Leaderboard.Dtos.PrizeDto_Request": {
+        "type": "object",
+        "properties": {
+          "mainPoints": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "compensationPoints": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "difficulty": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "NeoLifeStyle.Application.Features.Admin.Leaderboard.Dtos.PrizeDto_Response": {
+        "type": "object",
+        "properties": {
+          "mainPoints": {
+            "type": "integer",
+            "description": "Main Points summary",
+            "format": "int32"
+          },
+          "compensationPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "difficulty": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Please enter token",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
